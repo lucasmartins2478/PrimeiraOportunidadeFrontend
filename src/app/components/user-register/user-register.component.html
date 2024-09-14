@@ -1,0 +1,46 @@
+<div class="form">
+  <h2>{{ title }}</h2>
+  <div class="mb-3">
+    <label for="nameUser" class="form-label">{{ nameLabel }}</label>
+    <input
+      type="text"
+      name="nameUser"
+      id="nameUser"
+      placeholder="Nome"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="phoneNumberUser" class="form-label">{{phoneNumberLabel}}</label>
+    <input
+      type="text"
+      name="phoneNumberUser"
+      id="phoneNumberUser"
+      placeholder="Telefone"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="emailUser" class="form-label">{{ emailLabel }}</label>
+    <input
+      type="text"
+      name="emailUser"
+      id="emailUser"
+      placeholder="Email"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="passwordUser" class="form-label">{{ passwordLabel }}</label>
+    <input
+      type="text"
+      name="passwordUser"
+      id="passwordUser"
+      placeholder="Senha"
+      class="form-control"
+    />
+  </div>
+  <button (click)="registerUser()" class="btn btn-primary">
+    {{ registerButtonText }}
+  </button>
+</div>

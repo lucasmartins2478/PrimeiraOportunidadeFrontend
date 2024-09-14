@@ -1,0 +1,80 @@
+<div class="form">
+  <h2>{{ title }}</h2>
+  <div class="mb-3">
+    <label for="companyName" class="form-label">{{ companyNameLabel }}</label>
+    <input
+      type="text"
+      name="companyName"
+      id="companyName"
+      placeholder="Nome da empresa"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="companyCnpj" class="form-label">{{ companyCnpjLabel }}</label>
+    <input
+      type="text"
+      name="companyCnpj"
+      id="companyCnpj"
+      placeholder="CNPJ"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="companyEmail" class="form-label">{{ companyEmailLabel }}</label>
+    <input
+      type="email"
+      name="companyEmail"
+      id="companyEmail"
+      placeholder="Email"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="companyPassword" class="form-label">{{
+      companyPasswordLabel
+    }}</label>
+    <input
+      type="password"
+      name="companyPassword"
+      id="companyPassword"
+      placeholder="Senha"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="companyPhoneNumber" class="form-label">{{
+      companyPhoneNumberLabel
+    }}</label>
+    <input
+      type="text"
+      name="companyPhoneNumber"
+      id="companyPhoneNumber"
+      placeholder="Telefone"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="companyCity" class="form-label">{{ companyCityLabel }}</label>
+    <input
+      type="text"
+      name="companyCity"
+      id="companyCity"
+      placeholder="Cidade"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="companyAddress" class="form-label">{{
+      companyAddressLabel
+    }}</label>
+    <input
+      type="text"
+      name="companyAddress"
+      id="companyAddress"
+      placeholder="Endereço"
+      class="form-control"
+    />
+  </div>
+  <button (click)="registerCompany()" class="btn btn-primary">Cadastrar</button>
+</div>

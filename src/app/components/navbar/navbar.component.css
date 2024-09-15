@@ -1,7 +1,28 @@
-nav{
-  padding-left: 4rem;
-  padding-right: 4rem;
-}
 .d-flex{
   gap: 2rem;
+  align-items: center;
+}
+img{
+  height: 4rem;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+nav{
+  background-color: #004AAD;
+  margin-bottom: 2rem;
+}
+button{
+  color: #fff;
+  font-weight: 600;
+  background-color: #FF7B2A;
+}
+a{
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+svg{
+  color: #000;
+  font-weight: 600;
 }

@@ -1,12 +1,7 @@
-.form{
-  display: flex;
-  flex-direction: column;
-  width: 30rem;
-  height: 40rem;
-  background-color: #fff;
-  padding: 3rem;
-  border-radius: 8px;
-  margin: 0 auto;
+
+.container{
+  max-width: 25rem;
+  margin-bottom: 5rem;
 }
 .form-wrapper{
   display: flex;
@@ -30,10 +25,12 @@ input:focus{
 button{
   height: 2.5rem;
   margin: 1rem 0;
+  background-color: #004AAD;
 }
 h3{
   text-align: center;
 }
 a{
   text-align: center;
+  width: 100%;
 }

@@ -1,4 +1,4 @@
-<div class="form">
+<div class="container">
   <h2>{{ title }}</h2>
   <div class="form-wrapper">
     <label for="user">{{ userInput }}</label>
@@ -10,8 +10,8 @@
       id="password"
       placeholder="Digite sua senha"
     />
-    <a href="#">{{forgotPassword}}</a>
+    <a href="#">{{ forgotPassword }}</a>
     <button (click)="login()" class="btn btn-primary">{{ buttonText }}</button>
+    <a href="#">{{ useTermsText }}</a>
   </div>
-  <a href="#">{{useTermsText}}</a>
 </div>

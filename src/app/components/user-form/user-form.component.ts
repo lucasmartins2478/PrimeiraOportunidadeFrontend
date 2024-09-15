@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user-register',
-  templateUrl: './user-register.component.html',
-  styleUrl: './user-register.component.css',
+  selector: 'app-user-form',
+  templateUrl: './user-form.component.html',
+  styleUrl: './user-form.component.css'
 })
-export class UserRegisterComponent {
-  title: string = 'Cadastre-se';
+export class UserFormComponent {
+  title: string = 'É seu primeiro acesso? Cadastre-se';
   nameLabel: string = 'Nome';
   phoneNumberLabel: string = 'Telefone';
   passwordLabel: string = 'Senha';

@@ -5,6 +5,7 @@ import { CompaniesComponent } from './pages/companies/companies.component';
 import { JobsComponent } from './pages/jobs/jobs.component';
 import { UserRegisterComponent } from './pages/user-register/user-register.component';
 import { CompanyRegisterComponent } from './pages/company-register/company-register.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 
 
 const routes: Routes = [
@@ -12,7 +13,8 @@ const routes: Routes = [
   {path:"empresas", component:CompaniesComponent},
   {path:"vagas", component: JobsComponent},
   {path:"criar-conta", component: UserRegisterComponent},
-  {path:"para-empresas", component: CompanyRegisterComponent}
+  {path:"para-empresas", component: CompanyRegisterComponent},
+  {path:"recuperar-senha", component: ForgotPasswordComponent}
 ];
 
 @NgModule({

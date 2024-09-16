@@ -18,6 +18,8 @@ import { CurriculumFormComponent } from './components/curriculum-form/curriculum
 import { JobFormComponent } from './components/job-form/job-form.component';
 import { ArticleUserComponent } from './components/article-user/article-user.component';
 import { ArticleCompanyComponent } from './components/article-company/article-company.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { ForgotPasswordFormComponent } from './components/forgot-password-form/forgot-password-form.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { ArticleCompanyComponent } from './components/article-company/article-co
     JobFormComponent,
     CompanyRegisterComponent,
     ArticleUserComponent,
-    ArticleCompanyComponent
+    ArticleCompanyComponent,
+    ForgotPasswordComponent,
+    ForgotPasswordFormComponent
   ],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],

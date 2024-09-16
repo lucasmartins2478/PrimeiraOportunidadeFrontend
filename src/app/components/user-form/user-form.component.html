@@ -7,14 +7,15 @@
       fill="currentColor"
       class="bi bi-arrow-left-circle"
       viewBox="0 0 16 16"
+      routerLink="/"
     >
       <path
         fill-rule="evenodd"
         d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-      /></svg>{{ title }}
+      /></svg>É seu primeiro acesso? Cadastre-se
   </h2>
   <div class="mb-3">
-    <label for="nameUser" class="form-label">{{ nameLabel }}</label>
+    <label for="nameUser" class="form-label">Nome</label>
     <input
       type="text"
       name="nameUser"
@@ -24,9 +25,7 @@
     />
   </div>
   <div class="mb-3">
-    <label for="phoneNumberUser" class="form-label">{{
-      phoneNumberLabel
-    }}</label>
+    <label for="phoneNumberUser" class="form-label">Telefone</label>
     <input
       type="text"
       name="phoneNumberUser"
@@ -36,7 +35,7 @@
     />
   </div>
   <div class="mb-3">
-    <label for="emailUser" class="form-label">{{ emailLabel }}</label>
+    <label for="emailUser" class="form-label">Email</label>
     <input
       type="text"
       name="emailUser"
@@ -46,7 +45,7 @@
     />
   </div>
   <div class="mb-3">
-    <label for="passwordUser" class="form-label">{{ passwordLabel }}</label>
+    <label for="passwordUser" class="form-label">Senha</label>
     <input
       type="text"
       name="passwordUser"
@@ -56,9 +55,7 @@
     />
   </div>
   <div class="mb-3">
-    <label for="confirmPasswordUser" class="form-label">{{
-      confirmPasswordLabel
-    }}</label>
+    <label for="confirmPasswordUser" class="form-label">Confirme sua senha</label>
     <input
       type="text"
       name="confirmPasswordUser"
@@ -68,7 +65,7 @@
     />
   </div>
   <button (click)="registerUser()" class="btn btn-primary">
-    {{ registerButtonText }}
+    Cadastrar
   </button>
-  <p>{{alreadyHadAccountText}} <a routerLink="/">{{loginLinkText}}</a></p>
+  <p>Já possui conta?<a routerLink="/">Login</a></p>
 </div>

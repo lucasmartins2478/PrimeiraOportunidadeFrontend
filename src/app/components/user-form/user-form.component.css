@@ -26,6 +26,7 @@ button{
 }
 svg{
   font-weight: 600;
+  cursor: pointer;
 }
 p{
   text-align: center;

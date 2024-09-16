@@ -1,7 +1,11 @@
 
 .container{
   max-width: 25rem;
+  margin: 0 auto;
   margin-bottom: 5rem;
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 8px;
 }
 .form-wrapper{
   display: flex;

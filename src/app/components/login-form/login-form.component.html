@@ -1,17 +1,17 @@
 <div class="container">
   <h2>{{ title }}</h2>
   <div class="form-wrapper">
-    <label for="user">{{ userInput }}</label>
+    <label for="user">Usuário</label>
     <input type="text" name="user" id="user" placeholder="Digite seu email" />
-    <label for="password">{{ passwordInput }}</label>
+    <label for="password">Senha</label>
     <input
       type="password"
       name="password"
       id="password"
       placeholder="Digite sua senha"
     />
-    <a href="#">{{ forgotPassword }}</a>
-    <button (click)="login()" class="btn btn-primary">{{ buttonText }}</button>
-    <a href="#">{{ useTermsText }}</a>
+    <a href="#">Esqueceu sua senha?</a>
+    <button (click)="login()" class="btn btn-primary">Entrar</button>
+    <a href="#">Termos de uso</a>
   </div>
 </div>

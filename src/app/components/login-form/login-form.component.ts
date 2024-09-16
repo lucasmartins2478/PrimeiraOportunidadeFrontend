@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-login-form',
@@ -6,12 +6,7 @@ import { Component } from '@angular/core';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent {
-  title:string = "Seja-bem vindo(a) ao Primeira Oportunidade";
-  userInput:string = "Usuário";
-  passwordInput:string = "Senha";
-  buttonText:string = "Entrar";
-  useTermsText:string = "Termos de uso";
-  forgotPassword:string= "Esqueceu sua senha?"
+  @Input() title:string = "";
 
 
   login(){

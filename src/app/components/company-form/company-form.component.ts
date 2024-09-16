@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-company-register',
-  templateUrl: './company-register.component.html',
-  styleUrl: './company-register.component.css'
+  selector: 'app-company-form',
+  templateUrl: './company-form.component.html',
+  styleUrl: './company-form.component.css'
 })
-export class CompanyRegisterComponent {
+export class CompanyFormComponent {
   title:string = "Cadastre-se";
   companyNameLabel:string = "Nome da empresa";
   companyEmailLabel:string = "Email corporativo";

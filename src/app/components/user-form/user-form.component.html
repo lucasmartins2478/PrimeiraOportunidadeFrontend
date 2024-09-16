@@ -1,5 +1,18 @@
 <div class="form">
-  <h2>{{ title }}</h2>
+  <h2>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="35"
+      height="35"
+      fill="currentColor"
+      class="bi bi-arrow-left-circle"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+      /></svg>{{ title }}
+  </h2>
   <div class="mb-3">
     <label for="nameUser" class="form-label">{{ nameLabel }}</label>
     <input
@@ -11,7 +24,9 @@
     />
   </div>
   <div class="mb-3">
-    <label for="phoneNumberUser" class="form-label">{{phoneNumberLabel}}</label>
+    <label for="phoneNumberUser" class="form-label">{{
+      phoneNumberLabel
+    }}</label>
     <input
       type="text"
       name="phoneNumberUser"
@@ -40,7 +55,20 @@
       class="form-control"
     />
   </div>
+  <div class="mb-3">
+    <label for="confirmPasswordUser" class="form-label">{{
+      confirmPasswordLabel
+    }}</label>
+    <input
+      type="text"
+      name="confirmPasswordUser"
+      id="confirmPasswordUser"
+      placeholder="Confirme sua senha"
+      class="form-control"
+    />
+  </div>
   <button (click)="registerUser()" class="btn btn-primary">
     {{ registerButtonText }}
   </button>
+  <p>{{alreadyHadAccountText}} <a routerLink="/">{{loginLinkText}}</a></p>
 </div>

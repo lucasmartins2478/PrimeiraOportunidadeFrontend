@@ -4,13 +4,15 @@ import { HomeComponent } from './pages/home/home.component';
 import { CompaniesComponent } from './pages/companies/companies.component';
 import { JobsComponent } from './pages/jobs/jobs.component';
 import { UserRegisterComponent } from './pages/user-register/user-register.component';
+import { CompanyRegisterComponent } from './pages/company-register/company-register.component';
 
 
 const routes: Routes = [
   {path:"", component:HomeComponent},
   {path:"empresas", component:CompaniesComponent},
   {path:"vagas", component: JobsComponent},
-  {path:"criar-conta", component: UserRegisterComponent}
+  {path:"criar-conta", component: UserRegisterComponent},
+  {path:"para-empresas", component: CompanyRegisterComponent}
 ];
 
 @NgModule({

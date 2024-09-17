@@ -20,12 +20,9 @@ import { ArticleUserComponent } from './components/article-user/article-user.com
 import { ArticleCompanyComponent } from './components/article-company/article-company.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ForgotPasswordFormComponent } from './components/forgot-password-form/forgot-password-form.component';
-<<<<<<< HEAD
 import { ApplicationsComponent } from './pages/applications/applications.component';
 import { MyJobsComponent } from './pages/my-jobs/my-jobs.component';
 import { ReactiveFormsModule } from '@angular/forms';
-=======
->>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
 
 @NgModule({
   declarations: [
@@ -47,17 +44,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     ArticleUserComponent,
     ArticleCompanyComponent,
     ForgotPasswordComponent,
-<<<<<<< HEAD
     ForgotPasswordFormComponent,
     ApplicationsComponent,
     MyJobsComponent
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
-=======
-    ForgotPasswordFormComponent
-  ],
-  imports: [BrowserModule, AppRoutingModule],
->>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
   providers: [],
   bootstrap: [AppComponent],
 })

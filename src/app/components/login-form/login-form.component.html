@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="container">
   <h3>{{ title }}</h3>
   <div class="form-wrapper">
@@ -9,12 +10,20 @@
       placeholder="Digite seu email"
       formControlName="user"
     />
+=======
+<div class="container">
+  <h2>{{ title }}</h2>
+  <div class="form-wrapper">
+    <label for="user">Usuário</label>
+    <input type="text" name="user" id="user" placeholder="Digite seu email" />
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
     <label for="password">Senha</label>
     <input
       type="password"
       name="password"
       id="password"
       placeholder="Digite sua senha"
+<<<<<<< HEAD
       formControlName="password"
     />
     <a routerLink="/recuperar-senha">Esqueceu sua senha?</a>
@@ -63,3 +72,11 @@
     </div>
   </div>
 </form>
+=======
+    />
+    <a routerLink="/recuperar-senha">Esqueceu sua senha?</a>
+    <button (click)="login()" class="btn btn-primary">Entrar</button>
+    <a href="#">Termos de uso</a>
+  </div>
+</div>
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0

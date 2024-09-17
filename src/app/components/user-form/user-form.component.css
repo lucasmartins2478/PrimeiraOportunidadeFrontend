@@ -7,7 +7,11 @@
   margin-bottom: 5rem;
 
 }
+<<<<<<< HEAD
 h3{
+=======
+h2{
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
   text-align: center;
   display: flex;
   align-items: center;
@@ -34,5 +38,8 @@ p{
 a{
   color: #FF7B2A;
   text-decoration: none;
+<<<<<<< HEAD
   margin-left: 0.5rem;
+=======
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
 }

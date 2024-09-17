@@ -12,7 +12,12 @@
   flex-direction: column;
   gap: 1rem;
 }
+<<<<<<< HEAD
 h3{
+=======
+h2{
+  font-size: 2rem;
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
   margin-bottom: 4rem;
   text-align: center;
 }
@@ -25,14 +30,28 @@ input{
 input:focus{
   outline: none;
 }
+<<<<<<< HEAD
 #btn-login{
+=======
+button{
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0
   height: 2.5rem;
   margin: 1rem 0;
   background-color: #004AAD;
 }
+<<<<<<< HEAD
 a{
   text-align: center;
   width: 100%;
   cursor: pointer;
 }
 
+=======
+h3{
+  text-align: center;
+}
+a{
+  text-align: center;
+  width: 100%;
+}
+>>>>>>> 361e3ebf035404c0200c2f93f8802a79ffc51bb0

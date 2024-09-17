@@ -1,0 +1,9 @@
+#carouselExampleAutoplaying{
+  margin-bottom: 5rem;
+}
+.button-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 20rem;
+}

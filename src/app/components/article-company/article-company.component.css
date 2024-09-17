@@ -1,0 +1,34 @@
+article{
+  background-color: #E5E9FF;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 2rem;
+  margin-bottom:5rem ;
+  display: flex;
+  flex-direction: row;
+}
+.article-text{
+  max-width: 90%;
+}
+.button-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 10rem;
+  margin-left: 2rem;
+  justify-content: center;
+}
+button{
+  width: 100%;
+}
+#btn-login{
+  background-color: #004AAD;
+}
+
+@media(max-width:1244px){
+  article{
+    display: flex;
+    flex-direction: column;
+  }
+
+}

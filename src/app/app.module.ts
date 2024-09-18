@@ -26,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { JobCardComponent } from './components/job-card/job-card.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './pages/login/login.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { HttpClientModule } from '@angular/common/http';
     ApplicationsComponent,
     MyJobsComponent,
     JobCardComponent,
-    SearchFormComponent
+    SearchFormComponent,
+    LoginComponent
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [],

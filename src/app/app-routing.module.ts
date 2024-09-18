@@ -8,6 +8,7 @@ import { CompanyRegisterComponent } from './pages/company-register/company-regis
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { ApplicationsComponent } from './pages/applications/applications.component';
 import { MyJobsComponent } from './pages/my-jobs/my-jobs.component';
+import { LoginComponent } from './pages/login/login.component';
 
 
 const routes: Routes = [
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path:"para-empresas", component: CompanyRegisterComponent},
   {path:"recuperar-senha", component: ForgotPasswordComponent},
   {path:"minhas-candidaturas", component: ApplicationsComponent},
-  {path:"minhas-vagas", component:MyJobsComponent}
+  {path:"minhas-vagas", component:MyJobsComponent},
+  {path:"login", component:LoginComponent}
 ];
 
 @NgModule({

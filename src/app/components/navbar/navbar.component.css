@@ -9,6 +9,9 @@ img{
 }
 nav{
   background-color: #004AAD;
+  position: sticky;
+  top: 0;
+  z-index: 99999;
 }
 button{
   color: #fff;

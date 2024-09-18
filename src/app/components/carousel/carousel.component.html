@@ -4,21 +4,52 @@
   data-bs-ride="carousel"
 >
   <div class="carousel-inner">
-    <div class="carousel-item active">
+    <div class="carousel-item active position-relative">
       <img
-        src="../../../assets/carousel1.png"
+        src="../../../assets/carouselCandidato.png"
         class="d-block w-100"
-        alt="..."
+        alt="Imagem 1"
       />
+      <div
+        class="carousel-caption d-none d-md-block text-start position-absolute top-0 start-0 h-100 w-100 p-5"
+        style="background: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="content">
+          <div class="text">
+            <h2>Para Candidatos</h2>
+            <p>texto para os candidatos.</p>
+          </div>
+          <div class="button-wrapper">
+            <button class="btn btn-primary me-2">Login</button>
+            <button class="btn btn-warning">Criar conta</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="carousel-item">
+
+    <div class="carousel-item position-relative">
       <img
-        src="../../../assets/carousel2.png"
+        src="../../../assets/carouselEmpresa.png"
         class="d-block w-100"
-        alt="..."
+        alt="Imagem 2"
       />
+      <div
+        class="carousel-caption d-none d-md-block text-start position-absolute top-0 start-0 h-100 w-100 p-5"
+        style="background: rgba(0, 0, 0, 0.5)"
+      >
+        <div class="content">
+          <div class="text">
+            <h2>Para Empresas</h2>
+            <p>texto para as empresas</p>
+          </div>
+          <div class="button-wrapper">
+            <button class="btn btn-primary me-2">Para empresas</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
   <button
     class="carousel-control-prev"
     type="button"
@@ -28,14 +59,12 @@
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Previous</span>
   </button>
-
   <button
     class="carousel-control-next"
     type="button"
     data-bs-target="#carouselExampleAutoplaying"
     data-bs-slide="next"
   >
-
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>

@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { ParseSourceFile } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,15 +10,13 @@ import { Router } from '@angular/router';
   styleUrl: './login-form.component.css',
 })
 export class LoginFormComponent implements OnInit {
-
-  users = [
-    {user:"lucas", password:"senhaLucas"},
-    {user:"laysa", password:"senhaLaysa"}
-  ]
-
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private http: HttpClient
+  ) {}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       user: ['', Validators.required],
@@ -29,19 +28,26 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit() {
     const formData = this.loginForm.value;
-    let isLogged:boolean = false
+    let isLogged: boolean = false;
 
-    this.users.forEach((user)=>{
-      if(user.user === formData.user && user.password === formData.password){
-        isLogged = true
+    const apiUrl = 'https://664d0a0cede9a2b556527d60.mockapi.io/api/v1/users';
+
+    // Fazendo a requisição GET
+    this.http.get<any[]>(apiUrl).subscribe(
+      (response) => {
+
+
+        response.forEach(user=>{
+          if(user.email == formData.user && user.password == formData.password){
+            window.alert("usuário e senha corretos")
+            this.router.navigate(['/vagas']);
+          }
+        })
+      },
+      (error) => {
+        window.alert(`Erro ao buscar dados, ${error}`);
       }
-    })
-    if(isLogged){
-      window.alert("Usuário encontrado")
-      this.router.navigate(["/vagas"])
-    }else{
-      window.alert("Usuário não encontrado")
-    }
+    );
     // window.alert(`dados do formulário : ${formData.user}, ${formData.password}`);
     // this.router.navigate(['/vagas']);
   }

@@ -23,6 +23,9 @@ import { ForgotPasswordFormComponent } from './components/forgot-password-form/f
 import { ApplicationsComponent } from './pages/applications/applications.component';
 import { MyJobsComponent } from './pages/my-jobs/my-jobs.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { JobCardComponent } from './components/job-card/job-card.component';
+import { SearchFormComponent } from './components/search-form/search-form.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -46,9 +49,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     ForgotPasswordComponent,
     ForgotPasswordFormComponent,
     ApplicationsComponent,
-    MyJobsComponent
+    MyJobsComponent,
+    JobCardComponent,
+    SearchFormComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [],
   bootstrap: [AppComponent],
 })

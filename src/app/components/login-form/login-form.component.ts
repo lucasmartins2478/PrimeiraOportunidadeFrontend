@@ -19,35 +19,42 @@ export class LoginFormComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      user: ['', Validators.required],
-      password: ['', Validators.required],
+      user: ['', [Validators.required, Validators.email]],  // Correção na sintaxe do array de validadores
+      password: ['', [Validators.required, Validators.minLength(6)]],  // Correção aqui também
     });
   }
 
   @Input() title: string = '';
 
   onSubmit() {
-    const formData = this.loginForm.value;
-    let isLogged: boolean = false;
-
-    const apiUrl = 'https://664d0a0cede9a2b556527d60.mockapi.io/api/v1/users';
-
-    // Fazendo a requisição GET
-    this.http.get<any[]>(apiUrl).subscribe(
-      (response) => {
 
 
-        response.forEach(user=>{
-          if(user.email == formData.user && user.password == formData.password){
-            window.alert("usuário e senha corretos")
-            this.router.navigate(['/vagas']);
-          }
-        })
-      },
-      (error) => {
-        window.alert(`Erro ao buscar dados, ${error}`);
-      }
-    );
+    if ( this.loginForm.valid){
+      window.alert("Dados corretos")
+    }else{
+      window.alert("Dados incorretos")
+    }
+    // const formData = this.loginForm.value;
+    // let isLogged: boolean = false;
+
+    // const apiUrl = 'https://664d0a0cede9a2b556527d60.mockapi.io/api/v1/users';
+
+    // // Fazendo a requisição GET
+    // this.http.get<any[]>(apiUrl).subscribe(
+    //   (response) => {
+
+
+    //     response.forEach(user=>{
+    //       if(user.email == formData.user && user.password == formData.password){
+    //         window.alert("usuário e senha corretos")
+    //         this.router.navigate(['/vagas']);
+    //       }
+    //     })
+    //   },
+    //   (error) => {
+    //     window.alert(`Erro ao buscar dados, ${error}`);
+    //   }
+    // );
     // window.alert(`dados do formulário : ${formData.user}, ${formData.password}`);
     // this.router.navigate(['/vagas']);
   }

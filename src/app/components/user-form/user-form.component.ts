@@ -48,11 +48,12 @@ export class UserFormComponent implements OnInit {
           .subscribe(
             (response) => {
 
-              response.forEach(user =>{
-                if(user.email == formData.email){
-                  window.alert("Este email já pertence a um usuário cadastrado!")
-                }
-              })
+              this.router.navigate(['/login'])
+              // response.forEach(user =>{
+              //   if(user.email == formData.email){
+              //     window.alert("Este email já pertence a um usuário cadastrado!")
+              //   }
+              // })
             },
             (error) => {
               window.alert(`'Erro ao enviar dados', ${error}`);

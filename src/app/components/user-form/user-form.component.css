@@ -37,3 +37,8 @@ a{
   text-decoration: none;
   margin-left: 0.5rem;
 }
+@media(max-width:1244px){
+  h3{
+    gap: 3px;
+  }
+}

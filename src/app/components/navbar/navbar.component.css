@@ -37,6 +37,11 @@ svg {
     background-color: #004aad;
     color: #fff;
   }
+  button:focus{
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
   ul{
     display: flex;
     flex-direction: column;

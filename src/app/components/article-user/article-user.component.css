@@ -42,5 +42,11 @@ ul{
   .button-wrapper{
     margin: 0;
   }
+  h5{
+    font-size: 12px;
+  }
+  li{
+    font-size: 12px;
+  }
 
 }

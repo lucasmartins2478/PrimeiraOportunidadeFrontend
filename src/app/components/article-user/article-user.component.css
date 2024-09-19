@@ -32,3 +32,15 @@ ul{
   font-size: 17px;
   font-weight: 600;
 }
+
+@media(max-width:1244px){
+  article{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .button-wrapper{
+    margin: 0;
+  }
+
+}

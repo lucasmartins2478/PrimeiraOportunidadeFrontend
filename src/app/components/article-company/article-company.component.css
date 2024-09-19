@@ -29,6 +29,10 @@ button{
   article{
     display: flex;
     flex-direction: column;
+    gap: 1rem;
+  }
+  .button-wrapper{
+    margin: 0;
   }
 
 }

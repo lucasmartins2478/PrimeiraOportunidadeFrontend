@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { ParseSourceFile } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.css',
+  selector: 'app-user-login-form',
+  templateUrl: './user-login-form.component.html',
+  styleUrl: './user-login-form.component.css'
 })
-export class LoginFormComponent implements OnInit {
+export class UserLoginFormComponent implements OnInit{
   loginForm!: FormGroup;
 
   constructor(
@@ -23,8 +22,6 @@ export class LoginFormComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],  // Correção aqui também
     });
   }
-
-  @Input() title: string = '';
 
   onSubmit() {
 

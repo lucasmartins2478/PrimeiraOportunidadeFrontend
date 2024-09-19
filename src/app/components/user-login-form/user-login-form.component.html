@@ -1,0 +1,65 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="container">
+  <h3>Seja bem-vindo(a) a Primeira Oportunidade</h3>
+  <div class="form-wrapper">
+    <label for="user">Usuário</label>
+    <input
+      type="text"
+      name="user"
+      id="user"
+      placeholder="Digite seu email"
+      formControlName="user"
+    />
+    <label for="password">Senha</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="Digite sua senha"
+      formControlName="password"
+    />
+    <a routerLink="/recuperar-senha">Esqueceu sua senha?</a>
+    <button type="submit" class="btn btn-primary">
+      Entrar
+    </button>
+    <a data-bs-toggle="modal" data-bs-target="#exampleModal">Termos de uso</a>
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Termos de uso
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-dialog modal-dialog-scrollable">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Fechar
+            </button>
+            <button type="button" class="btn btn-primary">
+              Confirmar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

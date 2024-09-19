@@ -39,7 +39,6 @@ export class UserFormComponent implements OnInit {
           phoneNumber: formData.phoneNumber,
           email: formData.email,
           password: formData.password,
-          confirmPassword: formData.confirmPassword,
         };
         this.http
           .post<any[]>(

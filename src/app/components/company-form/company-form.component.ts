@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './company-form.component.css',
 })
 export class CompanyFormComponent implements OnInit {
-  userForm!: FormGroup;
+  companyForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -18,7 +18,7 @@ export class CompanyFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userForm = this.fb.group({
+    this.companyForm = this.fb.group({
       name: ['', [Validators.required]],
       cnpj: ['', [Validators.required]],
       segment: ['', [Validators.required]],
@@ -35,8 +35,14 @@ export class CompanyFormComponent implements OnInit {
       uf: ['', [Validators.required]],
     });
   }
-
   onSubmit(){
+
+
+    if(this.companyForm.valid){
+      window.alert("Dados corretos!")
+    }else{
+      window.alert('Preencha os campos corretamente!');
+    }
 
   }
 }

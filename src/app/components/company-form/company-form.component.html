@@ -1,170 +1,192 @@
-<div class="form" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-  <h2><svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="35"
-    height="35"
-    fill="currentColor"
-    class="bi bi-arrow-left-circle"
-    viewBox="0 0 16 16"
-    routerLink="/"
-  >
-    <path
-      fill-rule="evenodd"
-      d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-    /></svg>Cadastre sua empresa</h2>
-  <div class="mb-3">
-    <label for="companyName" class="form-label">Nome da empresa</label>
-    <input
-      type="text"
-      name="companyName"
-      id="companyName"
-      placeholder="Nome da empresa"
-      class="form-control"
-      formControlName="name"
-    />
+<form class="form" [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+  <h2>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="35"
+      height="35"
+      fill="currentColor"
+      class="bi bi-arrow-left-circle"
+      viewBox="0 0 16 16"
+      routerLink="/"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+      /></svg>
+      Cadastre sua empresa
+  </h2>
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyName" class="form-label">Nome da empresa</label>
+      <input
+        type="text"
+        name="companyName"
+        id="companyName"
+        placeholder="Nome da empresa"
+        class="form-control"
+        formControlName="name"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companyResponsible" class="form-label">Responsável</label>
+      <input
+        type="text"
+        name="companyResponsible"
+        id="companyResponsible"
+        placeholder="Responsável"
+        class="form-control"
+        formControlName="responsible"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companyCnpj" class="form-label">CNPJ</label>
-    <input
-      type="text"
-      name="companyCnpj"
-      id="companyCnpj"
-      placeholder="CNPJ"
-      class="form-control"
-      formControlName="cnpj"
-    />
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyCnpj" class="form-label">CNPJ</label>
+      <input
+        type="text"
+        name="companyCnpj"
+        id="companyCnpj"
+        placeholder="CNPJ"
+        class="form-control"
+        formControlName="cnpj"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companySegment" class="form-label">Segmento</label>
+      <input
+        type="text"
+        name="companySegment"
+        id="companySegment"
+        placeholder="Segmento"
+        class="form-control"
+        formControlName="segment"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companySegment" class="form-label">Segmento</label>
-    <input
-      type="text"
-      name="companySegment"
-      id="companySegment"
-      placeholder="Segmento"
-      class="form-control"
-      formControlName="segment"
-    />
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyEmail" class="form-label">Email</label>
+      <input
+        type="email"
+        name="companyEmail"
+        id="companyEmail"
+        placeholder="Email"
+        class="form-control"
+        formControlName="email"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companyPhoneNumber" class="form-label">Telefone</label>
+      <input
+        type="text"
+        name="companyPhoneNumber"
+        id="companyPhoneNumber"
+        placeholder="Telefone"
+        class="form-control"
+        formControlName="phoneNumber"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companyResponsible" class="form-label">Responsável</label>
-    <input
-      type="text"
-      name="companyResponsible"
-      id="companyResponsible"
-      placeholder="Responsável"
-      class="form-control"
-      formControlName="responsible"
-    />
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyPassword" class="form-label">Senha</label>
+      <input
+        type="password"
+        name="companyPassword"
+        id="companyPassword"
+        placeholder="Senha"
+        class="form-control"
+        formControlName="password"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companyConfirmPassoword" class="form-label"
+        >Confirme sua senha</label
+      >
+      <input
+        type="password"
+        name="companyConfirmPassword"
+        id="companyConfirmPassword"
+        placeholder="Confirme sua senha"
+        class="form-control"
+        formControlName="confirmPassword"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companyEmail" class="form-label">Email</label>
-    <input
-      type="email"
-      name="companyEmail"
-      id="companyEmail"
-      placeholder="Email"
-      class="form-control"
-      formControlName="email"
-    />
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyUrl" class="form-label">Site</label>
+      <input
+        type="text"
+        name="companyUrl"
+        id="companyUrl"
+        placeholder="Url do site"
+        class="form-control"
+        formControlName="url"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companyAddress" class="form-label">Endereço</label>
+      <input
+        type="text"
+        name="companyAddress"
+        id="companyAddress"
+        placeholder="Endereço"
+        class="form-control"
+        formControlName="address"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companyPhoneNumber" class="form-label">Telefone</label>
-    <input
-      type="text"
-      name="companyPhoneNumber"
-      id="companyPhoneNumber"
-      placeholder="Telefone"
-      class="form-control"
-      formControlName="phoneNumber"
-    />
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyCity" class="form-label">Cidade</label>
+      <input
+        type="text"
+        name="companyCity"
+        id="companyCity"
+        placeholder="Cidade"
+        class="form-control"
+        formControlName="city"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companyCep" class="form-label">CEP</label>
+      <input
+        type="text"
+        name="companyCep"
+        id="companyCep"
+        placeholder="CEP"
+        class="form-control"
+        formControlName="cep"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companyUrl" class="form-label">Site</label>
-    <input
-      type="text"
-      name="companyUrl"
-      id="companyUrl"
-      placeholder="Url do site"
-      class="form-control"
-      formControlName="url"
-    />
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="companyAddressNumber" class="form-label">Número</label>
+      <input
+        type="text"
+        name="companyAddressNumber"
+        id="companyAddressNumber"
+        placeholder="Número"
+        class="form-control"
+        formControlName="addressNumber"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="companyUf" class="form-label">Estado</label>
+      <input
+        type="text"
+        name="companyUf"
+        id="companyUf"
+        placeholder="Estado"
+        class="form-control"
+        formControlName="uf"
+      />
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="companyPassword" class="form-label">Senha</label>
-    <input
-      type="password"
-      name="companyPassword"
-      id="companyPassword"
-      placeholder="Senha"
-      class="form-control"
-      formControlName="password"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="companyConfirmPassoword" class="form-label">Confirme sua senha</label>
-    <input
-      type="text"
-      name="companyConfirmPassword"
-      id="companyConfirmPassword"
-      placeholder="Confirme sua senha"
-      class="form-control"
-      formControlName="confirmPassword"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="companyCity" class="form-label">Cidade</label>
-    <input
-      type="text"
-      name="companyCity"
-      id="companyCity"
-      placeholder="Cidade"
-      class="form-control"
-      formControlName="city"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="companyCep" class="form-label">CEP</label>
-    <input
-      type="text"
-      name="companyCep"
-      id="companyCep"
-      placeholder="CEP"
-      class="form-control"
-      formControlName="cep"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="companyAddressNumber" class="form-label">Número</label>
-    <input
-      type="text"
-      name="companyAddressNumber"
-      id="companyAddressNumber"
-      placeholder="Número"
-      class="form-control"
-      formControlName="addressNumber"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="companyUf" class="form-label">Estado</label>
-    <input
-      type="text"
-      name="companyUf"
-      id="companyUf"
-      placeholder="Estado"
-      class="form-control"
-      formControlName="uf"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="companyAddress" class="form-label">Endereço</label>
-    <input
-      type="text"
-      name="companyAddress"
-      id="companyAddress"
-      placeholder="Endereço"
-      class="form-control"
-      formControlName="address"
-    />
+  <div class="row">
+
   </div>
   <button class="btn btn-primary">Cadastrar</button>
-</div>
+</form>

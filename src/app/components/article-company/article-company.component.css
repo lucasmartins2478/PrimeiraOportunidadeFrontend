@@ -1,6 +1,6 @@
 article{
   background-color: #E5E9FF;
-  max-width: 80%;
+  width: 80%;
   margin: 0 auto;
   padding: 2rem;
   margin-bottom:5rem ;
@@ -9,6 +9,10 @@ article{
 }
 .article-text{
   max-width: 90%;
+}
+h1{
+  color: #004AAD;
+  display: none;
 }
 .button-wrapper{
   display: flex;
@@ -30,9 +34,20 @@ button{
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    background-color: #fff;
+    border: none;
+    width:   85%;
+    padding: 0;
   }
   .button-wrapper{
     margin: 0;
+  }
+  br{
+    display: none;
+  }
+  h1{
+    display: block;
+    margin-bottom: 2rem;
   }
 
 }

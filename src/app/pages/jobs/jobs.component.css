@@ -1,0 +1,10 @@
+.row{
+  margin: 0 auto;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+.card-wrapper{
+  width: 90%;
+  margin: 0 auto;
+}

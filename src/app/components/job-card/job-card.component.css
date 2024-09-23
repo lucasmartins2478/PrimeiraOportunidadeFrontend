@@ -1,0 +1,28 @@
+div{
+  padding: 1rem;
+  background-color: #E5E9FF;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  width: 20rem;
+}
+h5{
+  text-align: center;
+  color: #004AAD;
+}
+button{
+  width: 100%;
+  color: #fff;
+  background-color: #FF7B2A;
+  border: none;
+}
+
+@media(max-width:1200px){
+  div{
+    width: 15rem;
+  }
+}
+@media(max-width:768px){
+  div{
+    width: 100%;
+  }
+}

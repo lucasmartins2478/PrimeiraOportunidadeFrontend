@@ -4,6 +4,14 @@ h2{
   font-weight: 600;
   text-align: center;
 }
+.search-wrapper{
+  padding-top: 0.1rem;
+  height: 8rem;
+  position: sticky;
+  z-index: 9999;
+  top: 5.6rem;
+  background-color: #fff;
+}
 .row{
   margin: 0 auto;
   margin-top: 2rem;

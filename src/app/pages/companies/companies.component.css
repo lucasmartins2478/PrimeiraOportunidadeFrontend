@@ -1,0 +1,22 @@
+h2{
+  color: #FF7B2A;
+  margin-top: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+.row{
+  margin: 0 auto;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+.card-wrapper{
+  width: 90%;
+  margin: 0 auto;
+}
+.col-6{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+

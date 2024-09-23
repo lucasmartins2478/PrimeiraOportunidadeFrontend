@@ -28,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './pages/login/login.component';
 import { CompanyLoginFormComponent } from './components/company-login-form/company-login-form.component';
 import { UserLoginFormComponent } from './components/user-login-form/user-login-form.component';
+import { CompanyCardComponent } from './components/company-card/company-card.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { UserLoginFormComponent } from './components/user-login-form/user-login-
     LoginComponent,
     CompanyLoginFormComponent,
     UserLoginFormComponent,
+    CompanyCardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [],

@@ -9,9 +9,17 @@ import { Router } from '@angular/router';
   styleUrl: './user-form.component.css',
 })
 export class UserFormComponent implements OnInit {
+  alertMessage: string = '';
+  alertType: 'success' | 'danger' = 'success';
+  showAlert: boolean = false; 
+
   userForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router:Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.userForm = this.fb.group({
@@ -31,7 +39,8 @@ export class UserFormComponent implements OnInit {
   }
   onSubmit() {
     if (this.userForm.valid) {
-      window.alert('Dados corretos');
+      const apiUrl = 'http://localhost:3333/users';
+
       const formData = this.userForm.value;
       if (formData.password === formData.confirmPassword) {
         const body = {
@@ -40,30 +49,55 @@ export class UserFormComponent implements OnInit {
           email: formData.email,
           password: formData.password,
         };
-        this.http
-          .post<any[]>(
-            'https://664d0a0cede9a2b556527d60.mockapi.io/api/v1/users',
-            body
-          )
-          .subscribe(
-            (response) => {
 
-              this.router.navigate(['/login'])
-              // response.forEach(user =>{
-              //   if(user.email == formData.email){
-              //     window.alert("Este email já pertence a um usuário cadastrado!")
-              //   }
-              // })
-            },
-            (error) => {
-              window.alert(`'Erro ao enviar dados', ${error}`);
-            }
-          );
+        this.http.get<any[]>(apiUrl).subscribe(
+          (response) => {
+            response.forEach((user) => {
+              if (user.email == formData.email) {
+                return window.alert('Email já   cadastrado');
+              }
+            });
+          },
+          (error) => {
+            window.alert(`Erro ao fazer verificação de email ${error}`);
+          }
+        );
+        this.http.post<any[]>(apiUrl, body).subscribe(
+          (response) => {
+            this.alertMessage = 'Usuário cadastrado com sucesso!';
+            this.alertType = 'success';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+            // this.router.navigate(['/login']);
+          },
+          (error) => {
+            this.alertMessage = 'Erro ao cadastrar o usuário.';
+            this.alertType = 'danger';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+          }
+        );
       } else if (formData.password !== formData.confirmPassword) {
-        window.alert('Senhas não conferem');
+        this.alertMessage = 'Erro ao cadastrar o usuário.';
+        this.alertType = 'danger';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
       }
     } else {
-      window.alert('Preencha os campos corretamente!');
+      this.alertMessage = 'Erro ao cadastrar o usuário.';
+      this.alertType = 'danger';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
     }
+  }
+  resetAlertAfterDelay() {
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000);
+  }
+
+  clearAlert() {
+    this.alertMessage = '';
+    this.showAlert = false;
   }
 }

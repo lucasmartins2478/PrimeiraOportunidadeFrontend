@@ -29,6 +29,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { CompanyLoginFormComponent } from './components/company-login-form/company-login-form.component';
 import { UserLoginFormComponent } from './components/user-login-form/user-login-form.component';
 import { CompanyCardComponent } from './components/company-card/company-card.component';
+import { AlertComponent } from './components/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { CompanyCardComponent } from './components/company-card/company-card.com
     CompanyLoginFormComponent,
     UserLoginFormComponent,
     CompanyCardComponent,
+    AlertComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [],

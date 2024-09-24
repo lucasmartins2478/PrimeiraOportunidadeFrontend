@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
   styleUrl: './user-login-form.component.css',
 })
 export class UserLoginFormComponent implements OnInit {
+  alertMessage: string = '';
+  alertType: 'success' | 'danger' = 'success';
+  showAlert: boolean = false;
+
   loginForm!: FormGroup;
 
   constructor(
@@ -18,8 +22,8 @@ export class UserLoginFormComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]], // Correção na sintaxe do array de validadores
-      password: ['', [Validators.required, Validators.minLength(6)]], // Correção aqui também
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -27,9 +31,8 @@ export class UserLoginFormComponent implements OnInit {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
 
-      const apiUrl = 'https://664d0a0cede9a2b556527d60.mockapi.io/api/v1/users';
+      const apiUrl = 'http://localhost:3333/users';
 
-      // Fazendo a requisição GET
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
           response.forEach((user) => {
@@ -43,13 +46,6 @@ export class UserLoginFormComponent implements OnInit {
                 window.alert("Senha não confere!")
               }
             }
-            // if (
-            //   user.email == formData.user &&
-            //   user.password == formData.password
-            // ) {
-            //
-            //
-            // }
           });
 
         },
@@ -58,7 +54,20 @@ export class UserLoginFormComponent implements OnInit {
         }
       );
     } else {
-      window.alert('Preencha os campos corretamente!');
+      this.alertMessage = 'Erro ao cadastrar o usuário.';
+      this.alertType = 'danger';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
     }
+  }
+  resetAlertAfterDelay() {
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000);
+  }
+
+  clearAlert() {
+    this.alertMessage = '';
+    this.showAlert = false;
   }
 }

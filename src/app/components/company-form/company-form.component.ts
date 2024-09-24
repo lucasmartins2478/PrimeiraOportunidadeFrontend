@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
   styleUrl: './company-form.component.css',
 })
 export class CompanyFormComponent implements OnInit {
+  alertMessage: string = '';
+  alertType: 'success' | 'danger' = 'success';
+  showAlert: boolean = false;
+
   companyForm!: FormGroup;
 
   constructor(
@@ -44,5 +48,15 @@ export class CompanyFormComponent implements OnInit {
       window.alert('Preencha os campos corretamente!');
     }
 
+  }
+  resetAlertAfterDelay() {
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000);
+  }
+
+  clearAlert() {
+    this.alertMessage = '';
+    this.showAlert = false;
   }
 }

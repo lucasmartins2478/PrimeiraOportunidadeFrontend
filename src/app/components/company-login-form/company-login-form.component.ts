@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -8,7 +8,11 @@ import { Router } from '@angular/router';
   templateUrl: './company-login-form.component.html',
   styleUrl: './company-login-form.component.css'
 })
-export class CompanyLoginFormComponent {
+export class CompanyLoginFormComponent implements OnInit {
+  alertMessage: string = '';
+  alertType: 'success' | 'danger' = 'success';
+  showAlert: boolean = false;
+
   loginForm!: FormGroup;
 
   constructor(
@@ -18,8 +22,8 @@ export class CompanyLoginFormComponent {
   ) {}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      user: ['', [Validators.required, Validators.email]],  // Correção na sintaxe do array de validadores
-      password: ['', [Validators.required, Validators.minLength(6)]],  // Correção aqui também
+      user: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -54,5 +58,15 @@ export class CompanyLoginFormComponent {
     // );
     // window.alert(`dados do formulário : ${formData.user}, ${formData.password}`);
     // this.router.navigate(['/vagas']);
+  }
+  resetAlertAfterDelay() {
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000); 
+  }
+
+  clearAlert() {
+    this.alertMessage = '';
+    this.showAlert = false;
   }
 }

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class UserFormComponent implements OnInit {
   alertMessage: string = '';
   alertType: 'success' | 'danger' = 'success';
-  showAlert: boolean = false; 
+  showAlert: boolean = false;
 
   userForm!: FormGroup;
 
@@ -50,18 +50,7 @@ export class UserFormComponent implements OnInit {
           password: formData.password,
         };
 
-        this.http.get<any[]>(apiUrl).subscribe(
-          (response) => {
-            response.forEach((user) => {
-              if (user.email == formData.email) {
-                return window.alert('Email já   cadastrado');
-              }
-            });
-          },
-          (error) => {
-            window.alert(`Erro ao fazer verificação de email ${error}`);
-          }
-        );
+        
         this.http.post<any[]>(apiUrl, body).subscribe(
           (response) => {
             this.alertMessage = 'Usuário cadastrado com sucesso!';
@@ -89,6 +78,21 @@ export class UserFormComponent implements OnInit {
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
+  }
+  verifyEmail(email: string) {
+    const formData = this.userForm.value;
+    this.http.get<any[]>('http://localhost:3333/users').subscribe(
+      (response) => {
+        response.forEach((user) => {
+          if (user.email == formData.email) {
+            console.log("Ola")
+          }
+        });
+      },
+      (error) => {
+        console.log(`Erro ao buscar por emails cadastrados, ${error}`)
+      }
+    );
   }
   resetAlertAfterDelay() {
     setTimeout(() => {

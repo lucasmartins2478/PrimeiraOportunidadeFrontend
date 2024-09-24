@@ -50,7 +50,6 @@ export class UserFormComponent implements OnInit {
           password: formData.password,
         };
 
-        
         this.http.post<any[]>(apiUrl, body).subscribe(
           (response) => {
             this.alertMessage = 'Usuário cadastrado com sucesso!';
@@ -85,12 +84,12 @@ export class UserFormComponent implements OnInit {
       (response) => {
         response.forEach((user) => {
           if (user.email == formData.email) {
-            console.log("Ola")
+            console.log('Ola!!');
           }
         });
       },
       (error) => {
-        console.log(`Erro ao buscar por emails cadastrados, ${error}`)
+        console.log(`Erro ao buscar por emails cadastrados, ${error}`);
       }
     );
   }

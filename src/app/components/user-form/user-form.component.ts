@@ -37,62 +37,72 @@ export class UserFormComponent implements OnInit {
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
-  onSubmit() {
+  async onSubmit() {
     if (this.userForm.valid) {
       const apiUrl = 'http://localhost:3333/users';
 
       const formData = this.userForm.value;
-      if (formData.password === formData.confirmPassword) {
-        const body = {
-          name: formData.name,
-          phoneNumber: formData.phoneNumber,
-          email: formData.email,
-          password: formData.password,
-        };
 
-        this.http.post<any[]>(apiUrl, body).subscribe(
-          (response) => {
-            this.alertMessage = 'Usuário cadastrado com sucesso!';
-            this.alertType = 'success';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
-            // this.router.navigate(['/login']);
-          },
-          (error) => {
-            this.alertMessage = 'Erro ao cadastrar o usuário.';
-            this.alertType = 'danger';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
-          }
-        );
+      if (formData.password === formData.confirmPassword) {
+        const exists = await this.verifyEmail(formData.email);
+        if (exists) {
+          this.alertMessage =
+            'Endereço de email já vinculado à uma conta existente';
+          this.alertType = 'danger';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+        } else {
+          const body = {
+            name: formData.name,
+            phoneNumber: formData.phoneNumber,
+            email: formData.email,
+            password: formData.password,
+          };
+
+          this.http.post<any[]>(apiUrl, body).subscribe(
+            (response) => {
+              this.alertMessage = 'Usuário cadastrado com sucesso!';
+              this.alertType = 'success';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+              // this.router.navigate(['/login']);
+            },
+            (error) => {
+              window.alert(`Erro ao cadastrar usuário ${error}`);
+            }
+          );
+        }
       } else if (formData.password !== formData.confirmPassword) {
-        this.alertMessage = 'Erro ao cadastrar o usuário.';
+        this.alertMessage = 'As senhas devem ser correspondentes!';
         this.alertType = 'danger';
         this.showAlert = true;
         this.resetAlertAfterDelay();
       }
     } else {
-      this.alertMessage = 'Erro ao cadastrar o usuário.';
+      this.alertMessage = 'Preencha os campos corretamente!';
       this.alertType = 'danger';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
   }
-  verifyEmail(email: string) {
-    const formData = this.userForm.value;
-    this.http.get<any[]>('http://localhost:3333/users').subscribe(
-      (response) => {
-        response.forEach((user) => {
-          if (user.email == formData.email) {
-            console.log('Ola!!!!!!!!!HAHAHAHAHAHAHAHAHAHAHAHAHAHAHA');
-          }
-        });
-      },
-      (error) => {
-        console.log(`Erro ao buscar por emails cadastrados, ${error}`);
+  async verifyEmail(email: string): Promise<boolean> {
+    try {
+      const response = await this.http
+        .get<any[]>('http://localhost:3333/users')
+        .toPromise();
+
+      if (response && Array.isArray(response)) {
+        const emailExists = response.some((user) => user.email === email);
+        return emailExists;
+      } else {
+        return false;
       }
-    );
+    } catch (error) {
+      console.log(`Erro ao buscar por emails cadastrados: ${error}`);
+      return false;
+    }
   }
+
   resetAlertAfterDelay() {
     setTimeout(() => {
       this.showAlert = false;

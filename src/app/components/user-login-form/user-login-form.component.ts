@@ -36,33 +36,33 @@ export class UserLoginFormComponent implements OnInit {
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
           response.forEach((user) => {
-
-            if(user.email == formData.email){
-              if(user.password == formData.password){
-                window.alert('Usuário e senha corretos!');
-                this.router.navigate(['/vagas']);
-              }
-              else{
-                window.alert("Senha não confere!")
+            if (user.email == formData.email) {
+              if (user.password == formData.password) {
+                this.alertMessage = `Seja bem vindo(a) ${user.name}`;
+                this.alertType = 'success';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+                // this.router.navigate(['/vagas']);
+              } else {
+                this.alertMessage = 'Usuário ou senha incorretos!';
+                this.alertType = 'danger';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
               }
             }
           });
-
         },
         (error) => {
           window.alert(`Erro ao buscar dados, ${error}`);
         }
       );
     } else {
-      this.alertMessage = 'Erro ao cadastrar o usuário.';
+      this.alertMessage = 'Preencha os dados corretamente!';
       this.alertType = 'danger';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
   }
-
-  
-
 
   resetAlertAfterDelay() {
     setTimeout(() => {

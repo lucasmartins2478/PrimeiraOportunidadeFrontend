@@ -1,0 +1,126 @@
+<app-alert
+  [message]="alertMessage"
+  [type]="alertType"
+  [isVisible]="showAlert"
+></app-alert>
+
+<form [formGroup]="curriculumForm" (ngSubmit)="onSubmit()" class="form">
+  <h3>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="35"
+      height="35"
+      fill="currentColor"
+      class="bi bi-arrow-left-circle"
+      viewBox="0 0 16 16"
+      routerLink="/criar-curriculo/etapa1"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+      />
+    </svg>
+    Dados Acadêmicos
+  </h3>
+  <div class="row">
+    <div class="col-12">
+      <label for="institutionNameUser" class="form-label"
+        >Nome da Instituição de Ensino</label
+      >
+      <input
+        type="text"
+        name="institutionNameUser"
+        id="institutionNameUser"
+        placeholder="Insira o nome da instituição de ensino"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-5">
+      <label for="schoolLevelUser" class="form-label"
+        >Nível de Escolaridade</label
+      >
+      <input
+        type="text"
+        name="schoolLevelUser"
+        id="schoolLevelUser"
+        placeholder="Selecione"
+        class="form-control"
+      />
+    </div>
+    <div class="col-12 col-md-3">
+      <label for="dateOfBeginUser" class="form-label">Data de Início</label>
+      <input
+        type="text"
+        name="dateOfBeginUser"
+        id="dateOfBeginUser"
+        placeholder="xx/xx/xxxx"
+        class="form-control"
+      />
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="dateOfEndUser" class="form-label">Data de Conclusão</label>
+      <input
+        type="text"
+        name="dateOfEndUser"
+        id="dateOfEndUser"
+        class="form-control"
+        placeholder="xx/xx/xxxx"
+      />
+      <div class="check-input">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        <label id="yet" for="notEndYet">Estudo aqui atualmente</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="nameCourseUser" class="form-label">Nome do Curso</label>
+      <input
+        type="text"
+        name="nameCourseUser"
+        id="nameCourseUser"
+        placeholder="Se graduação ou técnico, insira o nome do curso"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-5">
+      <label for="yearUser" class="form-label">Ano/Semestre</label>
+      <input
+        type="text"
+        name="yearUser"
+        id="yearUser"
+        placeholder="Selecione"
+        class="form-control"
+      />
+    </div>
+    <div class="col-12 col-md-7">
+      <label for="cityOfCourseUser" class="form-label">Cidade</label>
+      <input
+        type="text"
+        name="cityOfCourseUser"
+        id="cityOfCourseUser"
+        placeholder="Cidade"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <button class="btn btn-primary" routerLink="/criar-curriculo/etapa3">
+    Cursos e Competências<svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-arrow-right"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+      />
+    </svg>
+  </button>
+</form>

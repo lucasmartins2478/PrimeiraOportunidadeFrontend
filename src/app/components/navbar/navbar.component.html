@@ -1,10 +1,8 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/"
-      ><img
-        src="../../../assets/logotipo.png"
-        alt=""
-    /></a>
+    <a class="navbar-brand" routerLink="/">
+      <img src="../../../assets/logotipo.png" alt="" />
+    </a>
     <button
       class="navbar-toggler"
       type="button"
@@ -24,8 +22,9 @@
             aria-current="page"
             routerLink="/vagas"
             style="color: #fff"
-            >Vagas</a
           >
+            Vagas
+          </a>
         </li>
         <li class="nav-item">
           <a
@@ -33,36 +32,42 @@
             aria-current="page"
             routerLink="/empresas"
             style="color: #fff"
-            >Empresas</a
           >
+            Empresas
+          </a>
+        </li>
+        <li class="nav-item" *ngIf="isAuthenticated()">
+          <a class="nav-link active" routerLink="/comunidade" style="color: #fff">Comunidade</a>
         </li>
       </ul>
+
       <form class="d-flex" role="search">
-        <a
-          class="nav-link active"
-          aria-current="page"
-          routerLink="/vagas"
-          style="color: #fff"
-          routerLink="/para-empresas"
-          ><svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-box-arrow-up-right"
-            viewBox="0 0 16 16"
+        <!-- Mostrar botões diferentes se o usuário estiver logado -->
+        <ng-container *ngIf="isAuthenticated(); else guestLinks">
+          <!-- Botão Criar Currículo -->
+          <button type="button" class="btn btn-warning" routerLink="/criar-curriculo/etapa1">
+            Criar Currículo
+          </button>
+          <!-- Ícone do usuário para acessar informações -->
+          <a class="nav-link active" routerLink="/perfil" style="color: #fff">
+            <i class="bi bi-person-circle"></i>
+          </a>
+        </ng-container>
+
+        <!-- Links para usuários não logados -->
+        <ng-template #guestLinks>
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/para-empresas"
+            style="color: #fff"
           >
-            <path
-              fill-rule="evenodd"
-              d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-            />
-            <path
-              fill-rule="evenodd"
-              d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-            /></svg>Para empresas</a>
-        <button type="button" class="btn btn-warning" routerLink="/criar-conta">
-          Criar conta
-        </button>
+            Para Empresas
+          </a>
+          <button type="button" class="btn btn-warning" routerLink="/criar-conta">
+            Criar Conta
+          </button>
+        </ng-template>
       </form>
     </div>
   </div>

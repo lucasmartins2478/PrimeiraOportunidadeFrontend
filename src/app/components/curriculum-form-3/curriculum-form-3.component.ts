@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
-
 @Component({
-  selector: 'app-curriculum-form',
-  templateUrl: './curriculum-form.component.html',
-  styleUrl: './curriculum-form.component.css',
+  selector: 'app-curriculum-form-3',
+  templateUrl: './curriculum-form-3.component.html',
+  styleUrl: './curriculum-form-3.component.css'
 })
-export class CurriculumFormComponent implements OnInit{
+export class CurriculumForm3Component implements OnInit{
   alertMessage: string = '';
   alertType: 'success' | 'danger' = 'success';
   showAlert: boolean = false;

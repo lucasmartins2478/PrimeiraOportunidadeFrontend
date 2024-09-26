@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-user-login-form',
@@ -18,7 +19,8 @@ export class UserLoginFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -42,6 +44,7 @@ export class UserLoginFormComponent implements OnInit {
                 this.alertType = 'success';
                 this.showAlert = true;
                 this.resetAlertAfterDelay();
+                this.authService.login();
                 // this.router.navigate(['/vagas']);
               } else {
                 this.alertMessage = 'Usuário ou senha incorretos!';

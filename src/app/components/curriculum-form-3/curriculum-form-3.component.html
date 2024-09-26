@@ -1,0 +1,107 @@
+<app-alert
+  [message]="alertMessage"
+  [type]="alertType"
+  [isVisible]="showAlert"
+></app-alert>
+
+<form [formGroup]="curriculumForm" (ngSubmit)="onSubmit()" class="form">
+  <h3>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="35"
+      height="35"
+      fill="currentColor"
+      class="bi bi-arrow-left-circle"
+      viewBox="0 0 16 16"
+      routerLink="/criar-curriculo/etapa2"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+      />
+    </svg>
+    Cursos e Competências
+  </h3>
+  <div class="check-input">
+    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+    <label for="notEndYet">Não possuo cursos</label>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="nameUser" class="form-label"
+        >Nome do curso complementar</label
+      >
+      <input
+        type="text"
+        name="nameUser"
+        id="nameUser"
+        placeholder="Insira o nome completo do curso"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-4">
+      <label for="cpfUser" class="form-label">Modalidade</label>
+      <input
+        type="text"
+        name="cpfUser"
+        id="cpfUser"
+        placeholder="Selecione"
+        class="form-control"
+      />
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="dateOfBirthUser" class="form-label">Duração (horas)</label>
+      <input
+        type="text"
+        name="dateOfBirthUser"
+        id="dateOfBirthUser"
+        placeholder=""
+        class="form-control"
+      />
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="ageUser" class="form-label">Conclusão</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="xx/xxxx"
+      />
+      <div class="check-input">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+        <label for="notEndYet">Estudando atualmente</label>
+      </div>
+    </div>
+
+  </div>
+  <div class="row" style="margin-top: 10rem;">
+    <div class="col-12">
+      <label for="addressUser" class="form-label">Insira suas competências</label>
+      <input
+        type="text"
+        name="addressUser"
+        id="addressUser"
+        placeholder="Insira palavras-chave ou o nome completo"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <button class="btn btn-primary" routerLink="/criar-curriculo/etapa4">
+    Dados adicionais<svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-arrow-right"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+      />
+    </svg>
+  </button>
+</form>

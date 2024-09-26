@@ -30,6 +30,10 @@ svg{
 p{
   text-align: center;
 }
+textarea {
+  resize: none;
+}
+
 nav{
   margin: 0 auto;
 }

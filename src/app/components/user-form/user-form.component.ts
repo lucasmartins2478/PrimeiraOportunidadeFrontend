@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserFormServiceService } from "../../services/form/user-form-service.service"
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,7 +19,8 @@ export class UserFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private userFormService: UserFormServiceService
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +34,7 @@ export class UserFormComponent implements OnInit {
           Validators.maxLength(12),
         ],
       ],
+      cpf:["", [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -61,6 +64,7 @@ export class UserFormComponent implements OnInit {
 
           this.http.post<any[]>(apiUrl, body).subscribe(
             (response) => {
+              this.userFormService.setFormData(this.userForm.value);
               this.alertMessage = 'Usuário cadastrado com sucesso!';
               this.alertType = 'success';
               this.showAlert = true;

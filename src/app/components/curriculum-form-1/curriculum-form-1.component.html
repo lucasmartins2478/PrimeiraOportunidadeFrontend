@@ -31,20 +31,11 @@
         id="nameUser"
         placeholder="Nome"
         class="form-control"
+        formControlName="name"
       />
     </div>
   </div>
   <div class="row">
-    <div class="col-12 col-md-5">
-      <label for="cpfUser" class="form-label">CPF</label>
-      <input
-        type="text"
-        name="cpfUser"
-        id="cpfUser"
-        placeholder="xxx.xxx.xxx-xx"
-        class="form-control"
-      />
-    </div>
     <div class="col-12 col-md-5">
       <label for="dateOfBirthUser" class="form-label">Data de Nascimento</label>
       <input
@@ -53,11 +44,54 @@
         id="dateOfBirthUser"
         placeholder="xx/xx/xxxx"
         class="form-control"
+        formControlName="dateOfBirth"
       />
     </div>
     <div class="col-12 col-md-2">
       <label for="ageUser" class="form-label">Idade</label>
-      <input type="text" name="ageUser" id="ageUser" class="form-control" />
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Idade"
+        formControlName="age"
+      />
+    </div>
+    <div class="col-12 col-md-5">
+      <label for="ageUser" class="form-label">Gênero</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Selecione"
+        formControlName="gender"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="ageUser" class="form-label">Telefone</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="(xx) xxxxx-xxxx"
+        formControlName="phoneNumber"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="ageUser" class="form-label">Raça</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Selecione"
+        formControlName="race"
+      />
     </div>
   </div>
   <div class="row">
@@ -69,6 +103,7 @@
         id="emailUser"
         placeholder="Email"
         class="form-control"
+        formControlName="email"
       />
     </div>
   </div>
@@ -81,6 +116,7 @@
         id="cityUser"
         placeholder="Cidade"
         class="form-control"
+        formControlName="city"
       />
     </div>
     <div class="col-12 col-md-4">
@@ -91,6 +127,7 @@
         id="ufUser"
         placeholder="Estado"
         class="form-control"
+        formControlName="uf"
       />
     </div>
   </div>
@@ -103,6 +140,7 @@
         id="addressUser"
         placeholder="Endereço"
         class="form-control"
+        formControlName="address"
       />
     </div>
     <div class="col-12 col-md-2">
@@ -113,6 +151,7 @@
         id="addressNumberUser"
         placeholder="xxx"
         class="form-control"
+        formControlName="addressNumber"
       />
     </div>
     <div class="col-12 col-md-4">
@@ -123,6 +162,7 @@
         id="cepUser"
         placeholder="CEP"
         class="form-control"
+        formControlName="cep"
       />
     </div>
   </div>
@@ -142,4 +182,3 @@
     </svg>
   </button>
 </form>
-

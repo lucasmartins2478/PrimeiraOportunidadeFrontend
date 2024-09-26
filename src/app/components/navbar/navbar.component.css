@@ -19,15 +19,27 @@ button {
   background-color: #ff7b2a;
   border: none;
 }
+#profile{
+  display: none;
+}
 a {
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
+.dropdown-menu{
+  margin-top: 10.5rem;
+  margin-left: 10.5rem;
+}
+
 svg {
   color: #000;
-  font-weight: 600;
+
+}
+.bi-person-circle{
+  margin-left: 5rem;
+  margin-right: 2rem;
 }
 @media (max-width: 991.5px) {
   button {
@@ -53,5 +65,12 @@ svg {
   }
   svg{
     display: none;
+  }
+  #profile{
+    display: block;
+  }
+  .dropdown-menu{
+    margin: 0;
+    margin-top: 5rem;
   }
 }

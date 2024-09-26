@@ -31,7 +31,7 @@ export class CompanyFormComponent implements OnInit {
       responsible: ['', [Validators.required]],
       url: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      confirmPassword:['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]],
       city: ['', [Validators.required]],
       cep: ['', [Validators.required]],
       address: ['', [Validators.required]],
@@ -39,15 +39,82 @@ export class CompanyFormComponent implements OnInit {
       uf: ['', [Validators.required]],
     });
   }
-  onSubmit(){
+  async onSubmit() {
+    if (this.companyForm.valid) {
+      const apiUrl = 'http://localhost:3333/companies';
 
+      const formData = this.companyForm.value;
 
-    if(this.companyForm.valid){
-      window.alert("Dados corretos!")
-    }else{
-      window.alert('Preencha os campos corretamente!');
+      if (formData.password === formData.confirmPassword) {
+        const exists = await this.verifyCnpj(formData.cpnj);
+        if (exists) {
+          this.alertMessage = 'CNPJ já cadastrado';
+          this.alertType = 'danger';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+        } else {
+          const body = {
+            name: formData.name,
+            responsible: formData.responsible,
+            cnpj: formData.cnpj,
+            segment: formData.segment,
+            email: formData.email,
+            phoneNumber: formData.phoneNumber,
+            password: formData.password,
+            url: formData.url,
+            address: formData.address,
+            city: formData.city,
+            cep: formData.cep,
+            addressNumber: formData.addressNumber,
+            uf: formData.uf,
+          };
+          this.http.post<any[]>(apiUrl, body).subscribe(
+            (response) => {
+              this.alertMessage = 'Usuário cadastrado com sucesso!';
+              this.alertType = 'success';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+              // this.router.navigate(['/login']);
+            },
+            (error) => {
+              window.alert(`Erro ao cadastrar usuário ${error}`);
+            }
+          );
+        }
+      } else if (formData.password !== formData.confirmPassword) {
+        this.alertMessage = 'As senhas devem ser correspondentes!';
+        this.alertType = 'danger';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+      }
+
+      // this.alertMessage = 'Usuário cadastrado com sucesso!';
+      // this.alertType = 'success';
+      // this.showAlert = true;
+      // this.resetAlertAfterDelay();
+    } else {
+      this.alertMessage = 'Preencha os campos corretamente!';
+      this.alertType = 'danger';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
     }
+  }
+  async verifyCnpj(cnpj: string): Promise<boolean> {
+    try {
+      const response = await this.http
+        .get<any[]>('http://localhost:3333/companies')
+        .toPromise();
 
+      if (response && Array.isArray(response)) {
+        const cnpjExists = response.some((company) => company.cnpj === cnpj);
+        return cnpjExists;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(`Erro ao buscar por cnpj cadastrados: ${error}`);
+      return false;
+    }
   }
   resetAlertAfterDelay() {
     setTimeout(() => {

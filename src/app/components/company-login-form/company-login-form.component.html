@@ -1,6 +1,8 @@
-<app-alert [message]="alertMessage" [type]="alertType" [isVisible]="showAlert"></app-alert>
-
-
+<app-alert
+  [message]="alertMessage"
+  [type]="alertType"
+  [isVisible]="showAlert"
+></app-alert>
 
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="container">
   <h3>Empresa já cadastrada? Faça seu Login</h3>
@@ -22,9 +24,7 @@
       formControlName="password"
     />
     <a routerLink="/recuperar-senha">Esqueceu sua senha?</a>
-    <button type="submit" class="btn btn-primary">
-      Entrar
-    </button>
+    <button type="submit" class="btn btn-primary">Entrar</button>
     <a data-bs-toggle="modal" data-bs-target="#exampleModal">Termos de uso</a>
     <!-- Button trigger modal -->
 
@@ -58,9 +58,7 @@
             >
               Fechar
             </button>
-            <button type="button" class="btn btn-primary">
-              Confirmar
-            </button>
+            <button type="button" class="btn btn-primary">Confirmar</button>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-user-login-form',
@@ -38,13 +38,17 @@ export class UserLoginFormComponent implements OnInit {
       this.http.get<any[]>(apiUrl).subscribe(
         (response) => {
           response.forEach((user) => {
-            if (user.email == formData.email) {
-              if (user.password == formData.password) {
-                this.alertMessage = `Seja bem vindo(a) ${user.name}`;
+            if (user.email === formData.email) {
+              if (user.password === formData.password) {
+                this.alertMessage = `Seja bem-vindo(a) ${user.name}`;
                 this.alertType = 'success';
                 this.showAlert = true;
                 this.resetAlertAfterDelay();
-                this.authService.login();
+
+                // Armazena os dados do usuário no AuthService
+                this.authService.login(user);
+
+                // Navega para a próxima página (descomente se necessário)
                 // this.router.navigate(['/vagas']);
               } else {
                 this.alertMessage = 'Usuário ou senha incorretos!';
@@ -66,6 +70,7 @@ export class UserLoginFormComponent implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
+
 
   resetAlertAfterDelay() {
     setTimeout(() => {

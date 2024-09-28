@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserFormServiceService } from "../../services/form/user-form-service.service"
+import { UserFormService } from '../../services/user/user-form.service';
 import { Router } from '@angular/router';
+import { IUser } from '../../models/user.interface';
 
 @Component({
   selector: 'app-user-form',
@@ -20,7 +21,7 @@ export class UserFormComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private userFormService: UserFormServiceService
+    private userFormService: UserFormService
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +35,7 @@ export class UserFormComponent implements OnInit {
           Validators.maxLength(12),
         ],
       ],
-      cpf:["", [Validators.required]],
+      cpf: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -62,7 +63,7 @@ export class UserFormComponent implements OnInit {
             password: formData.password,
           };
 
-          this.http.post<any[]>(apiUrl, body).subscribe(
+          this.http.post<IUser[]>(apiUrl, body).subscribe(
             (response) => {
               this.userFormService.setFormData(this.userForm.value);
               this.alertMessage = 'Usuário cadastrado com sucesso!';
@@ -92,7 +93,7 @@ export class UserFormComponent implements OnInit {
   async verifyEmail(email: string): Promise<boolean> {
     try {
       const response = await this.http
-        .get<any[]>('http://localhost:3333/users')
+        .get<IUser[]>('http://localhost:3333/users')
         .toPromise();
 
       if (response && Array.isArray(response)) {

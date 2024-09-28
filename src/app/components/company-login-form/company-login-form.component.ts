@@ -2,11 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserAuthService } from '../../services/auth/auth.service';
+import { ICompany } from '../../models/company.interface';
 
 @Component({
   selector: 'app-company-login-form',
   templateUrl: './company-login-form.component.html',
-  styleUrl: './company-login-form.component.css',
+  styleUrls: ['./company-login-form.component.css'],
 })
 export class CompanyLoginFormComponent implements OnInit {
   alertMessage: string = '';
@@ -19,46 +21,41 @@ export class CompanyLoginFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private http: HttpClient,
+    private authService: UserAuthService
   ) {}
+
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      user: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      user: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     });
   }
 
   onSubmit() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-
       const apiUrl = 'http://localhost:3333/companies';
 
-      this.http.get<any[]>(apiUrl).subscribe(
+      this.http.get<ICompany[]>(apiUrl).subscribe(
         (response) => {
-          response.forEach((user) => {
-            if (user.email === formData.user) {
-              if (user.password === formData.password) {
-                this.alertMessage = `Seja bem-vindo(a) ${user.responsible}`;
-                this.alertType = 'success';
-                this.showAlert = true;
-                this.resetAlertAfterDelay();
+          const company = response.find((comp) => comp.email === formData.user);
+          if (company && company.password === formData.password) {
+            this.alertMessage = `Seja bem-vindo(a) ${company.responsible}`;
+            this.alertType = 'success';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
 
-                // Armazena os dados do usuário no AuthService
-                // Navega para a próxima página (descomente se necessário)
-                // this.router.navigate(['/vagas']);
-              } else {
-                this.alertMessage = 'Usuário ou senha incorretos!';
-                this.alertType = 'danger';
-                this.showAlert = true;
-                this.resetAlertAfterDelay();
-              }
-            } else {
-              this.alertMessage = 'Usuário ou senha incorretos!';
-              this.alertType = 'danger';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
-            }
-          });
+            // Armazena os dados da empresa no AuthService
+            this.authService.loginCompany(company);
+
+            // Navega para a próxima página
+            this.router.navigate(['/minhas-vagas']);
+          } else {
+            this.alertMessage = 'Usuário ou senha incorretos!';
+            this.alertType = 'danger';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+          }
         },
         (error) => {
           window.alert(`Erro ao buscar dados, ${error}`);
@@ -71,6 +68,7 @@ export class CompanyLoginFormComponent implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
+
   resetAlertAfterDelay() {
     setTimeout(() => {
       this.showAlert = false;

@@ -30,7 +30,6 @@ import { CompanyLoginFormComponent } from './components/company-login-form/compa
 import { UserLoginFormComponent } from './components/user-login-form/user-login-form.component';
 import { CompanyCardComponent } from './components/company-card/company-card.component';
 import { AlertComponent } from './components/alert/alert.component';
-import { CurriculumRegisterComponent } from './pages/curriculum-register/curriculum-register.component';
 import { CurriculumStep1Component } from './pages/curriculum-step-1/curriculum-step-1.component';
 import { CurriculumStep2Component } from './pages/curriculum-step-2/curriculum-step-2.component';
 import { CurriculumStep3Component } from './pages/curriculum-step-3/curriculum-step-3.component';
@@ -39,6 +38,7 @@ import { CurriculumForm1Component } from './components/curriculum-form-1/curricu
 import { CurriculumForm2Component } from './components/curriculum-form-2/curriculum-form-2.component';
 import { CurriculumForm3Component } from './components/curriculum-form-3/curriculum-form-3.component';
 import { CurriculumForm4Component } from './components/curriculum-form-4/curriculum-form-4.component';
+import { JobRegisterComponent } from './pages/job-register/job-register.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +69,6 @@ import { CurriculumForm4Component } from './components/curriculum-form-4/curricu
     UserLoginFormComponent,
     CompanyCardComponent,
     AlertComponent,
-    CurriculumRegisterComponent,
     CurriculumStep1Component,
     CurriculumStep2Component,
     CurriculumStep3Component,
@@ -78,6 +77,7 @@ import { CurriculumForm4Component } from './components/curriculum-form-4/curricu
     CurriculumForm2Component,
     CurriculumForm3Component,
     CurriculumForm4Component,
+    JobRegisterComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
   providers: [],

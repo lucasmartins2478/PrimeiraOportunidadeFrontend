@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { companyFormService } from '../../services/company/company-form.service';
 import { Router } from '@angular/router';
+import { ICompany } from '../../models/company.interface';
 
 @Component({
   selector: 'app-company-form',
@@ -18,7 +20,8 @@ export class CompanyFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private companyFormService: companyFormService
   ) {}
 
   ngOnInit(): void {
@@ -68,8 +71,9 @@ export class CompanyFormComponent implements OnInit {
             addressNumber: formData.addressNumber,
             uf: formData.uf,
           };
-          this.http.post<any[]>(apiUrl, body).subscribe(
+          this.http.post<ICompany[]>(apiUrl, body).subscribe(
             (response) => {
+              this.companyFormService.setFormData(this.companyForm.value)
               this.alertMessage = 'Usuário cadastrado com sucesso!';
               this.alertType = 'success';
               this.showAlert = true;
@@ -99,14 +103,14 @@ export class CompanyFormComponent implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
-  async verifyCnpj(cnpj: string): Promise<boolean> {
+  async verifyCnpj(cnpj: number): Promise<boolean> {
     try {
       const response = await this.http
-        .get<any[]>('http://localhost:3333/companies')
+        .get<ICompany[]>('http://localhost:3333/companies')
         .toPromise();
 
       if (response && Array.isArray(response)) {
-        const cnpjExists = response.some((company) => company.cnpj === cnpj);
+        const cnpjExists = response.some((company) => company.cnpj == cnpj);
         return cnpjExists;
       } else {
         return false;

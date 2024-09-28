@@ -1,24 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
+import { UserAuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit{
-  isProfileMenuOpen = false
+export class NavbarComponent implements OnInit {
+  isProfileMenuOpen: boolean = false;
+  userType: string | null = null;
 
-  constructor(private authService: AuthService){}
+  constructor(private authService: UserAuthService) {}
+
+  ngOnInit(): void {
+    this.userType = this.authService.getUserType();
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
 
   toggleProfileMenu() {
-    this.isProfileMenuOpen = !this.isProfileMenuOpen; // Alternar visibilidade do menu
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
   }
 
-  isAuthenticated() {
-    return this.authService.getIsAuthenticated();
-  }
-  ngOnInit(): void {
-      console.log("iniciando componente navbar")
+  logout() {
+    this.authService.logout();
+    this.userType = null;
+    // Pode redirecionar o usuário após logout, se necessário
   }
 }

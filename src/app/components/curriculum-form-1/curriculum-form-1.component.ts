@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
+import { UserAuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-curriculum-form-1',
@@ -20,7 +20,7 @@ export class CurriculumForm1Component implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService // Adicionado AuthService
+    private authService: UserAuthService // Adicionado AuthService
   ) {}
 
   ngOnInit(): void {
@@ -38,16 +38,6 @@ export class CurriculumForm1Component implements OnInit {
       addressNumber: ['', [Validators.required]],
       cep: ['', [Validators.required]],
     });
-
-    // Preencher os dados do usuário no formulário
-    const savedData = this.authService.getUserData(); // Recupera os dados do usuário do AuthService
-    if (savedData) {
-      this.curriculumForm.patchValue({
-        name: savedData.name,
-        email: savedData.email,
-        celPhoneNumber: savedData.phoneNumber, // Use a chave correta para o telefone
-      });
-    }
   }
 
   onSubmit() {

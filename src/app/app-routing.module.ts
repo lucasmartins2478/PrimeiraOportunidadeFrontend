@@ -14,6 +14,7 @@ import { CurriculumStep1Component } from './pages/curriculum-step-1/curriculum-s
 import { CurriculumStep4Component } from './pages/curriculum-step-4/curriculum-step-4.component';
 import { CurriculumStep2Component } from './pages/curriculum-step-2/curriculum-step-2.component';
 import { CurriculumStep3Component } from './pages/curriculum-step-3/curriculum-step-3.component';
+import { JobRegisterComponent } from './pages/job-register/job-register.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,8 @@ const routes: Routes = [
   {path:"criar-curriculo/etapa1", component: CurriculumStep1Component},
   {path:"criar-curriculo/etapa2", component: CurriculumStep2Component},
   {path:"criar-curriculo/etapa3", component: CurriculumStep3Component},
-  {path:"criar-curriculo/etapa4", component: CurriculumStep4Component}
+  {path:"criar-curriculo/etapa4", component: CurriculumStep4Component},
+  {path:"criar-vaga", component: JobRegisterComponent}
 ];
 
 @NgModule({

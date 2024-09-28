@@ -17,69 +17,65 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            routerLink="/vagas"
-            style="color: #fff"
-          >
-            Vagas
-          </a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            routerLink="/empresas"
-            style="color: #fff"
-          >
-            Empresas
-          </a>
-        </li>
-        <li class="nav-item" *ngIf="isAuthenticated()">
-          <a
-            class="nav-link active"
-            routerLink="/comunidade"
-            style="color: #fff"
-          >
-            Comunidade
-          </a>
-        </li>
+        <ng-container *ngIf="isAuthenticated(); else guestLinks">
+          <li class="nav-item" *ngIf="userType === 'user'">
+            <a class="nav-link active" aria-current="page" routerLink="/vagas" style="color: #fff">
+              Vagas
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="userType === 'user'">
+            <a class="nav-link active" aria-current="page" routerLink="/empresas" style="color: #fff">
+              Empresas
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="userType === 'user'">
+            <a class="nav-link active" aria-current="page" routerLink="/comunidade" style="color: #fff">
+              Comunidade
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="userType === 'company'">
+            <a class="nav-link active" routerLink="/minhas-vagas" style="color: #fff">
+              Minhas Vagas
+            </a>
+          </li>
+        </ng-container>
+
+        <ng-template #guestLinks>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/vagas" style="color: #fff">
+              Vagas
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="/empresas" style="color: #fff">
+              Empresas
+            </a>
+          </li>
+        </ng-template>
       </ul>
 
       <form class="d-flex" role="search">
-        <ng-container *ngIf="isAuthenticated(); else guestLinks">
-          <!-- Botão Criar Currículo -->
-          <button
-            type="button"
-            class="btn btn-warning"
-            routerLink="/criar-curriculo/etapa1"
-          >
-            Criar Currículo
-          </button>
+        <ng-container *ngIf="isAuthenticated(); else guestActions">
+          <ng-container *ngIf="userType === 'user'; else companyActions">
+            <!-- Botão Criar Currículo -->
+            <button type="button" class="btn btn-warning" routerLink="/criar-curriculo/etapa1">
+              Criar Currículo
+            </button>
+          </ng-container>
+
+          <ng-template #companyActions>
+            <!-- Botão Criar Vaga -->
+            <button type="button" class="btn btn-warning" routerLink="/criar-vaga">
+              Criar Vaga
+            </button>
+          </ng-template>
 
           <!-- Ícone e texto do usuário para acessar informações -->
           <div class="nav-item" (click)="toggleProfileMenu()" style="cursor: pointer;">
-            <a
-            class="nav-link active"
-            id="profile"
-            style="color: #fff"
-            >Perfil</a
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="45"
-              height="45"
-              fill="currentColor"
-              class="bi bi-person-circle"
-              viewBox="0 0 16 16"
-            >
+            <a class="nav-link active" id="profile" style="color: #fff">Perfil</a>
+            <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-              <path
-                fill-rule="evenodd"
-                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
-              />
+              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
             </svg>
           </div>
 
@@ -90,37 +86,15 @@
           </div>
         </ng-container>
 
-        <ng-template #guestLinks>
-          <a
-            class="nav-link active"
-            aria-current="page"
-            routerLink="/para-empresas"
-            style="color: #fff"
-          >
+        <ng-template #guestActions>
+          <a class="nav-link active" aria-current="page" routerLink="/para-empresas" style="color: #fff">
             Para Empresas
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-box-arrow-up-right"
-              viewBox="0 0 16 16"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"
-              />
-              <path
-                fill-rule="evenodd"
-                d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a.5.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5" />
+              <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z" />
             </svg>
           </a>
-          <button
-            type="button"
-            class="btn btn-warning"
-            routerLink="/criar-conta"
-          >
+          <button type="button" class="btn btn-warning" routerLink="/criar-conta">
             Criar Conta
           </button>
         </ng-template>

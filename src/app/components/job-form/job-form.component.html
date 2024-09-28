@@ -1,1 +1,172 @@
-<p>job-form works!</p>
+<app-alert
+  [message]="alertMessage"
+  [type]="alertType"
+  [isVisible]="showAlert"
+></app-alert>
+
+<form [formGroup]="jobForm" (ngSubmit)="onSubmit()" class="form">
+  <h3>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="35"
+      height="35"
+      fill="currentColor"
+      class="bi bi-arrow-left-circle"
+      viewBox="0 0 16 16"
+      routerLink="/"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+      />
+    </svg>
+    Dados da Vaga
+  </h3>
+  <div class="row">
+    <div class="col-12">
+      <label for="nameUser" class="form-label">Nome do cargo</label>
+      <input
+        type="text"
+        name="nameUser"
+        id="nameUser"
+        placeholder="Nome do cargo"
+        class="form-control"
+        formControlName="name"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-3">
+      <label for="dateOfBirthUser" class="form-label">Modalidade</label>
+      <input
+        type="text"
+        name="dateOfBirthUser"
+        id="dateOfBirthUser"
+        placeholder="Selecione"
+        class="form-control"
+        formControlName="modality"
+      />
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="ageUser" class="form-label">Localidade</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Insira uma cidade"
+        formControlName="locality"
+      />
+    </div>
+    <div class="col-12 col-md-5">
+      <label for="ageUser" class="form-label">Estado</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Selecione"
+        formControlName="uf"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="ageUser" class="form-label">Contato</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Email ou telefone"
+        formControlName="contact"
+      />
+    </div>
+    <div class="col-12 col-md-3">
+      <label for="ageUser" class="form-label">Salário</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Insira um valor"
+        formControlName="salary"
+      />
+    </div>
+    <div class="col-12 col-md-3">
+      <label for="ageUser" class="form-label">Nível da vaga</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Selecione"
+        formControlName="level"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label for="ageUser" class="form-label">Requisitos</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Requisitos"
+        formControlName="requirements"
+      />
+    </div>
+    <div class="col-12 col-md-6">
+      <label for="ageUser" class="form-label">Nome da Empresa</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Nome da Empresa"
+        formControlName="companyData"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="ageUser" class="form-label">Benefícios</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Nome da Empresa"
+        formControlName="benefits"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="cpfUser" class="form-label">Descrição da vaga</label>
+      <textarea
+        name=""
+        id=""
+        class="form-control"
+        placeholder="Faça uma breve descrição sobre a vaga"
+        formControlName="description"
+      ></textarea>
+    </div>
+  </div>
+  <button class="btn btn-primary" routerLink="/criar-curriculo/etapa2">
+    Avançar<svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-arrow-right"
+      viewBox="0 0 16 16"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+      />
+    </svg>
+  </button>
+</form>

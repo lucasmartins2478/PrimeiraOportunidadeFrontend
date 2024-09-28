@@ -1,29 +1,40 @@
 import { Injectable } from '@angular/core';
+import { IUser } from '../../models/user.interface';
+import { ICompany } from '../../models/company.interface';
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class AuthService {
-  private isAuthenticated = false;
-  private userData: any; // Variável para armazenar os dados do usuário
+export class UserAuthService {
+  private user: IUser | null = null;
+  private company: ICompany | null = null;
 
   constructor() {}
 
-  login(user: any) {
-    this.isAuthenticated = true;
-    this.userData = user; // Armazena os dados do usuário
+  login(user: IUser) {
+    this.user = user;
+    // Armazenar o tipo do usuário
+    localStorage.setItem('userType', 'user');
+  }
+
+  loginCompany(company: ICompany) {
+    this.company = company;
+    // Armazenar o tipo da empresa
+    localStorage.setItem('userType', 'company');
   }
 
   logout() {
-    this.isAuthenticated = false;
-    this.userData = null; // Limpa os dados do usuário ao fazer logout
+    this.user = null;
+    this.company = null;
+    localStorage.removeItem('userType');
   }
 
-  getIsAuthenticated() {
-    return this.isAuthenticated;
+  isAuthenticated(): boolean {
+    return this.user !== null || this.company !== null;
   }
 
-  getUserData() {
-    return this.userData; // Retorna os dados do usuário
+  getUserType(): string | null {
+    return localStorage.getItem('userType');
   }
 }

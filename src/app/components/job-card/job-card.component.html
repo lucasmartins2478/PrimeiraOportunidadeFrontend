@@ -1,7 +1,36 @@
 <div class="col-6">
-  <h5>Título</h5>
-  <h6>Empresa: Tal</h6>
-  <h6>Modalidade: Presencial</h6>
-  <h6>Salário: R$ 100.000,00</h6>
-  <button class="btn btn-warning">Ver informações da vaga</button>
+  <h5>{{job.name}}</h5>
+  <h6>Empresa: {{job.companyName}}</h6>
+  <h6>Modalidade: {{job.modality}}</h6>
+  <h6>Salário: {{job.salary}}</h6>
+  <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Ver informações da vaga
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{job.name}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Empresa: {{job.companyName}}</h6>
+          <h6>Modalidade: {{job.modality}}</h6>
+          <h6>Localidade: {{job.locality}}</h6>
+          <h6>Estado: {{job.uf}}</h6>
+          <h6>Nível da vaga: {{job.level}}</h6>
+          <h6>Contato: {{job.contact}}</h6>
+          <h6>Requisitos: {{job.requirements}}</h6>
+          <h6>Benefícios: {{job.benefits}}</h6>
+          <h6>Descrição da vaga: {{job.description}}</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+          <button type="button" class="btn btn-primary">Candidatar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

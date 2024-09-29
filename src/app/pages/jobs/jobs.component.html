@@ -5,23 +5,10 @@
 </div>
 <div class="card-wrapper">
   <div class="row">
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
-    <app-job-card class="col-9 col-md-4"></app-job-card>
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of jobs"
+      [job]="job"
+    ></app-job-card>
   </div>
 </div>

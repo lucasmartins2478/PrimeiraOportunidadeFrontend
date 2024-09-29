@@ -3,14 +3,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserAuthService } from '../../services/auth/auth.service';
+import { IJob } from '../../models/job.interface';
 
 @Component({
   selector: 'app-job-form',
   templateUrl: './job-form.component.html',
-  styleUrl: './job-form.component.css'
+  styleUrl: './job-form.component.css',
 })
 export class JobFormComponent {
-
   alertMessage: string = '';
   alertType: 'success' | 'danger' = 'success';
   showAlert: boolean = false;
@@ -33,10 +33,10 @@ export class JobFormComponent {
       contact: ['', [Validators.required]],
       salary: ['', [Validators.required]],
       level: ['', [Validators.required]],
-      description: ['', [Validators.required]],
+      description: ['', ],
       requirements: ['', [Validators.required]],
-      company: ['', [Validators.required]],
-      benefits: ['', [Validators.required]]
+      companyName: ['', [Validators.required]],
+      benefits: ['', [Validators.required]],
     });
 
     // Preencher os dados do usuário no formulário
@@ -51,11 +51,35 @@ export class JobFormComponent {
   }
 
   onSubmit() {
-    if (this.jobForm.valid) {
-      this.alertMessage = 'Formulário válido!';
-      this.alertType = 'success';
-      this.showAlert = true;
-      this.resetAlertAfterDelay();
+    if (true) {
+      const apiUrl = 'http://localhost:3333/jobs';
+      const formData = this.jobForm.value;
+
+      const body = {
+        name: formData.name,
+        modality: formData.modality,
+        locality: formData.locality,
+        uf: formData.uf,
+        contact: formData.contact,
+        salary: formData.salary,
+        level: formData.level,
+        description: formData.description,
+        requirements: formData.requirements,
+        companyName: formData.companyName,
+        benefits: formData.benefits,
+      };
+
+      this.http.post<IJob[]>(apiUrl, body).subscribe(
+        (response) => {
+          this.alertMessage = 'Vaga criada com sucesso!';
+          this.alertType = 'success';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+        },
+        (error) => {
+          window.alert(`Erro ao cadastrar usuário ${error}`);
+        }
+      );
     } else {
       this.alertMessage = 'Formulário inválido';
       this.alertType = 'danger';
@@ -74,5 +98,4 @@ export class JobFormComponent {
     this.alertMessage = '';
     this.showAlert = false;
   }
-
 }

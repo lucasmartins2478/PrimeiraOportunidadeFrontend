@@ -1,4 +1,4 @@
-div{
+.col-6{
   padding: 1rem;
   background-color: #E5E9FF;
   border-radius: 8px;
@@ -9,11 +9,29 @@ h5{
   text-align: center;
   color: #004AAD;
 }
-button{
+.btn-warning{
   width: 100%;
   color: #fff;
   background-color: #FF7B2A;
   border: none;
+}
+.btn-primary{
+  color: #fff;
+  background-color: #FF7B2A;
+  border: none;
+}
+.modal-footer{
+  display: flex;
+  justify-content: space-around;
+}
+.modal-footer button{
+  width: 10rem;
+}
+.btn-primary:hover{
+  background-color: #f46811;
+}
+.modal{
+  z-index: 10000000;
 }
 
 @media(max-width:1200px){

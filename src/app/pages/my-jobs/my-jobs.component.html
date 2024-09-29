@@ -2,7 +2,13 @@
 <div class="search-wrapper">
   <h2>Minhas Vagas</h2>
   <app-search-form></app-search-form>
-  <div class="card-wrapper">
-
+</div>
+<div class="card-wrapper">
+  <div class="row">
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of jobs"
+      [job]="job"
+    ></app-job-card>
   </div>
 </div>

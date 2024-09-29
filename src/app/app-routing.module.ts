@@ -15,6 +15,7 @@ import { CurriculumStep4Component } from './pages/curriculum-step-4/curriculum-s
 import { CurriculumStep2Component } from './pages/curriculum-step-2/curriculum-step-2.component';
 import { CurriculumStep3Component } from './pages/curriculum-step-3/curriculum-step-3.component';
 import { JobRegisterComponent } from './pages/job-register/job-register.component';
+import { AuthGuard, CompanyGuard, UserGuard } from './services/auth/auth.guard';
 
 
 const routes: Routes = [
@@ -24,15 +25,15 @@ const routes: Routes = [
   {path:"criar-conta", component: UserRegisterComponent},
   {path:"para-empresas", component: CompanyRegisterComponent},
   {path:"recuperar-senha", component: ForgotPasswordComponent},
-  {path:"minhas-candidaturas", component: ApplicationsComponent},
-  {path:"minhas-vagas", component:MyJobsComponent},
+  {path:"minhas-candidaturas", component: ApplicationsComponent, canActivate: [AuthGuard, UserGuard]},
+  {path:"minhas-vagas", component:MyJobsComponent, canActivate: [AuthGuard, CompanyGuard]},
   {path:"login", component:LoginComponent},
   {path:"comunidade", component: CommunityComponent},
-  {path:"criar-curriculo/etapa1", component: CurriculumStep1Component},
-  {path:"criar-curriculo/etapa2", component: CurriculumStep2Component},
-  {path:"criar-curriculo/etapa3", component: CurriculumStep3Component},
-  {path:"criar-curriculo/etapa4", component: CurriculumStep4Component},
-  {path:"criar-vaga", component: JobRegisterComponent}
+  {path:"criar-curriculo/etapa1", component: CurriculumStep1Component, canActivate: [AuthGuard, UserGuard]},
+  {path:"criar-curriculo/etapa2", component: CurriculumStep2Component, canActivate: [AuthGuard, UserGuard]},
+  {path:"criar-curriculo/etapa3", component: CurriculumStep3Component, canActivate: [AuthGuard, UserGuard]},
+  {path:"criar-curriculo/etapa4", component: CurriculumStep4Component, canActivate: [AuthGuard, UserGuard]},
+  {path:"criar-vaga", component: JobRegisterComponent, canActivate: [AuthGuard, CompanyGuard]}
 ];
 
 @NgModule({

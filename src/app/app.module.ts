@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { CompanyRegisterComponent } from './pages/company-register/company-register.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -39,6 +40,9 @@ import { CurriculumForm2Component } from './components/curriculum-form-2/curricu
 import { CurriculumForm3Component } from './components/curriculum-form-3/curriculum-form-3.component';
 import { CurriculumForm4Component } from './components/curriculum-form-4/curriculum-form-4.component';
 import { JobRegisterComponent } from './pages/job-register/job-register.component';
+import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authenticaded.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -78,9 +82,13 @@ import { JobRegisterComponent } from './pages/job-register/job-register.componen
     CurriculumForm3Component,
     CurriculumForm4Component,
     JobRegisterComponent,
+    NotAuthenticadedComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule],
-  providers: [],
+  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgxMaskDirective, NgxMaskPipe],
+  providers: [
+    provideAnimationsAsync(),
+    provideNgxMask()
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

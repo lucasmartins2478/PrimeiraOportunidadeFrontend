@@ -16,6 +16,7 @@ import { CurriculumStep2Component } from './pages/curriculum-step-2/curriculum-s
 import { CurriculumStep3Component } from './pages/curriculum-step-3/curriculum-step-3.component';
 import { JobRegisterComponent } from './pages/job-register/job-register.component';
 import { AuthGuard, CompanyGuard, UserGuard } from './services/auth/auth.guard';
+import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authenticaded.component';
 
 
 const routes: Routes = [
@@ -33,7 +34,8 @@ const routes: Routes = [
   {path:"criar-curriculo/etapa2", component: CurriculumStep2Component, canActivate: [AuthGuard, UserGuard]},
   {path:"criar-curriculo/etapa3", component: CurriculumStep3Component, canActivate: [AuthGuard, UserGuard]},
   {path:"criar-curriculo/etapa4", component: CurriculumStep4Component, canActivate: [AuthGuard, UserGuard]},
-  {path:"criar-vaga", component: JobRegisterComponent, canActivate: [AuthGuard, CompanyGuard]}
+  {path:"criar-vaga", component: JobRegisterComponent, canActivate: [AuthGuard, CompanyGuard]},
+  {path:"realize-login", component: NotAuthenticadedComponent}
 ];
 
 @NgModule({

@@ -4,5 +4,5 @@ export interface IUser{
   email:string,
   phoneNumber:string,
   password:string,
-  type: 'user'
+  type: 'user',
 }

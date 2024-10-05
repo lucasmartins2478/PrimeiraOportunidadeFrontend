@@ -39,3 +39,15 @@ button{
   width: 10rem;
   background-color: #004aad;
 }
+@media(max-width:1281px){
+  div{
+    width: 80%;
+    height: 80vh;
+  }
+}
+@media(max-width:672px){
+  div{
+    height: 100vh;
+    width: 100%;
+  }
+}

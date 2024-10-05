@@ -27,14 +27,14 @@ const routes: Routes = [
   {path:"para-empresas", component: CompanyRegisterComponent},
   {path:"recuperar-senha", component: ForgotPasswordComponent},
   {path:"minhas-candidaturas", component: ApplicationsComponent, canActivate: [AuthGuard, UserGuard]},
-  {path:"minhas-vagas", component:MyJobsComponent, canActivate: [AuthGuard, CompanyGuard]},
+  {path:"minhas-vagas", component:MyJobsComponent, /*canActivate: [AuthGuard, CompanyGuard]*/},
   {path:"login", component:LoginComponent},
   {path:"comunidade", component: CommunityComponent},
   {path:"criar-curriculo/etapa1", component: CurriculumStep1Component, canActivate: [AuthGuard, UserGuard]},
   {path:"criar-curriculo/etapa2", component: CurriculumStep2Component, canActivate: [AuthGuard, UserGuard]},
   {path:"criar-curriculo/etapa3", component: CurriculumStep3Component, canActivate: [AuthGuard, UserGuard]},
   {path:"criar-curriculo/etapa4", component: CurriculumStep4Component, canActivate: [AuthGuard, UserGuard]},
-  {path:"criar-vaga", component: JobRegisterComponent, canActivate: [AuthGuard, CompanyGuard]},
+  {path:"criar-vaga", component: JobRegisterComponent, /*canActivate: [AuthGuard, CompanyGuard]*/},
   {path:"realize-login", component: NotAuthenticadedComponent}
 ];
 

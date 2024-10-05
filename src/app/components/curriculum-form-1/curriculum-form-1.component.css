@@ -33,6 +33,13 @@ p{
 nav{
   margin: 0 auto;
 }
+.progress{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: transparent;
+}
 @media(max-width:1244px){
   h3{
     gap: 3px;

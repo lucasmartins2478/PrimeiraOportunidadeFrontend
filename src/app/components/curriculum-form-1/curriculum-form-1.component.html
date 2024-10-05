@@ -29,7 +29,7 @@
         type="text"
         name="nameUser"
         id="nameUser"
-        placeholder="Nome"
+        placeholder="Nome completo"
         class="form-control"
         formControlName="name"
       />
@@ -42,15 +42,16 @@
         type="text"
         name="dateOfBirthUser"
         id="dateOfBirthUser"
-        placeholder="xx/xx/xxxx"
+        placeholder="dd/mm/aaaa"
         class="form-control"
+        mask="00/00/0000"
         formControlName="dateOfBirth"
       />
     </div>
     <div class="col-12 col-md-2">
       <label for="ageUser" class="form-label">Idade</label>
       <input
-        type="text"
+        type="number"
         name="ageUser"
         id="ageUser"
         class="form-control"
@@ -59,46 +60,54 @@
       />
     </div>
     <div class="col-12 col-md-5">
-      <label for="ageUser" class="form-label">Gênero</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
-        class="form-control"
-        placeholder="Selecione"
+      <label class="form-label">Gênero</label>
+      <select
+        class="form-select"
         formControlName="gender"
-      />
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Feminino">Feminino</option>
+        <option value="Não-binário">Não-binário</option>
+        <option value="Prefiro não informar">Prefiro não informar</option>
+        <option value="Outro">Outro</option>
+      </select>
     </div>
   </div>
   <div class="row">
     <div class="col-12 col-md-6">
-      <label for="ageUser" class="form-label">Telefone</label>
+      <label class="form-label">Telefone</label>
       <input
         type="text"
-        name="ageUser"
-        id="ageUser"
         class="form-control"
         placeholder="(xx) xxxxx-xxxx"
         formControlName="phoneNumber"
+        mask="(00) 00000-0000"
       />
     </div>
     <div class="col-12 col-md-6">
-      <label for="ageUser" class="form-label">Raça</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
-        class="form-control"
-        placeholder="Selecione"
+      <label class="form-label">Raça</label>
+      <select
+        class="form-select"
         formControlName="race"
-      />
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="Branco">Branco</option>
+        <option value="Pardo">Pardo</option>
+        <option value="Negro">Negro</option>
+        <option value="Amarelo">Amarelo</option>
+        <option value="Indígena">Indígena</option>
+        <option value="Prefiro não informar">Prefiro não informar</option>
+      </select>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
       <label for="emailUser" class="form-label">Email</label>
       <input
-        type="text"
+        type="email"
         name="emailUser"
         id="emailUser"
         placeholder="Email"
@@ -120,15 +129,41 @@
       />
     </div>
     <div class="col-12 col-md-4">
-      <label for="ufUser" class="form-label">Estado</label>
-      <input
-        type="text"
-        name="ufUser"
-        id="ufUser"
-        placeholder="Estado"
-        class="form-control"
+      <label class="form-label">Estado</label>
+      <select
+        class="form-select"
         formControlName="uf"
-      />
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="AC">AC</option>
+        <option value="AL">AL</option>
+        <option value="AP">AP</option>
+        <option value="AM">AM</option>
+        <option value="BA">BA</option>
+        <option value="CE">CE</option>
+        <option value="DF">DF</option>
+        <option value="ES">ES</option>
+        <option value="GO">GO</option>
+        <option value="MA">MA</option>
+        <option value="MT">MT</option>
+        <option value="MS">MS</option>
+        <option value="MG">MG</option>
+        <option value="PA">PA</option>
+        <option value="PB">PB</option>
+        <option value="PR">PR</option>
+        <option value="PE">PE</option>
+        <option value="PI">PI</option>
+        <option value="RJ">RJ</option>
+        <option value="RN">RN</option>
+        <option value="RS">RS</option>
+        <option value="RO">RO</option>
+        <option value="RR">RR</option>
+        <option value="SC">SC</option>
+        <option value="SP">SP</option>
+        <option value="SE">SE</option>
+        <option value="TO">TO</option>
+      </select>
     </div>
   </div>
   <div class="row">
@@ -146,7 +181,7 @@
     <div class="col-12 col-md-2">
       <label for="addressNumberUser" class="form-label">Número</label>
       <input
-        type="text"
+        type="number"
         name="addressNumberUser"
         id="addressNumberUser"
         placeholder="xxx"
@@ -163,10 +198,11 @@
         placeholder="CEP"
         class="form-control"
         formControlName="cep"
+        mask="00000-000"
       />
     </div>
   </div>
-  <button class="btn btn-primary" routerLink="/criar-curriculo/etapa2">
+  <button class="btn btn-primary" type="submit">
     Dados acadêmicos<svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -181,4 +217,52 @@
       />
     </svg>
   </button>
+  <div class="progress">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-circle-fill"
+      viewBox="0 0 16 16"
+    >
+      <circle cx="8" cy="8" r="8" />
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-circle"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+      />
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-circle"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+      />
+    </svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="currentColor"
+      class="bi bi-circle"
+      viewBox="0 0 16 16"
+    >
+      <path
+        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+      />
+    </svg>
+  </div>
 </form>

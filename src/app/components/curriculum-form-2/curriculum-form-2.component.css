@@ -15,13 +15,35 @@ h3{
   justify-content: center;
   gap: 0.5rem;
 }
-button{
+.close-form{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.close-button{
+  background-color: transparent;
+}
+.btn-warning{
+  color: #fff;
+  font-weight: 600;
+  background-color: #ff7b2a;
+  border: none;
+}
+.btn-primary{
   background-color: #004aad;
+  margin-top: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   padding-left: 1rem;
+}
+.progress{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: transparent;
 }
 svg{
   font-weight: 600;

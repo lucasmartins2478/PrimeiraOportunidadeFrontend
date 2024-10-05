@@ -2,7 +2,7 @@ export interface ICompany{
   id:number,
   name:string,
   responsible:string,
-  cnpj:number,
+  cnpj:string,
   segment:string,
   email:string,
   phoneNumber:string,

@@ -1,5 +1,6 @@
 export interface IJob {
-  name: string;
+  id: number;
+  title: string;
   modality: string;
   locality: string;
   uf: string;
@@ -10,4 +11,5 @@ export interface IJob {
   requirements: string;
   companyName: string;
   benefits: string;
+  idCompany: number;
 }

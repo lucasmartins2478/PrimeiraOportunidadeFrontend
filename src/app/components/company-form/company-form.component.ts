@@ -103,7 +103,7 @@ export class CompanyFormComponent implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
-  async verifyCnpj(cnpj: number): Promise<boolean> {
+  async verifyCnpj(cnpj: string): Promise<boolean> {
     try {
       const response = await this.http
         .get<ICompany[]>('http://localhost:3333/companies')

@@ -26,7 +26,7 @@ export class JobFormComponent {
 
   ngOnInit(): void {
     this.jobForm = this.fb.group({
-      name: ['', [Validators.required]],
+      title: ['', [Validators.required]],
       modality: ['', [Validators.required]],
       locality: ['', [Validators.required]],
       uf: ['', [Validators.required]],

@@ -27,14 +27,7 @@ export class UserFormComponent implements OnInit {
   ngOnInit(): void {
     this.userForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(10)]],
-      phoneNumber: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(9),
-          Validators.maxLength(12),
-        ],
-      ],
+      phoneNumber: ['', [Validators.required, Validators.minLength(9)]],
       cpf: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -58,11 +51,11 @@ export class UserFormComponent implements OnInit {
         } else {
           const body = {
             name: formData.name,
+            cpf: formData.cpf,
             phoneNumber: formData.phoneNumber,
             email: formData.email,
             password: formData.password,
           };
-
           this.http.post<IUser[]>(apiUrl, body).subscribe(
             (response) => {
               this.userFormService.setFormData(this.userForm.value);

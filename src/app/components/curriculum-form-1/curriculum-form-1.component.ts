@@ -42,10 +42,14 @@ export class CurriculumForm1Component implements OnInit {
 
   onSubmit() {
     if (this.curriculumForm.valid) {
+      const formData = this.curriculumForm.value;
+      
       this.alertMessage = 'Formulário válido!';
       this.alertType = 'success';
       this.showAlert = true;
       this.resetAlertAfterDelay();
+      console.log(formData);
+      this.router.navigate(["/criar-curriculo/etapa2"])
     } else {
       this.alertMessage = 'Formulário inválido';
       this.alertType = 'danger';

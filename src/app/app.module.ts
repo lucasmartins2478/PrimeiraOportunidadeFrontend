@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-
+import { FormsModule } from '@angular/forms'; // Importando o FormsModule
 import { BrowserModule } from '@angular/platform-browser';
 import { CompanyRegisterComponent } from './pages/company-register/company-register.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -14,7 +14,6 @@ import { UserFormComponent } from './components/user-form/user-form.component';
 import { UserRegisterComponent } from './pages/user-register/user-register.component';
 import { CommunityComponent } from './pages/community/community.component';
 import { CompanyFormComponent } from './components/company-form/company-form.component';
-import { CurriculumFormComponent } from './components/curriculum-form/curriculum-form.component';
 import { JobFormComponent } from './components/job-form/job-form.component';
 import { ArticleUserComponent } from './components/article-user/article-user.component';
 import { ArticleCompanyComponent } from './components/article-company/article-company.component';
@@ -41,8 +40,9 @@ import { CurriculumForm3Component } from './components/curriculum-form-3/curricu
 import { CurriculumForm4Component } from './components/curriculum-form-4/curriculum-form-4.component';
 import { JobRegisterComponent } from './pages/job-register/job-register.component';
 import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authenticaded.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+
 
 @NgModule({
   declarations: [
@@ -57,7 +57,6 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     UserRegisterComponent,
     CommunityComponent,
     CompanyFormComponent,
-    CurriculumFormComponent,
     JobFormComponent,
     CompanyRegisterComponent,
     ArticleUserComponent,
@@ -84,11 +83,16 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     JobRegisterComponent,
     NotAuthenticadedComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, HttpClientModule, NgxMaskDirective, NgxMaskPipe],
-  providers: [
-    provideAnimationsAsync(),
-    provideNgxMask()
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    FormsModule
   ],
+  providers: [provideAnimationsAsync(), provideNgxMask()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

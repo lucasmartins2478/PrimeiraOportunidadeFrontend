@@ -1,65 +1,104 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
+import { IAcademicData, ICurriculum } from '../../models/curriculum.interface';
+import { UserAuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-curriculum-form-2',
   templateUrl: './curriculum-form-2.component.html',
-  styleUrl: './curriculum-form-2.component.css'
+  styleUrl: './curriculum-form-2.component.css',
 })
-export class CurriculumForm2Component{
+export class CurriculumForm2Component {
   alertMessage: string = '';
   alertType: 'success' | 'danger' = 'success';
   showAlert: boolean = false;
 
   academicForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router:Router) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private userService: UserAuthService,
+    private router: Router
+  ) {
     this.academicForm = this.fb.group({
-      institutions: this.fb.array([]) // Inicializando um FormArray
+      institutions: this.fb.array([]),
     });
 
-    this.addInstitution()
+    this.addInstitution();
   }
 
-  // Método para obter o FormArray 
   get institutions(): FormArray {
     return this.academicForm.get('institutions') as FormArray;
   }
 
-  // Método para adicionar uma nova instituição
   addInstitution() {
-    const institutionGroup = this.fb.group({
-      name: ['', Validators.required],
+    const institutionForm = this.fb.group({
+      institutionName: ['', Validators.required],
       semester: ['', Validators.required],
-      startDate: ['', Validators.required],
+      startDate: ['', [Validators.required]],
       endDate: [''],
       isCurrentlyStudying: [false],
-      institutionName: ['', Validators.required],
+      name: ['', Validators.required],
       degree: ['', Validators.required],
-      city: ['', Validators.required] // Checkbox para "Estudo aqui atualmente"
+      city: ['', Validators.required],
     });
-
-    this.institutions.push(institutionGroup);
+    this.institutions.push(institutionForm);
   }
 
-  // Método para remover uma instituição
   removeInstitution(index: number) {
     this.institutions.removeAt(index);
   }
 
-  // Método para enviar o formulário (caso você queira implementar)
   onSubmit() {
     if (this.academicForm.valid) {
-      const formData = this.academicForm.value
-      this.alertMessage = 'Formulário válido!';
-      this.alertType = 'success';
-      this.showAlert = true;
-      this.resetAlertAfterDelay();
-      console.log(formData)
-      this.router.navigate(["/criar-curriculo/etapa3"])
-    }else{
+      // Process the form data
+      const formData = this.academicForm.value;
+
+      const institutionsData = this.institutions.value;
+
+      const apiUrl = 'http://localhost:3333/academicData';
+
+      if (institutionsData && institutionsData.length > 0) {
+        institutionsData.forEach((institution: IAcademicData) => {
+          const body = {
+            name: institution.name,
+            semester: institution.semester,
+            startDate: institution.startDate,
+            endDate: institution.endDate,
+            isCurrentlyStudying: institution.isCurrentlyStudying,
+            institutionName: institution.institutionName,
+            degree: institution.degree,
+            city: institution.city,
+            curriculumId: this.userService.getUserData()?.id,
+          };
+
+          console.log(body);
+
+          this.http.post<IAcademicData[]>(apiUrl, body).subscribe(
+            (response) => {
+              this.alertMessage = 'Formulário válido!';
+              this.alertType = 'success';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+            },
+            (error) => {
+              window.alert(`Erro ao cadastrar curriculo: ${error}`);
+            }
+          );
+        });
+
+        this.router.navigate(['/criar-curriculo/etapa3']);
+      }
+    } else {
       this.alertMessage = 'Formulário inválido';
       this.alertType = 'danger';
       this.showAlert = true;

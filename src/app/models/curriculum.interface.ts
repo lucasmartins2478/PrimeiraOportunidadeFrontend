@@ -1,17 +1,20 @@
 export interface ICurriculum {
   id: number;
-  name: string;
   dateOfBirth: string;
   age: number;
-  phoneNumber: string;
   gender: string;
   race: string;
-  email: string;
   city: string;
   uf: string;
   address: string;
   addressNumber: number;
   cep: string;
+  schoolName: string;
+  schoolYear: string;
+  schoolCity: string;
+  schoolStartdate: string;
+  schoolEnddate?: string;
+  currentlyStudying: boolean;
   description?: string;
   academicData?: IAcademicData[];
   coursesData?: ICoursesData[];

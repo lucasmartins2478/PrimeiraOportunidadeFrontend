@@ -1,12 +1,11 @@
-.form{
+form{
   display: flex;
   flex-direction: column;
-  max-width: 37rem;
-  margin: 5.5rem auto;
+  max-width: 50rem;
+  margin: 3rem auto;
   gap: 0.75rem;
   margin-bottom: 5rem;
   padding: 1rem;
-
 }
 h3{
   text-align: center;

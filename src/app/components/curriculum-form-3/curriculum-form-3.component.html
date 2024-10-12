@@ -132,21 +132,34 @@
 
   <!-- Botão para adicionar nova competência -->
   <button type="button" class="btn btn-warning" (click)="addCourse()">
-    Adicionar Competência
+    Adicionar Curso
   </button>
 
   <div class="row" style="margin-top: 2rem">
     <div class="col-12">
-      <label for="addressUser" class="form-label"
-        >Insira suas competências</label
-      >
-      <input
-        type="text"
-        formControlName="competence"
-        placeholder="Insira palavras-chave ou o nome completo"
-        class="form-control"
-      />
+      <label for="competenceInput" class="form-label">Insira suas competências</label>
+
+      <!-- Input para inserir competência -->
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          formControlName="competenceInput"
+          placeholder="Insira palavras-chave ou o nome completo"
+          class="form-control"
+        />
+        <button class="btn btn-outline-primary" type="button" (click)="addCompetence()">Adicionar</button>
+      </div>
+
+      <!-- Lista de competências adicionadas -->
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let competence of competencies.controls; let i = index">
+          {{ competence.value }}
+          <button class="btn  btn-sm float-end" (click)="removeCompetence(i)">X</button>
+        </li>
+      </ul>
     </div>
+
+
   </div>
 
   <button type="submit" class="btn btn-primary">

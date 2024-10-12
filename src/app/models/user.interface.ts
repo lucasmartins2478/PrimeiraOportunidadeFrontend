@@ -1,10 +1,11 @@
 export interface IUser{
   id: number,
   name:string,
-  email:string,
   cpf:string,
+  email:string,
   phoneNumber:string,
   password:string,
-  idCurriculo?:number
+  curriculumId?:number
+  vacancyId?:number
   type: 'user',
 }

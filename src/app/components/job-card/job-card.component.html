@@ -1,6 +1,6 @@
 <div class="col-6">
   <h5>{{job.title}}</h5>
-  <h6>Empresa: {{job.companyName}}</h6>
+  <h6>Empresa: {{companyName}}</h6>
   <h6>Modalidade: {{job.modality}}</h6>
   <h6>Salário: {{job.salary}}</h6>
   <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -16,7 +16,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <h6><b>Empresa:</b> {{job.companyName}}</h6>
+          <h6><b>Empresa:</b> {{companyName}}</h6>
           <h6><b>Modalidade:</b> {{job.modality}}</h6>
           <h6><b>Localidade:</b> {{job.locality}}</h6>
           <h6><b>Estado:</b> {{job.uf}}</h6>
@@ -28,7 +28,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
-          <button type="button" class="btn btn-primary" *ngIf="userType === 'user'">Candidatar</button>
+          <button type="button" class="btn btn-primary" *ngIf="userType === 'user'" (click)="apply()">Candidatar</button>
         </div>
       </div>
     </div>

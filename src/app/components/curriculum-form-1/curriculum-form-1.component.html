@@ -202,6 +202,63 @@
       />
     </div>
   </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="institutionNameUser" class="form-label"
+        >Nome da Instituição de Ensino</label
+      >
+      <input
+        type="text"
+        formControlName="schoolName"
+        placeholder="Insira o nome da instituição de ensino"
+        class="form-control"
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-4">
+      <label class="form-label">Ano/Semestre</label>
+      <select
+        class="form-select"
+        formControlName="schoolYear"
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="1º Médio">1º Ano Ensino Médio</option>
+        <option value="2º Médio">2º Ano Ensino Médio</option>
+        <option value="3º Médio">3º Ano Ensino Médio</option>
+      </select>
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="dateOfBeginUser" class="form-label">Data de Início</label>
+      <input
+        type="text"
+        formControlName="schoolStartDate"
+        placeholder="mm/aaaa"
+        mask="00/0000"
+        class="form-control"
+      />
+    </div>
+    <div class="col-12 col-md-4">
+      <label for="dateOfEndUser" class="form-label">Data de Conclusão</label>
+      <input
+        type="text"
+        formControlName="schoolEndDate"
+        class="form-control"
+        placeholder="mm/aaaa"
+        mask="00/0000"
+      />
+      <div class="check-input">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          formControlName="currentlyStudying"
+          id="flexCheckDefault"
+        />
+        <label for="flexCheckDefault">Estudo aqui atualmente</label>
+      </div>
+    </div>
+  </div>
   <button class="btn btn-primary" type="submit">
     Dados acadêmicos<svg
       xmlns="http://www.w3.org/2000/svg"

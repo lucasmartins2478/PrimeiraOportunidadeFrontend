@@ -23,7 +23,7 @@
     Cadastre sua empresa
   </h2>
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12">
       <label for="companyName" class="form-label">Nome da empresa</label>
       <input
         type="text"
@@ -34,20 +34,9 @@
         formControlName="name"
       />
     </div>
-    <div class="col-12 col-md-6">
-      <label for="companyResponsible" class="form-label">Responsável</label>
-      <input
-        type="text"
-        name="companyResponsible"
-        id="companyResponsible"
-        placeholder="Responsável"
-        class="form-control"
-        formControlName="responsible"
-      />
-    </div>
   </div>
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-4">
       <label for="companyCnpj" class="form-label">CNPJ</label>
       <input
         type="text"
@@ -59,20 +48,32 @@
         mask="00.000.000/0000-00"
       />
     </div>
-    <div class="col-12 col-md-6">
-      <label for="companySegment" class="form-label">Segmento</label>
+    <div class="col-12 col-md-4">
+      <label for="companyLogo" class="form-label">Logo</label>
       <input
-        type="text"
-        name="companySegment"
-        id="companySegment"
-        placeholder="Segmento"
+        type="file"
+        name="companyLogo"
+        id="companyLogo"
         class="form-control"
-        formControlName="segment"
+        formControlName="logo"
       />
+    </div>
+    <div class="col-12 col-md-4">
+      <label class="form-label">Segmento</label>
+      <select
+        class="form-select"
+        formControlName="segment"
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="Tecnologia e Informação">Tecnologia e Informação</option>
+        <option value="Comércio e Varejo">Comércio e Varejo</option>
+        <option value="Produção Alimentícia">Produção Alimentícia</option>
+      </select>
     </div>
   </div>
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-7">
       <label for="companyEmail" class="form-label">Email</label>
       <input
         type="email"
@@ -83,7 +84,7 @@
         formControlName="email"
       />
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-5">
       <label for="companyPhoneNumber" class="form-label">Telefone</label>
       <input
         type="text"
@@ -134,19 +135,19 @@
       />
     </div>
     <div class="col-12 col-md-6">
-      <label for="companyAddress" class="form-label">Endereço</label>
+      <label for="responsible" class="form-label">Responsável</label>
       <input
         type="text"
-        name="companyAddress"
-        id="companyAddress"
-        placeholder="Endereço"
+        name="responsible"
+        id="responsible"
+        placeholder="Insira o nome do responsável"
         class="form-control"
-        formControlName="address"
+        formControlName="responsible"
       />
     </div>
   </div>
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-7">
       <label for="companyCity" class="form-label">Cidade</label>
       <input
         type="text"
@@ -157,7 +158,7 @@
         formControlName="city"
       />
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-5">
       <label for="companyCep" class="form-label">CEP</label>
       <input
         type="text"
@@ -170,7 +171,18 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-5">
+      <label for="companyAddress" class="form-label">Endereço</label>
+      <input
+        type="text"
+        name="companyAddress"
+        id="companyAddress"
+        placeholder="Endereço"
+        class="form-control"
+        formControlName="address"
+      />
+    </div>
+    <div class="col-12 col-md-3">
       <label for="companyAddressNumber" class="form-label">Número</label>
       <input
         type="text"
@@ -181,7 +193,7 @@
         formControlName="addressNumber"
       />
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-4">
       <label for="companyUf" class="form-label">Estado</label>
       <input
         type="text"
@@ -196,3 +208,10 @@
   <div class="row"></div>
   <button class="btn btn-primary">Cadastrar</button>
 </form>
+
+<!-- <form (ngSubmit)="onSubmit()" #imageForm="ngForm">
+  <input type="file" (change)="onFileChange($event)" accept="image/*" required />
+  <button type="submit">Enviar</button>
+</form>
+
+<img *ngIf="imageUrl" [src]="imageUrl" alt="Preview da Imagem" /> -->

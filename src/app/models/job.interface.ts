@@ -9,7 +9,7 @@ export interface IJob {
   level: string;
   description: string;
   requirements: string;
-  companyName: string;
+  aboutCompany: string;
   benefits: string;
-  idCompany: number;
+  companyId: number;
 }

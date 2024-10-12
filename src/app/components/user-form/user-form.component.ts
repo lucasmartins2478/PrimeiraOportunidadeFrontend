@@ -63,7 +63,7 @@ export class UserFormComponent implements OnInit {
               this.alertType = 'success';
               this.showAlert = true;
               this.resetAlertAfterDelay();
-              // this.router.navigate(['/login']);
+              this.router.navigate(['/login']);
             },
             (error) => {
               window.alert(`Erro ao cadastrar usuário ${error}`);

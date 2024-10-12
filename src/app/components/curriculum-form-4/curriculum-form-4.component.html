@@ -4,7 +4,7 @@
   [isVisible]="showAlert"
 ></app-alert>
 
-<form [formGroup]="curriculumForm" (ngSubmit)="onSubmit()" class="form">
+<form [formGroup]="adictionalDataForm" (ngSubmit)="onSubmit()" class="form">
   <h3>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -24,26 +24,24 @@
   </h3>
   <div class="row">
     <div class="col-12">
-      <label for="nameUser" class="form-label"
+      <label class="form-label"
         >Possue seu currículo em arquivo? anexe-o aqui:</label
       >
       <input
         type="file"
-        name="nameUser"
-        id="nameUser"
         placeholder="Nome"
         class="form-control"
+        formControlName="attached"
       />
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <label for="cpfUser" class="form-label">Fale sobre você:</label>
+      <label class="form-label">Fale sobre você:</label>
       <textarea
-        name=""
-        id=""
         class="form-control"
         placeholder="Opcional"
+        formControlName="description"
       ></textarea>
     </div>
   </div>
@@ -70,7 +68,7 @@
     </label>
   </div>
 
-  <button class="btn btn-primary" routerLink="/">
+  <button class="btn btn-primary">
     Dados acadêmicos<svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"

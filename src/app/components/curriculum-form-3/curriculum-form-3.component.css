@@ -38,6 +38,14 @@ h3{
   gap: 1rem;
   padding-left: 1rem;
 }
+.btn-outline-primary{
+  color: #004aad;
+  border: #004aad 1px solid;
+}
+.btn-outline-primary:hover{
+  color: #fff;
+  background-color: #004aad;
+}
 .progress{
   display: flex;
   align-items: center;

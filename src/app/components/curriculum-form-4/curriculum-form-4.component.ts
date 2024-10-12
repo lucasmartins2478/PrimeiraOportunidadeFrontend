@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserAuthService } from '../../services/auth/auth.service';
+import { ICurriculum } from '../../models/curriculum.interface';
 
 @Component({
   selector: 'app-curriculum-form-4',
@@ -13,28 +15,51 @@ export class CurriculumForm4Component implements OnInit {
   alertType: 'success' | 'danger' = 'success';
   showAlert: boolean = false;
 
-  curriculumForm!: FormGroup;
+  adictionalDataForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private userService: UserAuthService
   ) {}
 
   ngOnInit(): void {
-    this.curriculumForm = this.fb.group({
-      name:[],
-      cpf:[]
+    this.adictionalDataForm = this.fb.group({
+      attached:[''],
+      description:['', [Validators.required]]
     });
   }
   onSubmit() {
-    if (this.curriculumForm.valid) {
-      window.alert('Formulário válido');
+    if (this.adictionalDataForm.valid) {
 
-      this.alertMessage = 'Formulário válido!';
-      this.alertType = 'success';
-      this.showAlert = true;
-      this.resetAlertAfterDelay();
+      const id = this.userService.getUserData()?.id
+      const formData = this.adictionalDataForm.value
+
+      const apiUrl = `http://localhost:3333/curriculum/${id}/addData`
+
+      const body = {
+        description: formData.description,
+        attached: formData.attached
+      }
+
+      console.log(apiUrl)
+      console.log(body)
+
+      this.http.put<ICurriculum[]>(apiUrl, body).subscribe(
+        (response) => {
+          this.alertMessage = 'Formulário válido!';
+          this.alertType = 'success';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+          this.router.navigate(['/vagas']); // Após a confirmação
+        },
+        (error) => {
+          window.alert(`Erro ao cadastrar currículo: ${error}`);
+        }
+      );
+
+
     } else {
       window.alert('Formulário inválido');
 

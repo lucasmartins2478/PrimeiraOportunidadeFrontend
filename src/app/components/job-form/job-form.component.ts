@@ -14,6 +14,7 @@ export class JobFormComponent {
   alertMessage: string = '';
   alertType: 'success' | 'danger' = 'success';
   showAlert: boolean = false;
+  companyData = this.authService.getCompanyData();
 
   jobForm!: FormGroup;
 
@@ -30,12 +31,13 @@ export class JobFormComponent {
       modality: ['', [Validators.required]],
       locality: ['', [Validators.required]],
       uf: ['', [Validators.required]],
-      contact: ['', [Validators.required]],
-      salary: ['', [Validators.required]],
+      contact: [this.companyData?.email, [Validators.required]],
+      salary: ['', [Validators.required, Validators.maxLength(11)]],
+      toAgree:[false],
       level: ['', [Validators.required]],
-      description: ['', ],
+      description: [''],
       requirements: ['', [Validators.required]],
-      companyName: ['', [Validators.required]],
+      aboutCompany: ['', [Validators.required]],
       benefits: ['', [Validators.required]],
     });
 
@@ -52,11 +54,11 @@ export class JobFormComponent {
 
   onSubmit() {
     if (true) {
-      const apiUrl = 'http://localhost:3333/jobs';
+      const apiUrl = 'http://localhost:3333/vacancy';
       const formData = this.jobForm.value;
 
       const body = {
-        name: formData.name,
+        title: formData.title,
         modality: formData.modality,
         locality: formData.locality,
         uf: formData.uf,
@@ -65,8 +67,9 @@ export class JobFormComponent {
         level: formData.level,
         description: formData.description,
         requirements: formData.requirements,
-        companyName: formData.companyName,
+        aboutCompany: formData.aboutCompany,
         benefits: formData.benefits,
+        companyId: this.companyData?.id,
       };
 
       this.http.post<IJob[]>(apiUrl, body).subscribe(

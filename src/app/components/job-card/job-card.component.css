@@ -33,14 +33,9 @@ h5{
 .modal{
   z-index: 10000000;
 }
-
-@media(max-width:1200px){
-  div{
-    width: 15rem;
-  }
-}
 @media(max-width:768px){
-  div{
+  .modal{
     width: 100%;
+    margin: 0 auto;
   }
 }

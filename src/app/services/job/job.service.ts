@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class JobService {
-  private apiUrl = 'http://localhost:3333/jobs'; // Altere para a URL correta da sua API
+  private apiUrl = 'http://localhost:3333/vacancies'; // Altere para a URL correta da sua API
 
   constructor(private http: HttpClient) {}
 

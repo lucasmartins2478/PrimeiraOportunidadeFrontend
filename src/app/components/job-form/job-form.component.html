@@ -23,7 +23,7 @@
     Dados da Vaga
   </h3>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-md-4">
       <label for="nameUser" class="form-label">Nome do cargo</label>
       <input
         type="text"
@@ -31,47 +31,10 @@
         id="nameUser"
         placeholder="Nome do cargo"
         class="form-control"
-        formControlName="name"
-      />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-3">
-      <label for="dateOfBirthUser" class="form-label">Modalidade</label>
-      <input
-        type="text"
-        name="dateOfBirthUser"
-        id="dateOfBirthUser"
-        placeholder="Selecione"
-        class="form-control"
-        formControlName="modality"
+        formControlName="title"
       />
     </div>
     <div class="col-12 col-md-4">
-      <label for="ageUser" class="form-label">Localidade</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
-        class="form-control"
-        placeholder="Insira uma cidade"
-        formControlName="locality"
-      />
-    </div>
-    <div class="col-12 col-md-5">
-      <label for="ageUser" class="form-label">Estado</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
-        class="form-control"
-        placeholder="Selecione"
-        formControlName="uf"
-      />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-6">
       <label for="ageUser" class="form-label">Contato</label>
       <input
         type="text"
@@ -82,69 +45,136 @@
         formControlName="contact"
       />
     </div>
+    <div class="col-12 col-md-4">
+      <label class="form-label">Nével da vaga</label>
+      <select
+        class="form-select"
+        formControlName="level"
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="Estágio">Estágio</option>
+        <option value="Jovem Aprendiz">Jovem Aprendiz</option>
+        <option value="Efetivo">Efetivo</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-3">
+      <label class="form-label">Modalidade</label>
+      <select
+        class="form-select"
+        formControlName="modality"
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="Presencial">Presencial</option>
+        <option value="Remoto">Remoto</option>
+        <option value="Híbrido">Híbrido</option>
+      </select>
+    </div>
+    <div class="col-12 col-md-3">
+      <label for="ageUser" class="form-label">Localidade</label>
+      <input
+        type="text"
+        name="ageUser"
+        id="ageUser"
+        class="form-control"
+        placeholder="Insira uma cidade"
+        formControlName="locality"
+      />
+    </div>
+    <div class="col-12 col-md-3">
+      <label class="form-label">Estado</label>
+      <select
+        class="form-select"
+        formControlName="uf"
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="AC">AC</option>
+        <option value="AL">AL</option>
+        <option value="AP">AP</option>
+        <option value="AM">AM</option>
+        <option value="BA">BA</option>
+        <option value="CE">CE</option>
+        <option value="DF">DF</option>
+        <option value="ES">ES</option>
+        <option value="GO">GO</option>
+        <option value="MA">MA</option>
+        <option value="MT">MT</option>
+        <option value="MS">MS</option>
+        <option value="MG">MG</option>
+        <option value="PA">PA</option>
+        <option value="PB">PB</option>
+        <option value="PR">PR</option>
+        <option value="PE">PE</option>
+        <option value="PI">PI</option>
+        <option value="RJ">RJ</option>
+        <option value="RN">RN</option>
+        <option value="RS">RS</option>
+        <option value="RO">RO</option>
+        <option value="RR">RR</option>
+        <option value="SC">SC</option>
+        <option value="SP">SP</option>
+        <option value="SE">SE</option>
+        <option value="TO">TO</option>
+      </select>
+    </div>
     <div class="col-12 col-md-3">
       <label for="ageUser" class="form-label">Salário</label>
       <input
         type="text"
-        name="ageUser"
-        id="ageUser"
         class="form-control"
         placeholder="Insira um valor"
         formControlName="salary"
-      />
-    </div>
-    <div class="col-12 col-md-3">
-      <label for="ageUser" class="form-label">Nível da vaga</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
-        class="form-control"
-        placeholder="Selecione"
-        formControlName="level"
+        mask="separator.2"
+        thousandSeparator="."
+        decimalMarker=","
+        prefix="R$ "
       />
     </div>
   </div>
+
   <div class="row">
-    <div class="col-12 col-md-6">
-      <label for="ageUser" class="form-label">Requisitos</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
+    <div class="col-12">
+      <label class="form-label">Sobre a Empresa</label>
+      <textarea
+        name=""
+        id=""
         class="form-control"
-        placeholder="Requisitos"
-        formControlName="requirements"
-      />
+        placeholder="Descrição sobre a empresa e seus valores "
+        formControlName="aboutCompany"
+      ></textarea>
     </div>
-    <div class="col-12 col-md-6">
-      <label for="ageUser" class="form-label">Nome da Empresa</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <label for="ageUser" class="form-label">Requisitos</label>
+      <textarea
+        name=""
+        id=""
         class="form-control"
-        placeholder="Nome da Empresa"
-        formControlName="companyName"
-      />
+        placeholder="Descrição das requisitos para a vaga"
+        formControlName="requirements"
+      ></textarea>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
       <label for="ageUser" class="form-label">Benefícios</label>
-      <input
-        type="text"
-        name="ageUser"
-        id="ageUser"
+      <textarea
+        name=""
+        id=""
         class="form-control"
-        placeholder="Nome da Empresa"
+        placeholder="Citar os benefícios que serão oferecidos"
         formControlName="benefits"
-      />
+      ></textarea>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <label for="cpfUser" class="form-label">Descrição da vaga</label>
+      <label class="form-label">Descrição da vaga</label>
       <textarea
         name=""
         id=""
@@ -154,7 +184,7 @@
       ></textarea>
     </div>
   </div>
-  <button class="btn btn-primary" >
+  <button class="btn btn-primary">
     Avançar<svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"

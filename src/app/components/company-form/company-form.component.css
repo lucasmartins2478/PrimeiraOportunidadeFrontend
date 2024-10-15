@@ -1,5 +1,5 @@
 .form{
-  width: 55rem;
+  max-width: 48rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -21,6 +21,14 @@ svg{
 }
 button{
   background-color: #004aad;
+}
+p{
+  text-align: center;
+}
+a{
+  color: #FF7B2A;
+  text-decoration: none;
+  margin-left: 0.5rem;
 }
 
 @media(max-width:1000px){

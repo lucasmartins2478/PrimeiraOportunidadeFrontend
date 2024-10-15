@@ -4,6 +4,7 @@ import { UserAuthService } from '../../services/auth/auth.service';
 import { ICompany } from '../../models/company.interface';
 import { IUser } from '../../models/user.interface';
 import { HttpClient } from '@angular/common/http';
+import { ICurriculum } from '../../models/curriculum.interface';
 
 @Component({
   selector: 'app-job-card',
@@ -12,6 +13,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
+
+  userData = this.authService.getUserData();
 
   companyName: string | undefined = this.authService.getCompanyData()?.name;
 
@@ -25,17 +28,22 @@ export class JobCardComponent implements OnInit {
   }
 
   async apply() {
-    console.log(this.job.id);
-    this.checkCurriculum(this.authService.getUserData()?.id);
+    const exist = await this.checkCurriculum(this.authService.getUserData()?.id);
+
+    if(exist){
+
+    }else{
+  
+    }
   }
 
   async checkCurriculum(id: number| undefined): Promise<boolean> {
     let exists = false;
-    const apiUrl = `http://localhost:3333/users/${id}`;
+    const apiUrl = `http://localhost:3333/curriculum/${id}`;
     try {
-      const response = await this.http.get<IUser>(apiUrl).toPromise();
+      const response = await this.http.get<ICurriculum>(apiUrl).toPromise();
 
-      if (response && response.curriculumId != null) {
+      if (response && response.description != null) {
         exists = true;
       } else {
         exists = false;
@@ -47,4 +55,5 @@ export class JobCardComponent implements OnInit {
     console.log(exists);
     return exists;
   }
+
 }

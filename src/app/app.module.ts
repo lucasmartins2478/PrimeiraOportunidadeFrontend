@@ -42,6 +42,7 @@ import { JobRegisterComponent } from './pages/job-register/job-register.componen
 import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authenticaded.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { CompanyLoginComponent } from './pages/company-login/company-login.component';
 
 
 @NgModule({
@@ -82,6 +83,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     CurriculumForm4Component,
     JobRegisterComponent,
     NotAuthenticadedComponent,
+    CompanyLoginComponent,
   ],
   imports: [
     BrowserModule,

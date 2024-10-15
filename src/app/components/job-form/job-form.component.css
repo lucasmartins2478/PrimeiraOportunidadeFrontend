@@ -1,4 +1,4 @@
-form{
+form {
   display: flex;
   flex-direction: column;
   max-width: 50rem;
@@ -7,14 +7,14 @@ form{
   margin-bottom: 5rem;
   padding: 1rem;
 }
-h3{
+h3 {
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
-button{
+.btn-primary {
   background-color: #004aad;
   display: flex;
   align-items: center;
@@ -22,21 +22,42 @@ button{
   gap: 1rem;
   padding-left: 1rem;
 }
-svg{
+svg {
   font-weight: 600;
   cursor: pointer;
 }
 textarea {
   resize: none;
 }
-p{
+p {
   text-align: center;
 }
-nav{
+nav {
   margin: 0 auto;
 }
-@media(max-width:1244px){
-  h3{
+.btn-warning {
+  color: #fff;
+  background-color: #ff7b2a;
+  border: none;
+}
+.d-grid .btn-primary {
+  width: 100%;
+}
+.modal-footer{
+  display: flex;
+  justify-content: space-around;
+}
+.modal-footer button{
+  width: 10rem;
+}
+@media (max-width: 1244px) {
+  h3 {
     gap: 3px;
+  }
+}
+@media(max-width:768px){
+  .modal{
+    width: 100%;
+    margin: 0 auto;
   }
 }

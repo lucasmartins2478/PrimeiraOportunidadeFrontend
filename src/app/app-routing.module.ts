@@ -17,29 +17,56 @@ import { CurriculumStep3Component } from './pages/curriculum-step-3/curriculum-s
 import { JobRegisterComponent } from './pages/job-register/job-register.component';
 import { AuthGuard, CompanyGuard, UserGuard } from './services/auth/auth.guard';
 import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authenticaded.component';
-
+import { CompanyLoginComponent } from './pages/company-login/company-login.component';
 
 const routes: Routes = [
-  {path:"", component:HomeComponent},
-  {path:"empresas", component:CompaniesComponent},
-  {path:"vagas", component: JobsComponent},
-  {path:"criar-conta", component: UserRegisterComponent},
-  {path:"para-empresas", component: CompanyRegisterComponent},
-  {path:"recuperar-senha", component: ForgotPasswordComponent},
-  {path:"minhas-candidaturas", component: ApplicationsComponent, canActivate: [AuthGuard, UserGuard]},
-  {path:"minhas-vagas", component:MyJobsComponent, /*canActivate: [AuthGuard, CompanyGuard]*/},
-  {path:"login", component:LoginComponent},
-  {path:"comunidade", component: CommunityComponent},
-  {path:"criar-curriculo/etapa1", component: CurriculumStep1Component, canActivate: [AuthGuard, UserGuard]},
-  {path:"criar-curriculo/etapa2", component: CurriculumStep2Component, canActivate: [AuthGuard, UserGuard]},
-  {path:"criar-curriculo/etapa3", component: CurriculumStep3Component, canActivate: [AuthGuard, UserGuard]},
-  {path:"criar-curriculo/etapa4", component: CurriculumStep4Component, canActivate: [AuthGuard, UserGuard]},
-  {path:"criar-vaga", component: JobRegisterComponent, /*canActivate: [AuthGuard, CompanyGuard]*/},
-  {path:"realize-login", component: NotAuthenticadedComponent}
+  { path: '', component: HomeComponent },
+  { path: 'empresas', component: CompaniesComponent },
+  { path: 'vagas', component: JobsComponent },
+  { path: 'criar-conta', component: UserRegisterComponent },
+  { path: 'para-empresas', component: CompanyRegisterComponent },
+  { path: 'login/empresa', component: CompanyLoginComponent },
+  { path: 'recuperar-senha', component: ForgotPasswordComponent },
+  {
+    path: 'minhas-candidaturas',
+    component: ApplicationsComponent,
+    canActivate: [AuthGuard, UserGuard],
+  },
+  {
+    path: 'minhas-vagas',
+    component: MyJobsComponent /*canActivate: [AuthGuard, CompanyGuard]*/,
+  },
+  { path: 'login/candidato', component: LoginComponent },
+  { path: 'comunidade', component: CommunityComponent },
+  {
+    path: 'criar-curriculo/etapa1',
+    component: CurriculumStep1Component,
+    canActivate: [AuthGuard, UserGuard],
+  },
+  {
+    path: 'criar-curriculo/etapa2',
+    component: CurriculumStep2Component,
+    canActivate: [AuthGuard, UserGuard],
+  },
+  {
+    path: 'criar-curriculo/etapa3',
+    component: CurriculumStep3Component,
+    canActivate: [AuthGuard, UserGuard],
+  },
+  {
+    path: 'criar-curriculo/etapa4',
+    component: CurriculumStep4Component,
+    canActivate: [AuthGuard, UserGuard],
+  },
+  {
+    path: 'criar-vaga',
+    component: JobRegisterComponent /*canActivate: [AuthGuard, CompanyGuard]*/,
+  },
+  { path: 'realize-login', component: NotAuthenticadedComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

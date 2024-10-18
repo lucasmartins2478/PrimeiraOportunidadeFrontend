@@ -33,6 +33,44 @@ h5{
 .modal{
   z-index: 10000000;
 }
+/* Estilo do modal */
+.modal {
+  display: block; /* Garantir que o modal seja exibido corretamente */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100000;
+  width: 100%;
+  height: 40rem;
+  max-width: 500px;
+  border-radius: 0.5rem;
+  background-color: white;
+
+}
+
+.modal-dialog {
+  margin: 0; /* Remover margem automática do Bootstrap */
+  height: 100%;
+}
+
+.modal-content {
+  padding: 20px;
+  height: 100%;
+}
+
+.modal-backdrop {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo para o botão de fechar */
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+}
+
 @media(max-width:768px){
   .modal{
     width: 100%;

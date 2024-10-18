@@ -12,4 +12,5 @@ export interface IJob {
   aboutCompany: string;
   benefits: string;
   companyId: number;
+  companyName: string;
 }

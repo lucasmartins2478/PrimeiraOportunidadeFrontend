@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IJob } from '../../models/job.interface';
+import { IJob } from '../../models/job.interface'
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

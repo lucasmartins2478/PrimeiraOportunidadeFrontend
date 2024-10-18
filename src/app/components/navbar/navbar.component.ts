@@ -9,11 +9,20 @@ import { UserAuthService } from '../../services/auth/auth.service';
 export class NavbarComponent implements OnInit {
   isProfileMenuOpen: boolean = false;
   userType: string | null = null;
+  hasCurriculum: boolean = false;
 
   constructor(private authService: UserAuthService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.userType = this.authService.getUserType();
+
+    if (this.userType === 'user') {
+      const id = this.authService.getUserData()?.id;  // Pegue o ID do usuário autenticado
+      if (id) {
+        // Verifique se o usuário tem um currículo
+        this.hasCurriculum = await this.authService.hasCurriculum(id);
+      }
+    }
   }
 
   isAuthenticated(): boolean {

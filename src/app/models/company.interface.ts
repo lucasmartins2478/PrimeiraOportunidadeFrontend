@@ -8,6 +8,7 @@ export interface ICompany{
   phoneNumber:string,
   password:string,
   url?:string,
+  imgUrl?:string
   address:string,
   city:string,
   cep:number,

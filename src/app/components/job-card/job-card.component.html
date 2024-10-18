@@ -1,66 +1,48 @@
+<!-- Card HTML -->
 <div class="col-6">
   <h5>{{ job.title }}</h5>
-  <h6>Empresa: {{ companyName }}</h6>
+  <h6>Empresa: {{ job.companyName }}</h6>
   <h6>Modalidade: {{ job.modality }}</h6>
   <h6>Salário: {{ job.salary }}</h6>
   <button
     type="button"
     class="btn btn-warning"
-    data-bs-toggle="modal"
-    data-bs-target="#exampleModal"
+    (click)="openModal(job)"
   >
     Ver informações da vaga
   </button>
+</div>
 
-  <!-- Modal -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">
-            {{ job.title }}
-          </h1>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div class="modal-body">
-          <h6><b>Empresa:</b> {{ companyName }}</h6>
-          <h6><b>Modalidade:</b> {{ job.modality }}</h6>
-          <h6><b>Localidade:</b> {{ job.locality }}</h6>
-          <h6><b>Estado:</b> {{ job.uf }}</h6>
-          <h6><b>Nível da vaga:</b> {{ job.level }}</h6>
-          <h6><b>Contato:</b> {{ job.contact }}</h6>
-          <h6><b>Requisitos:</b> {{ job.requirements }}</h6>
-          <h6><b>Benefícios:</b> {{ job.benefits }}</h6>
-          <h6><b>Descrição da vaga:</b> {{ job.description }}</h6>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Sair
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            *ngIf="userType === 'user'"
-            (click)="apply()"
-          >
-            Candidatar
-          </button>
-        </div>
+<!-- Modal controlado pelo Angular -->
+<div class="modal-backdrop" *ngIf="isModalOpen"></div>
+<div class="modal" tabindex="-1" *ngIf="isModalOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">{{ selectedJob?.title }}</h1>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <h6><b>Empresa:</b> {{ selectedJob?.companyName }}</h6>
+        <h6><b>Modalidade:</b> {{ selectedJob?.modality }}</h6>
+        <h6><b>Localidade:</b> {{ selectedJob?.locality }}</h6>
+        <h6><b>Estado:</b> {{ selectedJob?.uf }}</h6>
+        <h6><b>Nível da vaga:</b> {{ selectedJob?.level }}</h6>
+        <h6><b>Contato:</b> {{ selectedJob?.contact }}</h6>
+        <h6><b>Requisitos:</b> {{ selectedJob?.requirements }}</h6>
+        <h6><b>Benefícios:</b> {{ selectedJob?.benefits }}</h6>
+        <h6><b>Descrição da vaga:</b> {{ selectedJob?.description }}</h6>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Sair</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          *ngIf="userType === 'user'"
+          (click)="apply()"
+        >
+          Candidatar
+        </button>
       </div>
     </div>
   </div>

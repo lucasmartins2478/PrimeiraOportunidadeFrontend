@@ -33,6 +33,11 @@
               Comunidade
             </a>
           </li>
+          <li class="nav-item" *ngIf="userType === 'user'">
+            <a class="nav-link active" aria-current="page" routerLink="/minhas-candidaturas" style="color: #fff">
+              Minhas Candidaturas
+            </a>
+          </li>
           <li class="nav-item" *ngIf="userType === 'company'">
             <a class="nav-link active" routerLink="/minhas-vagas" style="color: #fff">
               Minhas Vagas
@@ -57,10 +62,22 @@
       <form class="d-flex" role="search">
         <ng-container *ngIf="isAuthenticated(); else guestActions">
           <ng-container *ngIf="userType === 'user'; else companyActions">
-            <!-- Botão Criar Currículo -->
-            <button type="button" class="btn btn-warning" routerLink="/criar-curriculo/etapa1">
-              Criar Currículo
+            <!-- Verifica se o usuário tem currículo -->
+            <button
+              *ngIf="hasCurriculum; else createCurriculumButton"
+              type="button"
+              class="btn btn-warning"
+              routerLink="/editar-curriculo"
+            >
+              Editar Currículo
             </button>
+
+            <!-- Caso o usuário não tenha currículo -->
+            <ng-template #createCurriculumButton>
+              <button type="button" class="btn btn-warning" routerLink="/criar-curriculo/etapa1">
+                Criar Currículo
+              </button>
+            </ng-template>
           </ng-container>
 
           <ng-template #companyActions>

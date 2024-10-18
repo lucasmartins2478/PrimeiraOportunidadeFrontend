@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../../models/user.interface';
 import { ICompany } from '../../models/company.interface';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +11,7 @@ export class UserAuthService {
   private user: IUser | null = null;
   private company: ICompany | null = null;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     const userType = this.getUserType();
     if (userType === 'user') {
       this.user = this.getUserDataFromStorage();
@@ -26,14 +28,12 @@ export class UserAuthService {
     }
   }
 
-
   login(user: IUser) {
     console.log('Dados do usuário durante o login:', user); // Verificar o objeto
     this.user = user;
     localStorage.setItem('userType', 'user');
     this.saveUserDataToStorage(user); // Salvar dados no localStorage ao logar
   }
-
 
   loginCompany(company: ICompany) {
     this.company = company;
@@ -69,53 +69,53 @@ export class UserAuthService {
     localStorage.setItem('phoneNumber', user.phoneNumber);
   }
 
-  // Função para salvar dados da empresa no localStorage
   private saveCompanyDataToStorage(company: ICompany): void {
-    localStorage.setItem('responsible', company.name);
+    localStorage.setItem('responsible', company.responsible);
+    localStorage.setItem('companyName', company.name);
     localStorage.setItem('companyEmail', company.email);
     localStorage.setItem('companyId', company.id.toString());
     // Adicione outros campos relevantes aqui
   }
 
-  // Função para obter dados do usuário do localStorage
   private getUserDataFromStorage(): IUser | null {
     const name = localStorage.getItem('name');
     const email = localStorage.getItem('email');
     const phoneNumber = localStorage.getItem('phoneNumber');
-    const id = Number(localStorage.getItem('id'))
+    const id = Number(localStorage.getItem('id'));
 
     if (name && email && phoneNumber && id) {
       return {
         name,
         email,
         phoneNumber,
-        id
+        id,
       } as IUser;
     }
-    return null; // Caso algum dado esteja faltando
+    return null;
   }
 
-  // Função para obter dados da empresa do localStorage
   private getCompanyDataFromStorage(): ICompany | null {
     const responsible = localStorage.getItem('responsible');
     const email = localStorage.getItem('companyEmail');
-    const id = Number(localStorage.getItem('companyId'))
-    if (responsible && email && id) {
+    const name = localStorage.getItem('name');
+    const id = Number(localStorage.getItem('companyId'));
+    if (responsible && email && id && name) {
       return {
         responsible,
         email,
-        id
+        id,
+        name,
       } as ICompany;
     }
-    return null; // Caso algum dado esteja faltando
+    return null;
   }
 
-  // Função para limpar dados do localStorage ao deslogar
   private clearUserDataFromStorage(): void {
     localStorage.removeItem('name');
     localStorage.removeItem('email');
     localStorage.removeItem('phoneNumber');
     localStorage.removeItem('id');
+    localStorage.removeItem('companyName');
     localStorage.removeItem('responsible');
     localStorage.removeItem('companyEmail');
     localStorage.removeItem('companyId');
@@ -129,5 +129,17 @@ export class UserAuthService {
   // Função pública para obter dados da empresa (pode ser chamada a partir de um componente)
   getCompanyData(): ICompany | null {
     return this.company;
+  }
+
+  async hasCurriculum(userId: number): Promise<boolean> {
+    const apiUrl = `http://localhost:3333/users/${userId}`;
+
+    try {
+      const response = await this.http.get<IUser>(apiUrl).toPromise();
+      return response?.curriculumId != null;
+    } catch (error) {
+      console.log(`Erro ao buscar usuários: ${error}`);
+      return false;
+    }
   }
 }

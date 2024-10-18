@@ -1,59 +1,92 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IJob } from '../../models/job.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
-import { ICompany } from '../../models/company.interface';
-import { IUser } from '../../models/user.interface';
 import { HttpClient } from '@angular/common/http';
-import { ICurriculum } from '../../models/curriculum.interface';
+import { IApplication } from '../../models/application.interface';
 
 @Component({
   selector: 'app-job-card',
   templateUrl: './job-card.component.html',
-  styleUrl: './job-card.component.css',
+  styleUrls: ['./job-card.component.css'],
 })
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
 
+  alertMessage: string = '';
+  alertType: 'success' | 'danger' = 'success';
+  showAlert: boolean = false;
+
   userData = this.authService.getUserData();
-
-  companyName: string | undefined = this.authService.getCompanyData()?.name;
-
   userType: string | null = null;
+
+  // Controle do modal
+  isModalOpen = false;
+  selectedJob: IJob | null = null;
 
   constructor(private authService: UserAuthService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    // Verifica o tipo de usuário ao inicializar o componente
     this.userType = this.authService.getUserType();
   }
 
+  // Abre o modal e define o job selecionado
+  openModal(job: IJob) {
+    this.selectedJob = job;
+    this.isModalOpen = true;
+  }
+
+  // Fecha o modal
+  closeModal() {
+    this.isModalOpen = false;
+  }
+
   async apply() {
-    const exist = await this.checkCurriculum(this.authService.getUserData()?.id);
+    if (!this.userData) {
+      this.alertMessage = 'Você precisa estar logado para se candidatar.';
+      this.alertType = 'danger';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+      return;
+    }
 
-    if(exist){
+    const exist = await this.checkCurriculum(this.userData.id);
 
-    }else{
-  
+    if (exist) {
+      const vacancyId = this.selectedJob?.id;
+      const userId = this.userData.id;
+
+      const body = { userId, vacancyId };
+
+      this.http.post<IApplication>('http://localhost:3333/application', body).subscribe(
+        (response) => {
+          this.alertMessage = 'Parabéns, você se candidatou!';
+          this.alertType = 'success';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+        },
+        (error) => {
+          console.log(`Erro ao adicionar candidatura ${error}`);
+        }
+      );
+    } else {
+      this.alertMessage = 'Você precisa ter um currículo cadastrado.';
+      this.alertType = 'danger';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
     }
   }
 
-  async checkCurriculum(id: number| undefined): Promise<boolean> {
-    let exists = false;
-    const apiUrl = `http://localhost:3333/curriculum/${id}`;
+  async checkCurriculum(id: number): Promise<boolean> {
     try {
-      const response = await this.http.get<ICurriculum>(apiUrl).toPromise();
-
-      if (response && response.description != null) {
-        exists = true;
-      } else {
-        exists = false;
-      }
+      const response = await this.http.get(`http://localhost:3333/curriculum/${id}`).toPromise();
+      return !!response;
     } catch (error) {
-      window.alert(`Erro ao fazer busca do currículo: ${error}`);
+      console.error(`Erro ao buscar currículo: ${error}`);
+      return false;
     }
-
-    console.log(exists);
-    return exists;
   }
 
+  resetAlertAfterDelay() {
+    setTimeout(() => (this.showAlert = false), 3000);
+  }
 }

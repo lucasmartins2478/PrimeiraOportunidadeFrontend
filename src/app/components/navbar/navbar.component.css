@@ -19,6 +19,9 @@ button {
   background-color: #ff7b2a;
   border: none;
 }
+li{
+  margin-left: 1rem;
+}
 #profile{
   display: none;
 }

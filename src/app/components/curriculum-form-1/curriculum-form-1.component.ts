@@ -118,6 +118,8 @@ export class CurriculumForm1Component implements OnInit {
     } catch (error) {
       window.alert(`Erro ao fazer busca do currículo: ${error}`);
     }
+
+
   }
 
   resetAlertAfterDelay() {

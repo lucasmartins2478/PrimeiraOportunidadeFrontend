@@ -75,6 +75,7 @@ export class JobFormComponent {
         requirements: formData.requirements,
         aboutCompany: formData.aboutCompany,
         benefits: formData.benefits,
+        companyName: this.companyData?.name,
         companyId: this.companyData?.id,
       };
 

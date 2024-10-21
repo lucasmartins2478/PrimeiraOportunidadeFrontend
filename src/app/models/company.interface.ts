@@ -7,8 +7,8 @@ export interface ICompany{
   email:string,
   phoneNumber:string,
   password:string,
-  url?:string,
-  imgUrl?:string
+  url:string,
+  logo:string
   address:string,
   city:string,
   cep:number,

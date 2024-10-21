@@ -18,7 +18,9 @@ import { UserAuthService } from '../../services/auth/auth.service';
 })
 export class CurriculumForm2Component {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
 
   academicForm: FormGroup;
@@ -86,7 +88,9 @@ export class CurriculumForm2Component {
           this.http.post<IAcademicData[]>(apiUrl, body).subscribe(
             (response) => {
               this.alertMessage = 'Formulário válido!';
-              this.alertType = 'success';
+              this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Sucesso';
+              this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
             },
@@ -95,12 +99,15 @@ export class CurriculumForm2Component {
             }
           );
         });
-
-        this.router.navigate(['/criar-curriculo/etapa3']);
+        setTimeout(() => {
+          this.router.navigate(['/criar-curriculo/etapa3']);
+        }, 2000);
       }
     } else {
-      this.alertMessage = 'Formulário inválido';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }

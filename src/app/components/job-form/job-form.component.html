@@ -1,8 +1,4 @@
-<app-alert
-  [message]="alertMessage"
-  [type]="alertType"
-  [isVisible]="showAlert"
-></app-alert>
+<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
 
 <form [formGroup]="jobForm" (ngSubmit)="onSubmit()" class="form">
   <h3>

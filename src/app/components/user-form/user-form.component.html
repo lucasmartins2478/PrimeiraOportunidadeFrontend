@@ -1,10 +1,6 @@
-<app-alert
-  [message]="alertMessage"
-  [type]="alertType"
-  [isVisible]="showAlert"
-></app-alert>
+<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
 
-<form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form">
+<form *ngIf="userForm" [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form">
   <h3>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -77,32 +73,42 @@
       />
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-label">Senha</label>
-      <input
-        type="password"
-        name="passwordUser"
-        id="passwordUser"
-        placeholder="Senha"
-        class="form-control"
-        formControlName="password"
-      />
+  <ng-container *ngIf="isAuthenticated(); else password">
+
+  </ng-container>
+  <ng-template #password>
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Senha</label>
+        <input
+          type="password"
+          name="passwordUser"
+          id="passwordUser"
+          placeholder="Senha"
+          class="form-control"
+          formControlName="password"
+        />
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-label">Confirme sua senha</label>
-      <input
-        type="password"
-        name="confirmPasswordUser"
-        id="confirmPasswordUser"
-        placeholder="Confirme sua senha"
-        class="form-control"
-        formControlName="confirmPassword"
-      />
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Confirme sua senha</label>
+        <input
+          type="password"
+          name="confirmPasswordUser"
+          id="confirmPasswordUser"
+          placeholder="Confirme sua senha"
+          class="form-control"
+          formControlName="confirmPassword"
+        />
+      </div>
     </div>
-  </div>
-  <button class="btn btn-primary" type="submit">Cadastrar</button>
-  <p>Já possui conta?<a routerLink="/login/candidato">Login</a></p>
+  </ng-template>
+  <ng-container *ngIf="isAuthenticated(); else submit">
+    <button class="btn btn-primary" type="button" (click)="onUpdate()">Atualizar</button>
+  </ng-container>
+  <ng-template #submit>
+    <button class="btn btn-primary" type="submit">Cadastrar</button>
+    <p>Já possui conta?<a routerLink="/login/candidato">Login</a></p>
+  </ng-template>
 </form>

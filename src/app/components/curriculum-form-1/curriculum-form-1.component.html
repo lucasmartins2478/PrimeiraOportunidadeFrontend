@@ -1,8 +1,4 @@
-<app-alert
-  [message]="alertMessage"
-  [type]="alertType"
-  [isVisible]="showAlert"
-></app-alert>
+<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
 
 <form [formGroup]="curriculumForm" (ngSubmit)="onSubmit()" class="form">
   <h3>
@@ -202,7 +198,7 @@
       />
     </div>
   </div>
-  <!-- <div class="row">
+  <div class="row">
     <div class="col-12">
       <label for="institutionNameUser" class="form-label"
         >Nome da Instituição de Ensino</label
@@ -258,7 +254,7 @@
         <label for="flexCheckDefault">Estudo aqui atualmente</label>
       </div>
     </div>
-  </div> -->
+  </div>
   <button class="btn btn-primary" type="submit">
     Dados acadêmicos<svg
       xmlns="http://www.w3.org/2000/svg"

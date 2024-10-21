@@ -3,12 +3,39 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 300px;
-  padding: 20px;
+  width: 450px;
+  height: 300px;
+  padding: 2rem;
   text-align: center;
   z-index: 1000;
   opacity: 1;
   transition: opacity 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alert-danger{
+  background-color: #eae6e6;
+  border: none;
+  color: #565656;
+}
+.alert-danger i{
+  color: #ff4949;
+}
+
+.alert-success{
+  background-color: #eae6e6;
+  border: none;
+  color: #565656;
+}
+.alert-success i{
+  color: #73ff4c;
+}
+
+i{
+  font-size: 5rem;
 }
 
 .alert-hidden {

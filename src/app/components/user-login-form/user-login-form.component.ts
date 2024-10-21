@@ -12,7 +12,9 @@ import { IUser } from '../../models/user.interface';
 })
 export class UserLoginFormComponent implements OnInit {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
 
   loginForm!: FormGroup;
@@ -41,18 +43,25 @@ export class UserLoginFormComponent implements OnInit {
           const user = response.find((user) => user.email === formData.email);
           if (user && user.password === formData.password) {
             this.alertMessage = `Seja bem-vindo(a) ${user.name}`;
-            this.alertType = 'success';
+            this.alertClass = 'alert alert-success';
+            this.alertTitle = 'Sucesso';
+            this.alertIconClass = 'bi bi-check-circle';
             this.showAlert = true;
             this.resetAlertAfterDelay();
 
-            // Armazena os dados do usuário no AuthService
-            this.authService.login(user);
+            setTimeout(() => {
+              // Armazena os dados do usuário no AuthService
+              this.authService.login(user);
 
-            // Navega para a próxima página
-            this.router.navigate(['/vagas']);
+              // Navega para a próxima página após o tempo do alerta
+              this.router.navigate(['/vagas']);
+            }, 2000);
+
           } else {
             this.alertMessage = 'Usuário ou senha incorretos!';
-            this.alertType = 'danger';
+            this.alertTitle = 'Erro';
+            this.alertIconClass = 'bi bi-x-circle';
+            this.alertClass = 'alert alert-danger';
             this.showAlert = true;
             this.resetAlertAfterDelay();
           }
@@ -60,15 +69,18 @@ export class UserLoginFormComponent implements OnInit {
         (error) => {
           window.alert(`Erro ao buscar dados, ${error}`);
         }
-
       );
     } else {
       this.alertMessage = 'Preencha os dados corretamente!';
-      this.alertType = 'danger';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
   }
+
+
 
   resetAlertAfterDelay() {
     setTimeout(() => {

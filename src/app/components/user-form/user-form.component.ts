@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserFormService } from '../../services/user/user-form.service';
 import { Router } from '@angular/router';
 import { IUser } from '../../models/user.interface';
+import { UserAuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-user-form',
@@ -12,28 +13,70 @@ import { IUser } from '../../models/user.interface';
 })
 export class UserFormComponent implements OnInit {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
-
+  user!: IUser;
   userForm!: FormGroup;
+  userData = this.authService.getUserData();
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private userFormService: UserFormService
+    private userFormService: UserFormService,
+    private authService: UserAuthService
   ) {}
 
-  ngOnInit(): void {
+  getUserData() {
+    const id = this.userData?.id;
+    this.userFormService.getUserData(id).subscribe(
+      (response: IUser) => {
+        this.user = response;
+        this.createUserForm(this.user);
+      },
+      (error) => {
+        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+      }
+    );
+  }
+
+  createUserForm(user: IUser) {
     this.userForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(10)]],
-      phoneNumber: ['', [Validators.required, Validators.minLength(9)]],
-      cpf: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      name: [
+        this.user?.name || '',
+        [Validators.required, Validators.minLength(10)],
+      ],
+      phoneNumber: [
+        this.user?.phoneNumber || '',
+        [Validators.required, Validators.minLength(9)],
+      ],
+      cpf: [this.user?.cpf || '', [Validators.required]],
+      email: [this.user?.email || '', [Validators.required, Validators.email]],
+      password: [
+        this.user?.password || '',
+        [Validators.required, Validators.minLength(6)],
+      ],
+      confirmPassword: [
+        this.user?.password || '',
+        [Validators.required, Validators.minLength(6)],
+      ],
     });
   }
+
+  ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.getUserData();
+    } else {
+      this.createUserForm(this.user);
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
   async onSubmit() {
     if (this.userForm.valid) {
       const apiUrl = 'http://localhost:3333/users';
@@ -43,9 +86,10 @@ export class UserFormComponent implements OnInit {
       if (formData.password === formData.confirmPassword) {
         const exists = await this.verifyEmail(formData.email);
         if (exists) {
-          this.alertMessage =
-            'Endereço de email já vinculado à uma conta existente';
-          this.alertType = 'danger';
+          this.alertMessage = 'Email já vinculado a uma conta existente!';
+          this.alertClass = 'alert alert-danger';
+          this.alertTitle = 'Erro';
+          this.alertIconClass = 'bi bi-x-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
         } else {
@@ -56,14 +100,18 @@ export class UserFormComponent implements OnInit {
             email: formData.email,
             password: formData.password,
           };
-          this.http.post<IUser[]>(apiUrl, body).subscribe(
+          this.http.post<IUser>(apiUrl, body).subscribe(
             (response) => {
               this.userFormService.setFormData(this.userForm.value);
               this.alertMessage = 'Usuário cadastrado com sucesso!';
-              this.alertType = 'success';
+              this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Sucesso';
+              this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
-              this.router.navigate(['/login']);
+              setTimeout(() => {
+                this.router.navigate(['/login']);
+              }, 2000);
             },
             (error) => {
               window.alert(`Erro ao cadastrar usuário ${error}`);
@@ -72,13 +120,80 @@ export class UserFormComponent implements OnInit {
         }
       } else if (formData.password !== formData.confirmPassword) {
         this.alertMessage = 'As senhas devem ser correspondentes!';
-        this.alertType = 'danger';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
         this.showAlert = true;
         this.resetAlertAfterDelay();
       }
     } else {
-      this.alertMessage = 'Preencha os campos corretamente!';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+
+  async onUpdate() {
+    if (this.userForm.valid) {
+      const id = this.userData?.id;
+      const formData = this.userForm.value;
+      const apiUrl = `http://localhost:3333/users/${id}`;
+      const hasCurriculum = await this.authService.hasCurriculum(id);
+
+      if (hasCurriculum) {
+        const body = {
+          name: formData.name,
+          cpf: formData.cpf,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          password: formData.password,
+          curriculumId: this.userData?.id,
+        };
+
+        this.http.put<IUser>(apiUrl, body).subscribe(
+          (response) => {
+            this.userFormService.setFormData(this.userForm.value);
+            this.alertMessage = 'Usuário cadastrado com sucesso!';
+            this.alertClass = 'success';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+            this.router.navigate(['/vagas']);
+          },
+          (error) => {
+            console.log(`erro ao atualizar usuário ${error}`);
+          }
+        );
+      } else {
+        const body = {
+          name: formData.name,
+          cpf: formData.cpf,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          password: formData.password,
+        };
+
+        this.http.put<IUser>(apiUrl, body).subscribe(
+          (response) => {
+            this.userFormService.setFormData(this.userForm.value);
+            this.alertMessage = 'Usuário cadastrado com sucesso!';
+            this.alertClass = 'alert alert-success';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+            this.router.navigate(['/vagas']);
+          },
+          (error) => {
+            console.log(`erro ao atualizar usuário ${error}`);
+          }
+        );
+      }
+    } else {
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }

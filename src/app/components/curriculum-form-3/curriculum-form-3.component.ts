@@ -12,7 +12,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CurriculumForm3Component implements OnInit {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
   isChecked: boolean = false;
 
@@ -27,10 +29,9 @@ export class CurriculumForm3Component implements OnInit {
     // Cria o FormGroup para o formulário
     this.courseForm = this.fb.group({
       courses: this.fb.array([]),
-      competenceInput: ['', [Validators.required]],// FormArray para cursos
+      competenceInput: [''], // FormArray para cursos
       competencies: this.fb.array([]), // FormArray para competências
     });
-
   }
 
   ngOnInit(): void {
@@ -75,25 +76,24 @@ export class CurriculumForm3Component implements OnInit {
   }
 
   // Getter para o FormArray de competencies
-get competencies(): FormArray {
-  return this.courseForm.get('competencies') as FormArray;
-}
-
-// Adicionar uma competência ao FormArray
-addCompetence(): void {
-  const competenceValue = this.courseForm.get('competenceInput')?.value;
-
-  if (competenceValue) {
-    this.competencies.push(this.fb.control(competenceValue));
-    this.courseForm.get('competenceInput')?.reset(); // Limpa o campo após adicionar
+  get competencies(): FormArray {
+    return this.courseForm.get('competencies') as FormArray;
   }
-}
 
-// Remover uma competência do FormArray
-removeCompetence(index: number): void {
-  this.competencies.removeAt(index);
-}
+  // Adicionar uma competência ao FormArray
+  addCompetence(): void {
+    const competenceValue = this.courseForm.get('competenceInput')?.value;
 
+    if (competenceValue) {
+      this.competencies.push(this.fb.control(competenceValue));
+      this.courseForm.get('competenceInput')?.reset(); // Limpa o campo após adicionar
+    }
+  }
+
+  // Remover uma competência do FormArray
+  removeCompetence(index: number): void {
+    this.competencies.removeAt(index);
+  }
 
   // Método de submissão do formulário
   onSubmit(): void {
@@ -122,7 +122,9 @@ removeCompetence(index: number): void {
           this.http.post<ICoursesData[]>(apiUrl, body).subscribe(
             (response) => {
               this.alertMessage = 'Curso cadastrado com sucesso!';
-              this.alertType = 'success';
+              this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Sucesso';
+              this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
             },
@@ -146,7 +148,7 @@ removeCompetence(index: number): void {
           this.http.post<ICompetences[]>(apiUrl, body).subscribe(
             (response) => {
               this.alertMessage = 'Competência cadastrada com sucesso!';
-              this.alertType = 'success';
+              this.alertClass = 'alert alert-success';
               this.showAlert = true;
               this.resetAlertAfterDelay();
             },
@@ -156,16 +158,18 @@ removeCompetence(index: number): void {
           );
         });
       }
-
-      this.router.navigate(['/criar-curriculo/etapa4']);
+      setTimeout(() => {
+        this.router.navigate(['/criar-curriculo/etapa4']);
+      }, 2000);
     } else {
-      this.alertMessage = 'Formulário inválido';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
   }
-
 
   resetAlertAfterDelay() {
     setTimeout(() => {

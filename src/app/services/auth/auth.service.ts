@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IUser } from '../../models/user.interface';
 import { ICompany } from '../../models/company.interface';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -71,10 +71,9 @@ export class UserAuthService {
 
   private saveCompanyDataToStorage(company: ICompany): void {
     localStorage.setItem('responsible', company.responsible);
-    localStorage.setItem('companyName', company.name);
+    localStorage.setItem('companyName', company.name); // Usando 'companyName' para evitar conflito com 'name'
     localStorage.setItem('companyEmail', company.email);
     localStorage.setItem('companyId', company.id.toString());
-    // Adicione outros campos relevantes aqui
   }
 
   private getUserDataFromStorage(): IUser | null {
@@ -83,7 +82,7 @@ export class UserAuthService {
     const phoneNumber = localStorage.getItem('phoneNumber');
     const id = Number(localStorage.getItem('id'));
 
-    if (name && email && phoneNumber && id) {
+    if (name && email && phoneNumber && id > 0) { // Verificando se o id é válido
       return {
         name,
         email,
@@ -97,9 +96,10 @@ export class UserAuthService {
   private getCompanyDataFromStorage(): ICompany | null {
     const responsible = localStorage.getItem('responsible');
     const email = localStorage.getItem('companyEmail');
-    const name = localStorage.getItem('name');
+    const name = localStorage.getItem('companyName'); // Usando 'companyName' para evitar conflito com 'name'
     const id = Number(localStorage.getItem('companyId'));
-    if (responsible && email && id && name) {
+
+    if (responsible && email && id > 0 && name) {
       return {
         responsible,
         email,
@@ -115,7 +115,7 @@ export class UserAuthService {
     localStorage.removeItem('email');
     localStorage.removeItem('phoneNumber');
     localStorage.removeItem('id');
-    localStorage.removeItem('companyName');
+    localStorage.removeItem('companyName'); // Removendo 'companyName'
     localStorage.removeItem('responsible');
     localStorage.removeItem('companyEmail');
     localStorage.removeItem('companyId');
@@ -131,11 +131,11 @@ export class UserAuthService {
     return this.company;
   }
 
-  async hasCurriculum(userId: number): Promise<boolean> {
+  async hasCurriculum(userId: number | undefined): Promise<boolean> {
     const apiUrl = `http://localhost:3333/users/${userId}`;
 
     try {
-      const response = await this.http.get<IUser>(apiUrl).toPromise();
+      const response = await lastValueFrom(this.http.get<IUser>(apiUrl));
       return response?.curriculumId != null;
     } catch (error) {
       console.log(`Erro ao buscar usuários: ${error}`);

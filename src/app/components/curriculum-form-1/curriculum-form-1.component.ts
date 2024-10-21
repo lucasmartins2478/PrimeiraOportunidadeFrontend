@@ -13,7 +13,9 @@ import { IUser } from '../../models/user.interface';
 })
 export class CurriculumForm1Component implements OnInit {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
   userData = this.authService.getUserData();
 
@@ -54,7 +56,7 @@ export class CurriculumForm1Component implements OnInit {
     });
   }
 
-   onSubmit() {
+  onSubmit() {
     if (this.curriculumForm.valid) {
       const formData = this.curriculumForm.value;
 
@@ -82,34 +84,38 @@ export class CurriculumForm1Component implements OnInit {
       console.log(this.userData);
       console.log(body);
 
-      this.http.post<ICurriculum[]>(apiUrl, body).subscribe(
+      this.http.post<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
           this.addCurriculum(this.userData?.id);
           this.alertMessage = 'Formulário válido!';
-          this.alertType = 'success';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-          this.router.navigate(['/criar-curriculo/etapa2']); // Após a confirmação
+          setTimeout(() => {
+            this.router.navigate(['/criar-curriculo/etapa2']);
+          }, 2000);
         },
         (error) => {
           window.alert(`Erro ao cadastrar currículo: ${error}`);
         }
       );
     } else {
-      this.alertMessage = 'Formulário inválido';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
   }
 
   async addCurriculum(id: number | undefined) {
-    const formData = this.curriculumForm.value;
     const apiUrl = `http://localhost:3333/users/${id}/curriculum`;
 
-
     const body = {
-      curriculumId: this.userData?.id
+      curriculumId: this.userData?.id,
     };
 
     try {
@@ -118,8 +124,6 @@ export class CurriculumForm1Component implements OnInit {
     } catch (error) {
       window.alert(`Erro ao fazer busca do currículo: ${error}`);
     }
-
-
   }
 
   resetAlertAfterDelay() {

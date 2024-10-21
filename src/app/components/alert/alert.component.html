@@ -1,5 +1,5 @@
-<div *ngIf="isVisible" class="alert"
-     [ngClass]="{'alert-success': type === 'success', 'alert-danger': type === 'danger'}"
-     role="alert">
+<div class="{{ class }}" role="alert" *ngIf="isVisible">
+  <i class="{{iconClass}}"></i>
+  <h3>{{title}}</h3>
   {{ message }}
 </div>

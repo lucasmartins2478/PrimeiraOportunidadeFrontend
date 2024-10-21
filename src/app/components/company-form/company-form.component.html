@@ -1,10 +1,6 @@
-<app-alert
-  [message]="alertMessage"
-  [type]="alertType"
-  [isVisible]="showAlert"
-></app-alert>
+<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
 
-<form class="form" [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+<form *ngIf="companyForm" class="form" [formGroup]="companyForm" (ngSubmit)="onSubmit()">
   <h2>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -96,32 +92,36 @@
       />
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 col-md-6">
-      <label for="companyPassword" class="form-label">Senha</label>
-      <input
-        type="password"
-        name="companyPassword"
-        id="companyPassword"
-        placeholder="Senha"
-        class="form-control"
-        formControlName="password"
-      />
+  <ng-container *ngIf="isAuthenticated(); else password"> </ng-container>
+  <ng-template #password>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <label for="companyPassword" class="form-label">Senha</label>
+        <input
+          type="password"
+          name="companyPassword"
+          id="companyPassword"
+          placeholder="Senha"
+          class="form-control"
+          formControlName="password"
+        />
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="companyConfirmPassoword" class="form-label"
+          >Confirme sua senha</label
+        >
+        <input
+          type="password"
+          name="companyConfirmPassword"
+          id="companyConfirmPassword"
+          placeholder="Confirme sua senha"
+          class="form-control"
+          formControlName="confirmPassword"
+        />
+      </div>
     </div>
-    <div class="col-12 col-md-6">
-      <label for="companyConfirmPassoword" class="form-label"
-        >Confirme sua senha</label
-      >
-      <input
-        type="password"
-        name="companyConfirmPassword"
-        id="companyConfirmPassword"
-        placeholder="Confirme sua senha"
-        class="form-control"
-        formControlName="confirmPassword"
-      />
-    </div>
-  </div>
+  </ng-template>
+
   <div class="row">
     <div class="col-12 col-md-6">
       <label for="companyUrl" class="form-label">Site</label>
@@ -194,20 +194,52 @@
       />
     </div>
     <div class="col-12 col-md-4">
-      <label for="companyUf" class="form-label">Estado</label>
-      <input
-        type="text"
-        name="companyUf"
-        id="companyUf"
-        placeholder="Estado"
-        class="form-control"
+      <label class="form-label">Estado</label>
+      <select
+        class="form-select"
         formControlName="uf"
-      />
+        aria-label="Default select example"
+      >
+        <option value="">Selecione</option>
+        <option value="AC">AC</option>
+        <option value="AL">AL</option>
+        <option value="AP">AP</option>
+        <option value="AM">AM</option>
+        <option value="BA">BA</option>
+        <option value="CE">CE</option>
+        <option value="DF">DF</option>
+        <option value="ES">ES</option>
+        <option value="GO">GO</option>
+        <option value="MA">MA</option>
+        <option value="MT">MT</option>
+        <option value="MS">MS</option>
+        <option value="MG">MG</option>
+        <option value="PA">PA</option>
+        <option value="PB">PB</option>
+        <option value="PR">PR</option>
+        <option value="PE">PE</option>
+        <option value="PI">PI</option>
+        <option value="RJ">RJ</option>
+        <option value="RN">RN</option>
+        <option value="RS">RS</option>
+        <option value="RO">RO</option>
+        <option value="RR">RR</option>
+        <option value="SC">SC</option>
+        <option value="SP">SP</option>
+        <option value="SE">SE</option>
+        <option value="TO">TO</option>
+      </select>
     </div>
   </div>
-  <div class="row"></div>
-  <button class="btn btn-primary">Cadastrar</button>
-  <p>Já possui conta?<a routerLink="/login/empresa">Login</a></p>
+  <ng-container *ngIf="isAuthenticated(); else submit">
+    <button class="btn btn-primary" type="button" (click)="onUpdate()">
+      Atualizar
+    </button>
+  </ng-container>
+  <ng-template #submit>
+    <button class="btn btn-primary" type="submit">Cadastrar</button>
+    <p>Já possui conta?<a routerLink="/login/empresa">Login</a></p>
+  </ng-template>
 </form>
 
 <!-- <form (ngSubmit)="onSubmit()" #imageForm="ngForm">

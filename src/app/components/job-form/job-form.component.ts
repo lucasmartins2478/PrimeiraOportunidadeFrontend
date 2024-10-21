@@ -12,7 +12,9 @@ import { IJob } from '../../models/job.interface';
 })
 export class JobFormComponent {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
   companyData = this.authService.getCompanyData();
 
@@ -84,20 +86,26 @@ export class JobFormComponent {
       this.http.post<IJob>(apiUrl, body).subscribe(
         (response) => {
           this.alertMessage = 'Vaga criada com sucesso!';
-          this.alertType = 'success';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-          console.log(response);
-          this.enviarPerguntas(response.id);
-          this.router.navigate(['/minhas-vagas']);
+          setTimeout(()=>{
+            this.enviarPerguntas(response.id);
+            this.router.navigate(['/minhas-vagas']);
+          }, 2000)
+
         },
         (error) => {
           window.alert(`Erro ao cadastrar vaga: ${error}`);
         }
       );
     } else {
-      this.alertMessage = 'Formulário inválido';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }

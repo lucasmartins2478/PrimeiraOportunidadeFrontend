@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { companyFormService } from '../../services/company/company-form.service';
 import { Router } from '@angular/router';
 import { ICompany } from '../../models/company.interface';
+import { UserAuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-company-form',
@@ -11,65 +12,69 @@ import { ICompany } from '../../models/company.interface';
   styleUrls: ['./company-form.component.css'], // Corrigi a propriedade 'styleUrl' para 'styleUrls'
 })
 export class CompanyFormComponent implements OnInit {
-
-  // ngOnInit(): void {
-
-  // }
-
-  // imageUrl: string | ArrayBuffer | null = null;
-
-  // onFileChange(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   if (input.files && input.files.length) {
-  //     const file = input.files[0];
-  //     this.imageUrl = URL.createObjectURL(file);
-  //     console.log('Arquivo selecionado:', file);
-  //   }
-  // }
-
-  // onSubmit(): void {
-  //   if (this.imageUrl) {
-  //     console.log('Imagem enviada:', this.imageUrl);
-  //     // Aqui você pode enviar a imagem para o servidor, se necessário
-  //   } else {
-  //     console.log('Nenhuma imagem foi selecionada.');
-  //   }
-  // }
-
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
-
+  company!: ICompany;
   companyForm!: FormGroup;
   logoUrl: any = ''; // URL da imagem
+  companyData = this.authService.getCompanyData();
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private companyFormService: companyFormService
+    private companyFormService: companyFormService,
+    private authService: UserAuthService
   ) {}
 
-  ngOnInit(): void {
+  getCompanyData() {
+    const id = this.companyData?.id;
+    this.companyFormService.getUserData(id).subscribe(
+      (response: ICompany) => {
+        this.company = response;
+        this.createCompanyForm(this.company);
+      },
+      (error) => {
+        console.log(`Erro ao buscar a empresa com ID ${id}: ${error}`);
+      }
+    );
+  }
+
+  createCompanyForm(company: ICompany) {
     this.companyForm = this.fb.group({
-      name: ['', [Validators.required]],
-      cnpj: ['', [Validators.required]],
-      segment: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      responsible: ['', [Validators.required]],
-      url: ['', [Validators.required]],
+      name: [this.company?.name || '', [Validators.required]],
+      cnpj: [this.company?.cnpj || '', [Validators.required]],
+      segment: [this.company?.segment || '', [Validators.required]],
+      phoneNumber: [this.company?.phoneNumber || '', [Validators.required]],
+      email: [this.company?.email || '', [Validators.required]],
+      responsible: [this.company?.responsible || '', [Validators.required]],
+      url: [this.company?.url || '', [Validators.required]],
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      cep: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      addressNumber: ['', [Validators.required]],
-      uf: ['', [Validators.required]],
-      logo: ['', [Validators.required]]
+      city: [this.company?.city || '', [Validators.required]],
+      cep: [this.company?.cep || '', [Validators.required]],
+      address: [this.company?.address || '', [Validators.required]],
+      addressNumber: [this.company?.addressNumber || '', [Validators.required]],
+      uf: [this.company?.uf || '', [Validators.required]],
+      logo: [this.company?.logo || ''],
     });
   }
-  
+
+  ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.getCompanyData();
+    } else {
+      this.createCompanyForm(this.company);
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
   // Método chamado ao selecionar um arquivo de imagem
   onLogoSelected(event: Event) {
     const input = event.target as HTMLInputElement; // Cast para HTMLInputElement
@@ -95,8 +100,11 @@ export class CompanyFormComponent implements OnInit {
       if (formValue.password === formValue.confirmPassword) {
         const exists = await this.verifyCnpj(formValue.cnpj);
         if (exists) {
-          this.alertMessage = 'CNPJ já cadastrado';
-          this.alertType = 'danger';
+          this.alertMessage =
+            'O CNPJ informado já está vinculado a uma conta existente!';
+          this.alertClass = 'alert alert-danger';
+          this.alertTitle = 'Erro';
+          this.alertIconClass = 'bi bi-x-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
         } else {
@@ -105,14 +113,18 @@ export class CompanyFormComponent implements OnInit {
             formData.append(key, formValue[key]);
           }
 
-          this.http.post<ICompany[]>(apiUrl, formValue).subscribe(
+          this.http.post<ICompany>(apiUrl, formValue).subscribe(
             (response) => {
               this.companyFormService.setFormData(this.companyForm.value);
-              this.alertMessage = 'Usuário cadastrado com sucesso!';
-              this.alertType = 'success';
+              this.alertMessage = 'Empresa cadastrado com sucesso!';
+              this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Sucesso';
+              this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
-              // this.router.navigate(['/login']);
+              setTimeout(() => {
+                this.router.navigate(['/login/empresa']);
+              }, 2000);
             },
             (error) => {
               window.alert(`Erro ao cadastrar usuário ${error}`);
@@ -121,13 +133,54 @@ export class CompanyFormComponent implements OnInit {
         }
       } else {
         this.alertMessage = 'As senhas devem ser correspondentes!';
-        this.alertType = 'danger';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
         this.showAlert = true;
         this.resetAlertAfterDelay();
       }
     } else {
-      this.alertMessage = 'Preencha os campos corretamente!';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+
+  async onUpdate() {
+    if (this.companyForm.valid) {
+      const id = this.companyData?.id;
+      const apiUrl = `http://localhost:3333/companies/${id}`;
+
+      // Criar um FormData para garantir que o arquivo (logo) seja enviado corretamente
+      const formData = new FormData();
+      const formValue = this.companyForm.value;
+
+      // Adiciona os dados do formulário ao FormData
+      for (const key in formValue) {
+        formData.append(key, formValue[key]);
+      }
+
+      this.http.put<ICompany>(apiUrl, formData).subscribe(
+        (response) => {
+          this.companyFormService.setFormData(this.companyForm.value);
+          this.alertMessage = 'Empresa atualizada com sucesso!';
+          this.alertClass = 'alert alert-success';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+          this.router.navigate(['/minhas-vagas']);
+        },
+        (error) => {
+          console.log(`Erro ao atualizar a empresa: ${error}`);
+        }
+      );
+    } else {
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }

@@ -1,8 +1,4 @@
-<app-alert
-  [message]="alertMessage"
-  [type]="alertType"
-  [isVisible]="showAlert"
-></app-alert>
+<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
 
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="container">
   <h3>Seja bem-vindo(a) a Primeira Oportunidade</h3>

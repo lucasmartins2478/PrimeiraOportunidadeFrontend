@@ -8,11 +8,13 @@ import { ICurriculum } from '../../models/curriculum.interface';
 @Component({
   selector: 'app-curriculum-form-4',
   templateUrl: './curriculum-form-4.component.html',
-  styleUrl: './curriculum-form-4.component.css'
+  styleUrl: './curriculum-form-4.component.css',
 })
 export class CurriculumForm4Component implements OnInit {
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
 
   adictionalDataForm!: FormGroup;
@@ -26,45 +28,46 @@ export class CurriculumForm4Component implements OnInit {
 
   ngOnInit(): void {
     this.adictionalDataForm = this.fb.group({
-      attached:[''],
-      description:['', [Validators.required]]
+      attached: [''],
+      description: ['', [Validators.required]],
     });
   }
   onSubmit() {
     if (this.adictionalDataForm.valid) {
+      const id = this.userService.getUserData()?.id;
+      const formData = this.adictionalDataForm.value;
 
-      const id = this.userService.getUserData()?.id
-      const formData = this.adictionalDataForm.value
-
-      const apiUrl = `http://localhost:3333/curriculum/${id}/addData`
+      const apiUrl = `http://localhost:3333/curriculum/${id}/addData`;
 
       const body = {
         description: formData.description,
-        attached: formData.attached
-      }
+        attached: formData.attached,
+      };
 
-      console.log(apiUrl)
-      console.log(body)
+      console.log(apiUrl);
+      console.log(body);
 
       this.http.put<ICurriculum[]>(apiUrl, body).subscribe(
         (response) => {
           this.alertMessage = 'Formulário válido!';
-          this.alertType = 'success';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-          this.router.navigate(['/vagas']); // Após a confirmação
+          setTimeout(() => {
+            this.router.navigate(['/vagas']);
+          }, 2000);
         },
         (error) => {
           window.alert(`Erro ao cadastrar currículo: ${error}`);
         }
       );
-
-
     } else {
-      window.alert('Formulário inválido');
-
-      this.alertMessage = 'Formulário inválido';
-      this.alertType = 'danger';
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }

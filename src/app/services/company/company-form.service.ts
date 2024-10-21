@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { ICompany } from '../../models/company.interface';
 
 @Injectable({
@@ -9,9 +9,35 @@ import { ICompany } from '../../models/company.interface';
 export class companyFormService {
 
 
-  constructor(private http: HttpClient) {}
+  private apiUrl: string = `http://localhost:3333/companies`;
 
   private formData: any = {};
+
+  users: ICompany[] = [];
+
+  constructor(private http: HttpClient) {}
+
+  getUsersData(): Observable<ICompany[]> {
+    return this.http.get<ICompany[]>(this.apiUrl).pipe(
+      catchError((error: any) => {
+        console.error(`Erro ao buscar usuários: ${error}`);
+        return throwError(error);
+      })
+    );
+  }
+
+
+
+  getUserData(id: number| undefined): Observable<ICompany> {
+    const url = `${this.apiUrl}/${id}`; // Cria a URL com o ID do usuário
+    return this.http.get<ICompany>(url).pipe(
+      catchError((error: any) => {
+        console.error(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+        return throwError(error);
+      })
+    );
+  }
+
 
   setFormData(data: any) {
     this.formData = { ...this.formData, ...data };
@@ -20,8 +46,6 @@ export class companyFormService {
   getFormData() {
     return this.formData;
   }
-
-  private apiUrl = 'http://localhost:3333/companies'; // Altere para a URL correta da sua API
 
   getCompanies(): Observable<ICompany[]> {
     return this.http.get<ICompany[]>(this.apiUrl);

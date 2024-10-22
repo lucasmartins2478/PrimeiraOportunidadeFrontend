@@ -1,1 +1,36 @@
 <app-navbar></app-navbar>
+
+<div class="card-wrapper">
+  <div class="row">
+    <app-section-card
+      class="col-9 col-md-3"
+      [link]="'/comunidade/seção1'"
+      [title]="'Dicas montagem de currículo'"
+    ></app-section-card>
+    <app-section-card
+      class="col-9 col-md-3"
+      [link]="'/comunidade/seção2'"
+      [title]="'Dicas de cursos'"
+    ></app-section-card>
+    <app-section-card
+      class="col-9 col-md-3"
+      [link]="'/comunidade/seção3'"
+      [title]="'Dicas para entrevista'"
+    ></app-section-card>
+    <app-section-card
+      class="col-9 col-md-3"
+      [link]="'/comunidade/seção4'"
+      [title]="'Conheça as competências'"
+    ></app-section-card>
+  </div>
+</div>
+<div class="chat-section">
+  <h3><b>Chats</b></h3>
+  <p>
+    Seja bem-vindo ao nosso chat, aqui você pode se conectar com outros
+    candidatos, tirar dúvidas e compartilhar experiências.
+  </p>
+  <button class="btn btn-primary" routerLink="/comunidade/chat">
+    <i class="bi bi-box-arrow-up-right"></i> Abrir chat
+  </button>
+</div>

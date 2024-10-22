@@ -18,6 +18,11 @@ import { JobRegisterComponent } from './pages/job-register/job-register.componen
 import { AuthGuard, CompanyGuard, UserGuard } from './services/auth/auth.guard';
 import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authenticaded.component';
 import { CompanyLoginComponent } from './pages/company-login/company-login.component';
+import { Section1Component } from './pages/section-1/section-1.component';
+import { Section2Component } from './pages/section-2/section-2.component';
+import { Section3Component } from './pages/section-3/section-3.component';
+import { Section4Component } from './pages/section-4/section-4.component';
+import { ChatComponent } from './pages/chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -63,6 +68,11 @@ const routes: Routes = [
     component: JobRegisterComponent /*canActivate: [AuthGuard, CompanyGuard]*/,
   },
   { path: 'realize-login', component: NotAuthenticadedComponent },
+  { path: 'comunidade/seção1', component: Section1Component },
+  { path: 'comunidade/seção2', component: Section2Component },
+  { path: 'comunidade/seção3', component: Section3Component },
+  { path: 'comunidade/seção4', component: Section4Component },
+  { path: 'comunidade/chat', component: ChatComponent}
 ];
 
 @NgModule({

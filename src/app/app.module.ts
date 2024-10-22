@@ -43,6 +43,12 @@ import { NotAuthenticadedComponent } from './pages/not-authenticaded/not-authent
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { CompanyLoginComponent } from './pages/company-login/company-login.component';
+import { SectionCardComponent } from './components/section-card/section-card.component';
+import { Section1Component } from './pages/section-1/section-1.component';
+import { Section2Component } from './pages/section-2/section-2.component';
+import { Section3Component } from './pages/section-3/section-3.component';
+import { Section4Component } from './pages/section-4/section-4.component';
+import { ChatComponent } from './pages/chat/chat.component';
 
 
 @NgModule({
@@ -84,6 +90,12 @@ import { CompanyLoginComponent } from './pages/company-login/company-login.compo
     JobRegisterComponent,
     NotAuthenticadedComponent,
     CompanyLoginComponent,
+    SectionCardComponent,
+    Section1Component,
+    Section2Component,
+    Section3Component,
+    Section4Component,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

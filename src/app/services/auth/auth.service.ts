@@ -29,7 +29,6 @@ export class UserAuthService {
   }
 
   login(user: IUser) {
-    console.log('Dados do usuário durante o login:', user); // Verificar o objeto
     this.user = user;
     localStorage.setItem('userType', 'user');
     this.saveUserDataToStorage(user); // Salvar dados no localStorage ao logar
@@ -136,7 +135,12 @@ export class UserAuthService {
 
     try {
       const response = await lastValueFrom(this.http.get<IUser>(apiUrl));
-      return response?.curriculumId != null;
+      if(response.curriculumId != null){
+        return true
+      }
+      else{
+        return false
+      }
     } catch (error) {
       console.log(`Erro ao buscar usuários: ${error}`);
       return false;

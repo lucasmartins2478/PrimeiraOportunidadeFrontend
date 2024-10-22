@@ -80,8 +80,6 @@ export class UserLoginFormComponent implements OnInit {
     }
   }
 
-
-
   resetAlertAfterDelay() {
     setTimeout(() => {
       this.showAlert = false;

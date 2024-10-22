@@ -149,6 +149,8 @@ export class CurriculumForm3Component implements OnInit {
             (response) => {
               this.alertMessage = 'Competência cadastrada com sucesso!';
               this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Sucesso';
+              this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
             },

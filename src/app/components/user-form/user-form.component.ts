@@ -11,7 +11,7 @@ import { UserAuthService } from '../../services/auth/auth.service';
   templateUrl: './user-form.component.html',
   styleUrl: './user-form.component.css',
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit {  
   alertMessage: string = '';
   alertTitle: string = '';
   alertClass: string = '';
@@ -109,6 +109,7 @@ export class UserFormComponent implements OnInit {
               this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
+
               setTimeout(() => {
                 this.router.navigate(['/login']);
               }, 2000);

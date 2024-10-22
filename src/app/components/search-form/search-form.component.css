@@ -15,7 +15,6 @@ button {
 }
 input{
   background-color: #D9D9D9;
-  border-radius: 180px;
   padding: 0 2rem;
 }
 @media(max-width:890px){

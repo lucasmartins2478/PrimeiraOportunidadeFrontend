@@ -49,6 +49,10 @@ import { Section2Component } from './pages/section-2/section-2.component';
 import { Section3Component } from './pages/section-3/section-3.component';
 import { Section4Component } from './pages/section-4/section-4.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { ChatMessageComponent } from './components/chat-message/chat-message.component';
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 
 @NgModule({
@@ -96,6 +100,7 @@ import { ChatComponent } from './pages/chat/chat.component';
     Section3Component,
     Section4Component,
     ChatComponent,
+    ChatMessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +109,8 @@ import { ChatComponent } from './pages/chat/chat.component';
     HttpClientModule,
     NgxMaskDirective,
     NgxMaskPipe,
-    FormsModule
+    FormsModule,
+    SocketIoModule.forRoot(config),
   ],
   providers: [provideAnimationsAsync(), provideNgxMask()],
   bootstrap: [AppComponent],

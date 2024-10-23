@@ -36,7 +36,6 @@ a {
   top: 5.5rem;
   right: 0;
 }
-
 i {
   color: #000;
 
@@ -67,7 +66,7 @@ i {
     display: flex;
     flex-direction: column;
   }
-  i{
+  svg{
     display: none;
   }
   #profile{
@@ -78,5 +77,14 @@ i {
     margin-top: 5rem;
     top: 73%;
     right: 30%;
+  }
+}
+@media (max-width: 455px){
+  .dropdown-menu{
+    margin: 0;
+    margin-top: 5rem;
+    top: 73%;
+    right: 0%;
+    width: 100%;
   }
 }

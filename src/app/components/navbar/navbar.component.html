@@ -33,11 +33,6 @@
               Comunidade
             </a>
           </li>
-          <li class="nav-item" *ngIf="userType === 'user'">
-            <a class="nav-link active" aria-current="page" routerLink="/minhas-candidaturas" style="color: #fff">
-              Minhas Candidaturas
-            </a>
-          </li>
           <li class="nav-item" *ngIf="userType === 'company'">
             <a class="nav-link active" routerLink="/minhas-vagas" style="color: #fff">
               Minhas Vagas
@@ -99,6 +94,7 @@
           <!-- Menu Dropdown para opções de perfil -->
           <div *ngIf="isProfileMenuOpen" class="dropdown-menu show">
             <ng-container *ngIf="userType === 'user'; else companyLink">
+              <a class="dropdown-item" routerLink="/minhas-candidaturas">Minhas candidaturas</a>
               <a class="dropdown-item" routerLink="/criar-conta">Ver Perfil</a>
             </ng-container>
             <ng-template #companyLink>

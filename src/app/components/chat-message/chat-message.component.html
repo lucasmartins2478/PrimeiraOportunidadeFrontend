@@ -1,0 +1,15 @@
+<div class="chat-container">
+  <div class="chat-window">
+    <div *ngFor="let message of messages" class="chat-message">
+      {{ message }}
+    </div>
+  </div>
+
+  <div class="chat-input">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" [(ngModel)]="newMessage" placeholder="Digite sua mensagem..." aria-label="Recipient's username" aria-describedby="button-addon2">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="sendMessage()"><i class="bi bi-send-fill"></i></button>
+    </div>
+  </div>
+</div>
+

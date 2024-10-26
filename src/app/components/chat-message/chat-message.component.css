@@ -15,6 +15,14 @@ button i{
 }
 .chat-window{
   height: 62vh;
-
   padding: 10px;
+}
+.chat-message{
+  right: 0%;
+  max-width: 40%;
+  background-color: #fff;
+  padding: 0.5rem;
+  border-top-left-radius:180px ;
+  border-top-right-radius: 180px;
+  border-bottom-left-radius: 180px;
 }

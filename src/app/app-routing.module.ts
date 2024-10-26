@@ -39,7 +39,7 @@ const routes: Routes = [
   },
   {
     path: 'minhas-vagas',
-    component: MyJobsComponent /*canActivate: [AuthGuard, CompanyGuard]*/,
+    component: MyJobsComponent, canActivate: [AuthGuard, CompanyGuard],
   },
   { path: 'login/candidato', component: LoginComponent },
   { path: 'comunidade', component: CommunityComponent },
@@ -65,14 +65,14 @@ const routes: Routes = [
   },
   {
     path: 'criar-vaga',
-    component: JobRegisterComponent /*canActivate: [AuthGuard, CompanyGuard]*/,
+    component: JobRegisterComponent, canActivate: [AuthGuard, CompanyGuard],
   },
   { path: 'realize-login', component: NotAuthenticadedComponent },
   { path: 'comunidade/seção1', component: Section1Component },
   { path: 'comunidade/seção2', component: Section2Component },
   { path: 'comunidade/seção3', component: Section3Component },
   { path: 'comunidade/seção4', component: Section4Component },
-  { path: 'comunidade/chat', component: ChatComponent}
+  { path: 'comunidade/chat', component: ChatComponent,canActivate: [AuthGuard, UserGuard] }
 ];
 
 @NgModule({

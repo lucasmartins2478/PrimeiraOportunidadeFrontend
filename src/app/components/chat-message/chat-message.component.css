@@ -8,21 +8,47 @@ button:hover{
 button i{
   color: #000;
 }
+
 .chat-container{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-.chat-window{
+.chat-window {
   height: 62vh;
+  width: 95%;
   padding: 10px;
+  display: flex;
+  overflow-y: scroll;
+  flex-direction: column;
+  margin: 0 auto;
 }
-.chat-message{
-  right: 0%;
+
+.chat-message-sent {
+  align-self: flex-end;
   max-width: 40%;
-  background-color: #fff;
-  padding: 0.5rem;
-  border-top-left-radius:180px ;
-  border-top-right-radius: 180px;
-  border-bottom-left-radius: 180px;
+  background-color: #E5E9FF;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.chat-message-received {
+  align-self: flex-start;
+  max-width: 40%;
+  background-color: #f1f1f1;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.user-name{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.chat-message i{
+  font-size: 24px;
 }

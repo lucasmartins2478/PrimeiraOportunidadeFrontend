@@ -1,22 +1,37 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { IMessage } from '../../models/message.interface';
+import { UserAuthService } from '../auth/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
-  // O array de mensagens será gerenciado por um BehaviorSubject para facilitar a atualização em tempo real
+  apiUrl: string = 'http://localhost:3333/messages';
   private messagesSource = new BehaviorSubject<string[]>([]);
   public messages$ = this.messagesSource.asObservable();
 
-  constructor() {}
+  constructor(private http: HttpClient, private authService: UserAuthService) {}
 
-  // Função para enviar uma nova mensagem
-  sendMessage(message: string): void {
-    const currentMessages = this.messagesSource.value;
-    // Adiciona a nova mensagem ao array
-    const updatedMessages = [...currentMessages, message];
-    // Atualiza o BehaviorSubject com a nova lista de mensagens
-    this.messagesSource.next(updatedMessages);
+  getMessages(): Observable<IMessage[]> {
+    return this.http.get<IMessage[]>(this.apiUrl);
+  }
+
+  // Atualiza o método para retornar um Observable da resposta
+  sendMessage(message: string): Observable<any> {
+    const apiUrl = 'http://localhost:3333/message';
+    const sender_id = this.authService.getUserData()?.id;
+    const sender_name = this.authService.getUserData()?.name;
+    const content = message;
+
+    const body = {
+      sender_id: sender_id,
+      content: content,
+      sender_name: sender_name
+    };
+
+    // Retorna o Observable para o componente gerenciar a atualização
+    return this.http.post(apiUrl, body);
   }
 }

@@ -3,35 +3,22 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IMessage } from '../../models/message.interface';
 import { UserAuthService } from '../auth/auth.service';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
   apiUrl: string = 'http://localhost:3333/messages';
-  private messagesSource = new BehaviorSubject<IMessage[]>([]);
+  private messagesSource = new BehaviorSubject<string[]>([]);
   public messages$ = this.messagesSource.asObservable();
 
-  constructor(private http: HttpClient, private authService: UserAuthService) {
-    this.startPolling();
-  }
+  constructor(private http: HttpClient, private authService: UserAuthService) {}
 
   getMessages(): Observable<IMessage[]> {
     return this.http.get<IMessage[]>(this.apiUrl);
   }
 
-  private startPolling(): void {
-    setInterval(() => {
-      this.getMessages().subscribe(
-        (messages: IMessage[]) => {
-          this.messagesSource.next(messages);
-        },
-        (error) => console.error('Erro ao buscar mensagens:', error)
-      );
-    }, 1000);
-  }
-
+  // Atualiza o método para retornar um Observable da resposta
   sendMessage(message: string): Observable<any> {
     const apiUrl = 'http://localhost:3333/message';
     const sender_id = this.authService.getUserData()?.id;
@@ -44,12 +31,7 @@ export class ChatService {
       sender_name: sender_name
     };
 
-    return this.http.post<IMessage>(apiUrl, body).pipe(
-      tap((newMessage) => {
-        // Adiciona a nova mensagem diretamente ao array de mensagens
-        const updatedMessages = [...this.messagesSource.value, newMessage];
-        this.messagesSource.next(updatedMessages);
-      })
-    );
+    // Retorna o Observable para o componente gerenciar a atualização
+    return this.http.post(apiUrl, body);
   }
 }

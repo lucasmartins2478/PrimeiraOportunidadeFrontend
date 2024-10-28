@@ -9,13 +9,28 @@ import { UserAuthService } from '../auth/auth.service';
 })
 export class ChatService {
   apiUrl: string = 'http://localhost:3333/messages';
-  private messagesSource = new BehaviorSubject<string[]>([]);
+  private messagesSource = new BehaviorSubject<IMessage[]>([]);
   public messages$ = this.messagesSource.asObservable();
 
-  constructor(private http: HttpClient, private authService: UserAuthService) {}
+  constructor(private http: HttpClient, private authService: UserAuthService) {
+    // Inicia o polling para buscar novas mensagens
+    this.startPolling();
+  }
 
   getMessages(): Observable<IMessage[]> {
     return this.http.get<IMessage[]>(this.apiUrl);
+  }
+
+  private startPolling(): void {
+    // Polling para buscar mensagens a cada 3 segundos
+    setInterval(() => {
+      this.getMessages().subscribe(
+        (messages: IMessage[]) => {
+          this.messagesSource.next(messages);
+        },
+        (error) => console.error('Erro ao buscar mensagens:', error)
+      );
+    }, 3000); // Intervalo de 3 segundos (ajuste conforme necessário)
   }
 
   // Atualiza o método para retornar um Observable da resposta

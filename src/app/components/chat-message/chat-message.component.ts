@@ -1,10 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  OnInit,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, ElementRef, ViewChild,AfterViewChecked} from '@angular/core';
 import { ChatService } from '../../services/chat/chat.service';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { IMessage } from '../../models/message.interface';
@@ -14,7 +8,7 @@ import { IMessage } from '../../models/message.interface';
   templateUrl: './chat-message.component.html',
   styleUrls: ['./chat-message.component.css'],
 })
-export class ChatMessageComponent implements OnInit, AfterViewInit {
+export class ChatMessageComponent implements AfterViewChecked {
   messages: IMessage[] = [];
   newMessage: string = '';
   userId: number | undefined;
@@ -28,12 +22,11 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.userId = this.authService.getUserData()?.id;
+    this.chatService.listenMessages();
 
-    // Carrega as mensagens e faz scroll para o final ao carregar
     this.chatService.getMessages().subscribe(
       (messages) => {
         this.messages = messages;
-        this.scrollToBottom();
       },
       (error) => {
         console.error('Erro ao buscar mensagens:', error);
@@ -41,34 +34,27 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     );
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
 
   sendMessage(): void {
     if (this.newMessage.trim() !== '') {
-      const messageContent = this.newMessage; // Salve o conteúdo da mensagem antes de resetar
-
-      // Envia a nova mensagem usando o serviço de chat
-      this.chatService.sendMessage(messageContent).subscribe(() => {
-        // Após enviar, chama getMessages para atualizar as mensagens
-        this.chatService.getMessages().subscribe((messages) => {
-          this.messages = messages;
-          this.scrollToBottom(); // Rola para a última mensagem
-        });
+      this.chatService.sendMessage(this.newMessage).subscribe((message) => {
+        // Se o servidor retornar a mensagem enviada, adicione-a manualmente à lista de mensagens
+        this.messages.push(message);
+        this.newMessage = '';
+        this.scrollToBottom();
       });
-
-      // Limpa o campo de mensagem
-      this.newMessage = '';
     }
   }
 
   private scrollToBottom(): void {
-    setTimeout(() => {
-      if (this.chatWindow) {
-        this.chatWindow.nativeElement.scrollTop =
-          this.chatWindow.nativeElement.scrollHeight;
-      }
-    }, 0);
+    try {
+      this.chatWindow.nativeElement.scrollTop =
+        this.chatWindow.nativeElement.scrollHeight;
+    } catch (err) {
+      console.error('Erro ao rolar para a última mensagem:', err);
+    }
   }
 }

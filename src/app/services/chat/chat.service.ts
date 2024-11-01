@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+// chat.service.ts
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IMessage } from '../../models/message.interface';
 import { UserAuthService } from '../auth/auth.service';
@@ -9,7 +10,7 @@ import { UserAuthService } from '../auth/auth.service';
 })
 export class ChatService {
   apiUrl: string = 'http://localhost:3333/messages';
-  private messagesSource = new BehaviorSubject<string[]>([]);
+  private messagesSource = new BehaviorSubject<IMessage[]>([]);
   public messages$ = this.messagesSource.asObservable();
 
   constructor(private http: HttpClient, private authService: UserAuthService) {}
@@ -18,7 +19,6 @@ export class ChatService {
     return this.http.get<IMessage[]>(this.apiUrl);
   }
 
-  // Atualiza o método para retornar um Observable da resposta
   sendMessage(message: string): Observable<any> {
     const apiUrl = 'http://localhost:3333/message';
     const sender_id = this.authService.getUserData()?.id;
@@ -28,10 +28,33 @@ export class ChatService {
     const body = {
       sender_id: sender_id,
       content: content,
-      sender_name: sender_name
+      sender_name: sender_name,
     };
 
-    // Retorna o Observable para o componente gerenciar a atualização
     return this.http.post(apiUrl, body);
   }
+
+  // Novo método para gerenciar SSE
+  listenMessages(): void {
+    const eventSource = new EventSource('http://localhost:3333/events');
+
+    eventSource.onmessage = (event) => {
+      try {
+        const newMessage: IMessage = JSON.parse(event.data);
+        if (newMessage && newMessage.sender_id && newMessage.content) {
+          this.messagesSource.next([...this.messagesSource.value, newMessage]);
+        } else {
+          console.error('Mensagem recebida com formato inválido:', newMessage);
+        }
+      } catch (error) {
+        console.error('Erro ao processar a mensagem:', error);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('Erro no SSE:', error);
+      eventSource.close(); // Fecha a conexão em caso de erro
+    };
+  }
+
 }

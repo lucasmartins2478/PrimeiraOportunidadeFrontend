@@ -13,7 +13,9 @@ export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
 
   alertMessage: string = '';
-  alertType: 'success' | 'danger' = 'success';
+  alertTitle: string = '';
+  alertClass: string = '';
+  alertIconClass: string = '';
   showAlert: boolean = false;
 
   userData = this.authService.getUserData();
@@ -43,7 +45,9 @@ export class JobCardComponent implements OnInit {
   async apply() {
     if (!this.userData) {
       this.alertMessage = 'Você precisa estar logado para se candidatar.';
-      this.alertType = 'danger';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
       return;
@@ -57,20 +61,27 @@ export class JobCardComponent implements OnInit {
 
       const body = { userId, vacancyId };
 
-      this.http.post<IApplication>('http://localhost:3333/application', body).subscribe(
-        (response) => {
-          this.alertMessage = 'Parabéns, você se candidatou!';
-          this.alertType = 'success';
-          this.showAlert = true;
-          this.resetAlertAfterDelay();
-        },
-        (error) => {
-          console.log(`Erro ao adicionar candidatura ${error}`);
-        }
-      );
+      this.http
+        .post<IApplication>('http://localhost:3333/application', body)
+        .subscribe(
+          (response) => {
+            this.closeModal()
+            this.alertMessage = 'Parabéns, candidatura relizada com sucesso!';
+            this.alertClass = 'alert alert-success';
+            this.alertTitle = 'Sucesso';
+            this.alertIconClass = 'bi bi-check-circle';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+          },
+          (error) => {
+            console.log(`Erro ao adicionar candidatura ${error}`);
+          }
+        );
     } else {
       this.alertMessage = 'Você precisa ter um currículo cadastrado.';
-      this.alertType = 'danger';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
@@ -78,7 +89,9 @@ export class JobCardComponent implements OnInit {
 
   async checkCurriculum(id: number): Promise<boolean> {
     try {
-      const response = await this.http.get(`http://localhost:3333/curriculum/${id}`).toPromise();
+      const response = await this.http
+        .get(`http://localhost:3333/curriculum/${id}`)
+        .toPromise();
       return !!response;
     } catch (error) {
       console.error(`Erro ao buscar currículo: ${error}`);

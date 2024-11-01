@@ -48,10 +48,6 @@ export class CurriculumForm1Component implements OnInit {
       address: ['', [Validators.required]],
       addressNumber: ['', [Validators.required]],
       cep: ['', [Validators.required]],
-      schoolName: ['', Validators.required],
-      schoolYear: ['', Validators.required],
-      schoolStartDate: ['', [Validators.required]],
-      schoolEndDate: [''],
       currentlyStudying: [false],
     });
   }
@@ -73,11 +69,6 @@ export class CurriculumForm1Component implements OnInit {
         addressNumber: formData.addressNumber,
         cep: formData.cep,
         uf: formData.uf,
-        schoolName: formData.schoolName,
-        schoolYear: formData.schoolYear,
-        schoolStartDate: formData.schoolStartDate,
-        schoolEndDate: formData.schoolEndDate,
-        isCurrentlyStudying: formData.currentlyStudying,
         userId: this.userData?.id,
       };
 

@@ -32,10 +32,13 @@ export class CurriculumForm2Component {
     private router: Router
   ) {
     this.academicForm = this.fb.group({
+      schoolName: ['', Validators.required],
+      schoolYear: ['', Validators.required],
+      schoolStartDate: ['', [Validators.required]],
+      schoolEndDate: [''],
+      currentlyStudying: [false],
       institutions: this.fb.array([]),
     });
-
-    this.addInstitution();
   }
 
   get institutions(): FormArray {
@@ -64,6 +67,25 @@ export class CurriculumForm2Component {
     if (this.academicForm.valid) {
       // Process the form data
       const formData = this.academicForm.value;
+      const id = this.userService.getUserData()?.id;
+      const curriculumUrl = `http://localhost:3333/curriculum/${id}/addSchoolData`;
+
+      const body = {
+        schoolName: formData.schoolName,
+        schoolYear: formData.schoolYear,
+        schoolStartDate: formData.schoolStartDate,
+        schoolEndDate: formData.schoolEndDate,
+        isCurrentlyStudying: formData.currentlyStudying,
+      };
+
+      this.http.put<ICurriculum>(curriculumUrl, body).subscribe(
+        (response) => {
+          console.log('Dados escolares adicionados');
+        },
+        (error) => {
+          console.log(`Erro ao adicionar dados escolares : ${error}`);
+        }
+      );
 
       const institutionsData = this.institutions.value;
 
@@ -82,9 +104,6 @@ export class CurriculumForm2Component {
             city: institution.city,
             curriculumId: this.userService.getUserData()?.id,
           };
-
-          console.log(body);
-
           this.http.post<IAcademicData[]>(apiUrl, body).subscribe(
             (response) => {
               this.alertMessage = 'Formulário válido!';
@@ -99,10 +118,17 @@ export class CurriculumForm2Component {
             }
           );
         });
-        setTimeout(() => {
-          this.router.navigate(['/criar-curriculo/etapa3']);
-        }, 2000);
       }
+      this.alertMessage = 'Formulário válido!';
+      this.alertClass = 'alert alert-success';
+      this.alertTitle = 'Sucesso';
+      this.alertIconClass = 'bi bi-check-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+
+      setTimeout(() => {
+        this.router.navigate(['/criar-curriculo/etapa3']);
+      }, 2000);
     } else {
       this.alertMessage = 'Preencha os dados corretamente!';
       this.alertClass = 'alert alert-danger';

@@ -19,7 +19,6 @@ export class CompanyFormComponent implements OnInit {
   showAlert: boolean = false;
   company!: ICompany;
   companyForm!: FormGroup;
-  logoUrl: any = ''; // URL da imagem
   companyData = this.authService.getCompanyData();
 
   constructor(
@@ -51,7 +50,7 @@ export class CompanyFormComponent implements OnInit {
       phoneNumber: [this.company?.phoneNumber || '', [Validators.required]],
       email: [this.company?.email || '', [Validators.required]],
       responsible: [this.company?.responsible || '', [Validators.required]],
-      url: [this.company?.url || '', [Validators.required]],
+      url: [this.company?.url || ''],
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]],
       city: [this.company?.city || '', [Validators.required]],
@@ -76,29 +75,15 @@ export class CompanyFormComponent implements OnInit {
   }
 
   // Método chamado ao selecionar um arquivo de imagem
-  onLogoSelected(event: Event) {
-    const input = event.target as HTMLInputElement; // Cast para HTMLInputElement
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.companyForm.patchValue({ logo: file }); // Armazena o arquivo no formulário
-
-      const reader = new FileReader(); // Cria um novo FileReader
-      reader.onload = (e) => {
-        this.logoUrl = e.target?.result; // Define a URL da imagem
-      };
-      reader.readAsDataURL(file); // Lê o arquivo como uma URL de dados
-    }
-  }
 
   async onSubmit() {
     if (this.companyForm.valid) {
       const apiUrl = 'http://localhost:3333/companies';
 
-      const formData = new FormData();
-      const formValue = this.companyForm.value;
+      const formData = this.companyForm.value;
 
-      if (formValue.password === formValue.confirmPassword) {
-        const exists = await this.verifyCnpj(formValue.cnpj);
+      if (formData.password === formData.confirmPassword) {
+        const exists = await this.verifyCnpj(formData.cnpj);
         if (exists) {
           this.alertMessage =
             'O CNPJ informado já está vinculado a uma conta existente!';
@@ -108,12 +93,8 @@ export class CompanyFormComponent implements OnInit {
           this.showAlert = true;
           this.resetAlertAfterDelay();
         } else {
-          // Adiciona os dados do formulário ao FormData
-          for (const key in formValue) {
-            formData.append(key, formValue[key]);
-          }
 
-          this.http.post<ICompany>(apiUrl, formValue).subscribe(
+          this.http.post<ICompany>(apiUrl, formData).subscribe(
             (response) => {
               this.companyFormService.setFormData(this.companyForm.value);
               this.alertMessage = 'Empresa cadastrado com sucesso!';
@@ -153,15 +134,8 @@ export class CompanyFormComponent implements OnInit {
     if (this.companyForm.valid) {
       const id = this.companyData?.id;
       const apiUrl = `http://localhost:3333/companies/${id}`;
+      const formData = this.companyForm.value;
 
-      // Criar um FormData para garantir que o arquivo (logo) seja enviado corretamente
-      const formData = new FormData();
-      const formValue = this.companyForm.value;
-
-      // Adiciona os dados do formulário ao FormData
-      for (const key in formValue) {
-        formData.append(key, formValue[key]);
-      }
 
       this.http.put<ICompany>(apiUrl, formData).subscribe(
         (response) => {

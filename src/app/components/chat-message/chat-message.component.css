@@ -32,6 +32,9 @@ button i{
   border-radius: 12px;
   margin-bottom: 4px;
   color: #000;
+  word-wrap: break-word; /* Quebra as palavras longas */
+    overflow-wrap: break-word; /* Quebra as palavras para ajustar na linha */
+    white-space: pre-wrap;
 }
 
 .chat-message-received {
@@ -42,6 +45,9 @@ button i{
   border-radius: 12px;
   margin-bottom: 4px;
   color: #000;
+  word-wrap: break-word; /* Quebra as palavras longas */
+    overflow-wrap: break-word; /* Quebra as palavras para ajustar na linha */
+    white-space: pre-wrap;
 }
 
 .user-name{

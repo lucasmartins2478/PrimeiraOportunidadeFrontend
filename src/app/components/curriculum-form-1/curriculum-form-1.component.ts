@@ -5,11 +5,13 @@ import { Router } from '@angular/router';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { ICurriculum } from '../../models/curriculum.interface';
 import { IUser } from '../../models/user.interface';
+import { CurriculumService } from '../../services/curriculum/curriculum.service';
+import { UserFormService } from '../../services/user/user-form.service';
 
 @Component({
   selector: 'app-curriculum-form-1',
   templateUrl: './curriculum-form-1.component.html',
-  styleUrls: ['./curriculum-form-1.component.css'], // Corrigido de styleUrl para styleUrls
+  styleUrls: ['./curriculum-form-1.component.css'],
 })
 export class CurriculumForm1Component implements OnInit {
   alertMessage: string = '';
@@ -18,36 +20,105 @@ export class CurriculumForm1Component implements OnInit {
   alertIconClass: string = '';
   showAlert: boolean = false;
   userData = this.authService.getUserData();
-
+  user!: IUser;
+  curriculumData!: ICurriculum;
   curriculumForm!: FormGroup;
+  hasCurriculum!: boolean;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: UserAuthService // Adicionado AuthService
+    private authService: UserAuthService,
+    private userFormService: UserFormService,
+    private curriculumService: CurriculumService
   ) {}
 
   ngOnInit(): void {
-    // Recuperar os dados do usuário do AuthService
+    this.checkCurriculum();
+  }
 
-    // Inicializando o formulário com os valores recuperados do localStorage
+  checkCurriculum() {
+    const id = this.userData?.id;
+
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+
+    this.userFormService.getUserData(id).subscribe(
+      (response) => {
+        this.hasCurriculum = response.curriculumId != null;
+        this.getUserData(); // Carrega os dados do usuário e chama createForm
+      },
+      (error) => {
+        console.log('Erro ao fazer busca do usuário:', error);
+      }
+    );
+  }
+
+  getUserData() {
+    const id = this.userData?.id;
+
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+
+    this.userFormService.getUserData(id).subscribe(
+      (response: IUser) => {
+        this.user = response;
+        if (this.hasCurriculum) {
+          this.getCurriculumData(); // Se o currículo existe, carrega os dados
+        } else {
+          this.createForm(); // Caso contrário, cria o formulário vazio
+        }
+      },
+      (error) => {
+        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+      }
+    );
+  }
+
+  getCurriculumData() {
+    const id = this.userData?.id;
+
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+
+    this.curriculumService.getCurriculumData(id).subscribe(
+      (response: ICurriculum) => {
+        this.curriculumData = response;
+        this.createForm(); // Atualiza o formulário com os dados do currículo
+      },
+      (error) => {
+        console.log(`Erro ao buscar currículo: ${error}`);
+      }
+    );
+  }
+
+  createForm() {
     this.curriculumForm = this.fb.group({
-      name: [this.userData?.name || '', [Validators.required]],
-      dateOfBirth: ['', [Validators.required]], // Ajustar com os dados reais
-      age: ['', [Validators.required]], // Ajustar com os dados reais
-      phoneNumber: [this.userData?.phoneNumber || '', [Validators.required]],
-      gender: ['', [Validators.required]],
-      race: ['', [Validators.required]],
-      email: [
-        this.userData?.email || '',
-        [Validators.required, Validators.email],
+      name: [this.user?.name || '', [Validators.required]],
+      dateOfBirth: [
+        this.curriculumData?.dateOfBirth || '',
+        [Validators.required],
       ],
-      city: ['', [Validators.required]],
-      uf: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      addressNumber: ['', [Validators.required]],
-      cep: ['', [Validators.required]],
+      age: [this.curriculumData?.age || '', [Validators.required]],
+      phoneNumber: [this.user?.phoneNumber || '', [Validators.required]],
+      gender: [this.curriculumData?.gender || '', [Validators.required]],
+      race: [this.curriculumData?.race || '', [Validators.required]],
+      email: [this.user?.email || '', [Validators.required, Validators.email]],
+      city: [this.curriculumData?.city || '', [Validators.required]],
+      uf: [this.curriculumData?.uf || '', [Validators.required]],
+      address: [this.curriculumData?.address || '', [Validators.required]],
+      addressNumber: [
+        this.curriculumData?.addressNumber || '',
+        [Validators.required],
+      ],
+      cep: [this.curriculumData?.cep || '', [Validators.required]],
       currentlyStudying: [false],
     });
   }
@@ -90,6 +161,51 @@ export class CurriculumForm1Component implements OnInit {
         },
         (error) => {
           window.alert(`Erro ao cadastrar currículo: ${error}`);
+        }
+      );
+    } else {
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+
+  onUpdate() {
+    if (this.curriculumForm.valid) {
+      const formData = this.curriculumForm.value;
+      const id = this.userData?.id; // Aqui você deve garantir que o ID do currículo correto está sendo utilizado
+
+      const apiUrl = `http://localhost:3333/curriculum/${id}`; // Verifique se este ID é realmente o ID do currículo
+
+      const body = {
+        dateOfBirth: formData.dateOfBirth,
+        age: formData.age,
+        gender: formData.gender,
+        race: formData.race,
+        city: formData.city,
+        address: formData.address,
+        addressNumber: formData.addressNumber,
+        cep: formData.cep,
+        uf: formData.uf,
+      };
+
+      this.http.put<ICurriculum>(apiUrl, body).subscribe(
+        (response) => {
+          this.alertMessage = 'Curriculo Atualizado com sucesso!';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+          setTimeout(() => {
+            this.router.navigate(['/criar-curriculo/etapa2']);
+          }, 2000);
+        },
+        (error) => {
+          window.alert(`Erro ao atualizar currículo: ${error}`);
         }
       );
     } else {

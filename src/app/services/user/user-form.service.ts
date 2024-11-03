@@ -24,9 +24,7 @@ export class UserFormService {
     );
   }
 
-
-
-  getUserData(id: number| undefined): Observable<IUser> {
+  getUserData(id: number | undefined): Observable<IUser> {
     const url = `${this.apiUrl}/${id}`; // Cria a URL com o ID do usuário
     return this.http.get<IUser>(url).pipe(
       catchError((error: any) => {
@@ -35,8 +33,6 @@ export class UserFormService {
       })
     );
   }
-
-
 
   setFormData(data: any) {
     this.formData = { ...this.formData, ...data };

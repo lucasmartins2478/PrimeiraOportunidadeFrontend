@@ -12,8 +12,8 @@ export interface ICurriculum {
   schoolName: string;
   schoolYear: string;
   schoolCity: string;
-  schoolStartdate: string;
-  schoolEnddate?: string;
+  schoolStartDate: string;
+  schoolEndDate?: string;
   currentlyStudying: boolean;
   description?: string;
   academicData?: IAcademicData[];

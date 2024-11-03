@@ -1,6 +1,6 @@
 <app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
 
-<form [formGroup]="academicForm" (ngSubmit)="onSubmit()" class="form">
+<form *ngIf="academicForm" [formGroup]="academicForm" (ngSubmit)="onSubmit()" class="form">
   <h3>
     <svg
       xmlns="http://www.w3.org/2000/svg"

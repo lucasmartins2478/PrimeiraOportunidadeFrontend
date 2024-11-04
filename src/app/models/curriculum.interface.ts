@@ -22,6 +22,7 @@ export interface ICurriculum {
 }
 
 export interface IAcademicData {
+  id:number
   name: string;
   semester: string;
   startDate: string;
@@ -33,6 +34,7 @@ export interface IAcademicData {
 }
 
 export interface ICoursesData {
+  id:number
   name: string;
   modality: string;
   duration: string;
@@ -42,5 +44,6 @@ export interface ICoursesData {
 }
 
 export interface ICompetences {
+  id:number
   name: string;
 }

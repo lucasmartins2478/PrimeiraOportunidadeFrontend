@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IAcademicData, ICurriculum } from '../../models/curriculum.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { CurriculumService } from '../../services/curriculum/curriculum.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-curriculum-form-2',
@@ -24,9 +20,12 @@ export class CurriculumForm2Component implements OnInit {
   curriculumData!: ICurriculum;
   academicForm!: FormGroup;
   userData = this.userService.getUserData();
+  hasCurriculum!: boolean;
+  hasAcademicData!: boolean;
 
   constructor(
     private fb: FormBuilder,
+    private http: HttpClient,
     private userService: UserAuthService,
     private router: Router,
     private curriculumService: CurriculumService
@@ -37,9 +36,27 @@ export class CurriculumForm2Component implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm();
-    this.getCurriculumData();
-    this.getAcademicData();
+    this.checkCurriculum();
+  }
+
+  checkCurriculum() {
+    const id = this.userData?.id;
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+
+    this.curriculumService.getCurriculumData(id).subscribe(
+      (response) => {
+        this.hasCurriculum = response.schoolName != null;
+        this.createForm(); // Mover para antes de chamar getAcademicData()
+        this.getCurriculumData();
+        this.getAcademicData();
+      },
+      (error) => {
+        console.log('Erro ao fazer busca do usuário:', error);
+      }
+    );
   }
 
   createForm() {
@@ -78,10 +95,18 @@ export class CurriculumForm2Component implements OnInit {
     }
     this.curriculumService.getAcademicData(id).subscribe(
       (response: IAcademicData[]) => {
+        console.log('Dados acadêmicos recebidos:', response); // Verifique os dados recebidos
+        this.hasAcademicData = Array.isArray(response) && response.length > 0;
         this.updateFormWithAcademicData(response);
       },
       (error) => {
         console.log(`Erro ao buscar dados acadêmicos: ${error}`);
+        this.showAlertMessage(
+          'Erro ao buscar dados acadêmicos.',
+          'alert-danger',
+          'Erro',
+          'bi bi-x-circle'
+        );
       }
     );
   }
@@ -102,7 +127,10 @@ export class CurriculumForm2Component implements OnInit {
     if (academicDataArray && academicDataArray.length > 0) {
       academicDataArray.forEach((academicData) => {
         const institutionForm = this.fb.group({
-          institutionName: [academicData.institutionName || '', Validators.required],
+          institutionName: [
+            academicData.institutionName || '',
+            Validators.required,
+          ],
           semester: [academicData.semester || '', Validators.required],
           startDate: [academicData.startDate || '', Validators.required],
           endDate: [academicData.endDate || ''],
@@ -136,9 +164,121 @@ export class CurriculumForm2Component implements OnInit {
 
   onSubmit() {
     // Lógica de envio do formulário
+    if (this.academicForm.valid) {
+      const formData = this.academicForm.value;
+      const id = this.userService.getUserData()?.id;
+      const curriculumUrl = `http://localhost:3333/curriculum/${id}/addSchoolData`;
+
+      const body = {
+        schoolName: formData.schoolName,
+        schoolYear: formData.schoolYear,
+        schoolStartDate: formData.schoolStartDate,
+        schoolEndDate: formData.schoolEndDate,
+        isCurrentlyStudying: formData.currentlyStudying,
+      };
+
+      this.http.put<ICurriculum>(curriculumUrl, body).subscribe(
+        (response) => {
+          console.log('Dados escolares adicionados');
+        },
+        (error) => {
+          console.log(`Erro ao adicionar dados escolares: ${error}`);
+        }
+      );
+
+      const institutionsData = this.institutions.value;
+      const apiUrl = 'http://localhost:3333/academicData';
+
+      if (institutionsData && institutionsData.length > 0) {
+        institutionsData.forEach((institution: IAcademicData) => {
+          const body = {
+            name: institution.name,
+            semester: institution.semester,
+            startDate: institution.startDate,
+            endDate: institution.endDate,
+            isCurrentlyStudying: institution.isCurrentlyStudying,
+            institutionName: institution.institutionName,
+            degree: institution.degree,
+            city: institution.city,
+            curriculumId: id,
+          };
+          this.http.post<IAcademicData[]>(apiUrl, body).subscribe(
+            () => {
+              this.showAlertMessage(
+                'Formulário válido!',
+                'alert-success',
+                'Sucesso',
+                'bi bi-check-circle'
+              );
+            },
+            (error: any) => {
+              window.alert(`Erro ao cadastrar currículo: ${error}`);
+            }
+          );
+        });
+      }
+      setTimeout(() => {
+        this.router.navigate(['/criar-curriculo/etapa3']);
+      }, 2000);
+    } else {
+      this.showAlertMessage(
+        'Preencha os dados corretamente!',
+        'alert-danger',
+        'Erro',
+        'bi bi-x-circle'
+      );
+    }
+  }
+  onUpdate() {
+    if (this.academicForm.valid) {
+      const formData = this.academicForm.value;
+      const id = this.userService.getUserData()?.id;
+      const curriculumUrl = `http://localhost:3333/curriculum/${id}/addSchoolData`;
+
+      const body = {
+        schoolName: formData.schoolName,
+        schoolYear: formData.schoolYear,
+        schoolStartDate: formData.schoolStartDate,
+        schoolEndDate: formData.schoolEndDate,
+        isCurrentlyStudying: formData.currentlyStudying,
+      };
+
+      this.http.put<ICurriculum>(curriculumUrl, body).subscribe(
+        (response) => {
+          console.log('Dados escolares adicionados');
+        },
+        (error) => {
+          console.log(`Erro ao adicionar dados escolares: ${error}`);
+        }
+      );
+
+
+      const institutionsData = this.institutions.value;
+      const apiUrl = 'http://localhost:3333/academicData';
+
+
+      
+
+
+
+
+
+    } else {
+      this.showAlertMessage(
+        'Preencha os dados corretamente!',
+        'alert-danger',
+        'Erro',
+        'bi bi-x-circle'
+      );
+    }
   }
 
-  showAlertMessage(message: string, alertClass: string, title: string, icon: string) {
+  showAlertMessage(
+    message: string,
+    alertClass: string,
+    title: string,
+    icon: string
+  ) {
     this.alertMessage = message;
     this.alertClass = `alert ${alertClass}`;
     this.alertTitle = title;

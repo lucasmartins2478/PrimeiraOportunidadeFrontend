@@ -47,3 +47,4 @@ export interface ICompetences {
   id:number
   name: string;
 }
+

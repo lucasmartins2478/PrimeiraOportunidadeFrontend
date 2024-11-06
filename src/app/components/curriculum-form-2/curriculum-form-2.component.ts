@@ -95,7 +95,7 @@ export class CurriculumForm2Component implements OnInit {
     }
     this.curriculumService.getAcademicData(id).subscribe(
       (response: IAcademicData[]) => {
-        console.log('Dados acadêmicos recebidos:', response); // Verifique os dados recebidos
+        console.log('Dados acadêmicos recebidos:', response); // Verifique os dados recebido
         this.hasAcademicData = Array.isArray(response) && response.length > 0;
         this.updateFormWithAcademicData(response);
       },
@@ -127,6 +127,7 @@ export class CurriculumForm2Component implements OnInit {
     if (academicDataArray && academicDataArray.length > 0) {
       academicDataArray.forEach((academicData) => {
         const institutionForm = this.fb.group({
+          id: [academicData.id],
           institutionName: [
             academicData.institutionName || '',
             Validators.required,
@@ -252,17 +253,72 @@ export class CurriculumForm2Component implements OnInit {
         }
       );
 
-
       const institutionsData = this.institutions.value;
       const apiUrl = 'http://localhost:3333/academicData';
 
+      if (institutionsData && institutionsData.length > 0) {
+        institutionsData.forEach((institution: IAcademicData) => {
+          const institutionBody = {
+            name: institution.name,
+            semester: institution.semester,
+            startDate: institution.startDate,
+            endDate: institution.endDate,
+            isCurrentlyStudying: institution.isCurrentlyStudying,
+            institutionName: institution.institutionName,
+            degree: institution.degree,
+            city: institution.city,
+            curriculumId: id,
+          };
 
-      
+          if (institution.id) {
+            // Atualiza a instituição existente
+            this.http
+              .put<IAcademicData>(
+                `${apiUrl}/${institution.id}`,
+                institutionBody
+              )
+              .subscribe(
+                () => {
+                  this.showAlertMessage(
+                    'Dados acadêmicos atualizados!',
+                    'alert-success',
+                    'Sucesso',
+                    'bi bi-check-circle'
+                  );
+                },
+                (error: any) => {
+                  window.alert(`Erro ao atualizar dados acadêmicos: ${error}`);
+                }
+              );
+          } else {
+            // Cria uma nova instituição se o ID não estiver presente
+            this.http.post<IAcademicData>(apiUrl, institutionBody).subscribe(
+              () => {
+                console.log('Nova instituição adicionada');
+                this.showAlertMessage(
+                  'Nova instituição adicionada!',
+                  'alert-success',
+                  'Sucesso',
+                  'bi bi-check-circle'
+                );
+              },
+              (error: any) => {
+                window.alert(`Erro ao adicionar nova instituição: ${error}`);
+              }
+            );
+          }
+        });
+      }
+      this.showAlertMessage(
+        'Nova instituição adicionada!',
+        'alert-success',
+        'Sucesso',
+        'bi bi-check-circle'
+      );
+      setTimeout(() => {
 
-
-
-
-
+        this.router.navigate(['/criar-curriculo/etapa3']);
+      }, 2000);
     } else {
       this.showAlertMessage(
         'Preencha os dados corretamente!',

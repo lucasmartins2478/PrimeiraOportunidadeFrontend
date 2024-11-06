@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ICompetences, ICoursesData } from '../../models/curriculum.interface';
+import {
+  ICompetences,
+  ICoursesData,
+  ICurriculum,
+} from '../../models/curriculum.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { CurriculumService } from '../../services/curriculum/curriculum.service';
 
 @Component({
   selector: 'app-curriculum-form-3',
@@ -16,17 +21,65 @@ export class CurriculumForm3Component implements OnInit {
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
-  isChecked: boolean = false;
-
-  courseForm: FormGroup;
+  competencesData!: ICompetences[];
+  cousesData!: ICoursesData[];
+  courseForm!: FormGroup;
+  userData = this.userService.getUserData();
+  hasCoursesData!: boolean;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private userService: UserAuthService,
+    private curriculumService: CurriculumService,
     private http: HttpClient
   ) {
     // Cria o FormGroup para o formulário
+  }
+
+  getCousesData() {
+    const id = this.userData?.id;
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+    this.curriculumService.getCoursesData(id).subscribe(
+      (response: ICoursesData[]) => {
+        this.hasCoursesData = response.length > 0;
+        this.cousesData = response;
+
+        this.updateFormWithCoursesData(response);
+
+        // Verifica `hasCoursesData` após definir o valor
+        if (!this.hasCoursesData) {
+          this.addCourse();
+        }
+
+        this.getCompetencesData();
+      },
+      (error) => {
+        console.log(`Erro ao buscar currículo: ${error}`);
+      }
+    );
+  }
+  getCompetencesData() {
+    const id = this.userData?.id;
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+    this.curriculumService.getCompetences(id).subscribe(
+      (response: ICompetences[]) => {
+        this.competencesData = response;
+        this.updateFormWithCompetencesData(response);
+      },
+      (error) => {
+        console.log(`Erro ao buscar currículo: ${error}`);
+      }
+    );
+  }
+
+  createForm() {
     this.courseForm = this.fb.group({
       courses: this.fb.array([]),
       competenceInput: [''], // FormArray para cursos
@@ -34,9 +87,36 @@ export class CurriculumForm3Component implements OnInit {
     });
   }
 
+  updateFormWithCoursesData(coursesData: ICoursesData[]) {
+    this.cousesData.forEach((course) => {
+      const courseGroup = this.fb.group({
+        id: [course.id],
+        name: [course.name, Validators.required],
+        modality: [course.modality, Validators.required],
+        duration: [course.duration, Validators.required],
+        dateOfEnd: [course.endDate],
+        isCurrentlyStudying: [course.isCurrentlyStudying],
+        institutionName: [course.institutionName, Validators.required],
+      });
+      this.courses.push(courseGroup);
+    });
+  }
+
+  updateFormWithCompetencesData(competenceData: ICompetences[]) {
+    this.competencies.clear(); // Limpa as competências existentes no FormArray
+    competenceData.forEach((competence) => {
+      this.competencies.push(
+        this.fb.group({
+          id: [competence.id], // Adicione o ID ao formulário
+          name: [competence.name],
+        })
+      );
+    });
+  }
+
   ngOnInit(): void {
-    // Adiciona um curso ao iniciar
-    this.addCourse();
+    this.createForm();
+    this.getCousesData();
   }
 
   // Getter para o FormArray de courses
@@ -81,12 +161,16 @@ export class CurriculumForm3Component implements OnInit {
   }
 
   // Adicionar uma competência ao FormArray
+  // Adicionar uma competência ao FormArray
   addCompetence(): void {
     const competenceValue = this.courseForm.get('competenceInput')?.value;
 
     if (competenceValue) {
-      this.competencies.push(this.fb.control(competenceValue));
-      this.courseForm.get('competenceInput')?.reset(); // Limpa o campo após adicionar
+      // Adiciona a competência ao FormArray `competencies`
+      this.competencies.push(this.fb.group({ name: competenceValue }));
+
+      // Limpa o campo `competenceInput` após adicionar
+      this.courseForm.get('competenceInput')?.reset();
     }
   }
 
@@ -98,11 +182,8 @@ export class CurriculumForm3Component implements OnInit {
   // Método de submissão do formulário
   onSubmit(): void {
     if (this.courseForm.valid) {
-      const formData = this.courseForm.value;
       const coursesData = this.courses.value;
       const competenciesData = this.competencies.value;
-
-      console.log(formData);
 
       // Enviar dados dos cursos
       if (coursesData && coursesData.length > 0) {
@@ -160,6 +241,114 @@ export class CurriculumForm3Component implements OnInit {
           );
         });
       }
+      setTimeout(() => {
+        this.router.navigate(['/criar-curriculo/etapa4']);
+      }, 2000);
+    } else {
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+
+  onUpdate() {
+    if (this.courseForm.valid) {
+      const coursesData = this.courses.value;
+      const competenciesData = this.competencies.value;
+
+      // Enviar dados dos cursos
+      if (coursesData && coursesData.length > 0) {
+        coursesData.forEach((course: ICoursesData) => {
+          const apiUrl = 'http://localhost:3333/courseData';
+
+          const body = {
+            name: course.name,
+            modality: course.modality,
+            duration: course.duration,
+            endDate: course.endDate,
+            isCurrentlyStudying: course.isCurrentlyStudying,
+            institutionName: course.institutionName,
+            curriculumId: this.userService.getUserData()?.id,
+          };
+          if (course.id) {
+            this.http
+              .put<ICoursesData[]>(`${apiUrl}/${course.id}`, body)
+              .subscribe(
+                (response) => {
+                  this.alertMessage = 'Curso atualizado com sucesso!';
+                  this.alertClass = 'alert alert-success';
+                  this.alertTitle = 'Sucesso';
+                  this.alertIconClass = 'bi bi-check-circle';
+                  this.showAlert = true;
+                  this.resetAlertAfterDelay();
+                },
+                (error) => {
+                  window.alert(`Erro ao atualizar curso: ${error}`);
+                }
+              );
+          } else {
+            this.http.post<ICoursesData[]>(apiUrl, body).subscribe(
+              (response) => {
+                this.alertMessage = 'Curso cadastrado com sucesso!';
+                this.alertClass = 'alert alert-success';
+                this.alertTitle = 'Sucesso';
+                this.alertIconClass = 'bi bi-check-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+              },
+              (error) => {
+                window.alert(`Erro ao cadastrar curso: ${error}`);
+              }
+            );
+          }
+        });
+      }
+
+      // Enviar dados das competências
+      if (competenciesData && competenciesData.length > 0) {
+        competenciesData.forEach((competence: ICompetences) => {
+          const apiUrl = 'http://localhost:3333/competences';
+          const body = {
+            name: competence.name,
+            curriculumId: this.userService.getUserData()?.id,
+          };
+          if (competence.id) {
+            this.http
+              .put<ICompetences[]>(`${apiUrl}/${competence.id}`, body)
+              .subscribe(
+                (response) => {
+                  this.alertMessage = 'Competência atualizada com sucesso!';
+                  this.alertClass = 'alert alert-success';
+                  this.alertTitle = 'Sucesso';
+                  this.alertIconClass = 'bi bi-check-circle';
+                  this.showAlert = true;
+                  this.resetAlertAfterDelay();
+                },
+                (error) => {
+                  window.alert(`Erro ao atualizar competência: ${error}`);
+                }
+              );
+          } else {
+            this.http.post<ICompetences[]>(apiUrl, body).subscribe(
+              (response) => {
+                this.alertMessage = 'Competência cadastrada com sucesso!';
+                this.alertClass = 'alert alert-success';
+                this.alertTitle = 'Sucesso';
+                this.alertIconClass = 'bi bi-check-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+              },
+              (error) => {
+                window.alert(`Erro ao cadastrar competência: ${error}`);
+              }
+            );
+          }
+        });
+      }
+
       setTimeout(() => {
         this.router.navigate(['/criar-curriculo/etapa4']);
       }, 2000);

@@ -1,6 +1,17 @@
-<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
+<app-alert
+  [message]="alertMessage"
+  [class]="alertClass"
+  [isVisible]="showAlert"
+  [title]="alertTitle"
+  [iconClass]="alertIconClass"
+></app-alert>
 
-<form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="form">
+<form
+  *ngIf="courseForm"
+  [formGroup]="courseForm"
+  (ngSubmit)="onSubmit()"
+  class="form"
+>
   <h3>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +144,9 @@
 
   <div class="row" style="margin-top: 2rem">
     <div class="col-12">
-      <label for="competenceInput" class="form-label">Insira suas competências</label>
+      <label for="competenceInput" class="form-label"
+        >Insira suas competências</label
+      >
 
       <!-- Input para inserir competência -->
       <div class="input-group mb-3">
@@ -143,37 +156,66 @@
           placeholder="Insira palavras-chave ou o nome completo"
           class="form-control"
         />
-        <button class="btn btn-outline-primary" type="button" (click)="addCompetence()">Adicionar</button>
+        <button
+          class="btn btn-outline-primary"
+          type="button"
+          (click)="addCompetence()"
+        >
+          Adicionar
+        </button>
       </div>
 
       <!-- Lista de competências adicionadas -->
       <ul class="list-group">
-        <li class="list-group-item" *ngFor="let competence of competencies.controls; let i = index">
-          {{ competence.value }}
-          <button class="btn  btn-sm float-end" (click)="removeCompetence(i)">X</button>
+        <li
+          class="list-group-item"
+          *ngFor="let competence of competencies.controls; let i = index"
+        >
+          {{ competence.value.name }}
+          <button class="btn btn-sm float-end" (click)="removeCompetence(i)">
+            X
+          </button>
         </li>
       </ul>
     </div>
-
-
   </div>
+  <ng-container *ngIf="hasCoursesData; else submit">
+    <button type="button" class="btn btn-primary" (click)="onUpdate()">
+      Dados adicionais
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-right"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+        />
+      </svg>
+    </button>
+  </ng-container>
+  <ng-template #submit>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">
+      Dados adicionais
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-right"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+        />
+      </svg>
+    </button>
+  </ng-template>
 
-  <button type="submit" class="btn btn-primary">
-    Dados adicionais
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-arrow-right"
-      viewBox="0 0 16 16"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-      />
-    </svg>
-  </button>
   <div class="progress">
     <svg
       xmlns="http://www.w3.org/2000/svg"

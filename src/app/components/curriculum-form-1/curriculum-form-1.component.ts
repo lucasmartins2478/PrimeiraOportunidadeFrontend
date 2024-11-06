@@ -142,10 +142,6 @@ export class CurriculumForm1Component implements OnInit {
         uf: formData.uf,
         userId: this.userData?.id,
       };
-
-      console.log(this.userData);
-      console.log(body);
-
       this.http.post<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
           this.addCurriculum(this.userData?.id);
@@ -227,7 +223,6 @@ export class CurriculumForm1Component implements OnInit {
 
     try {
       const response = await this.http.put<IUser>(apiUrl, body).toPromise();
-      console.log(response);
     } catch (error) {
       window.alert(`Erro ao fazer busca do currículo: ${error}`);
     }

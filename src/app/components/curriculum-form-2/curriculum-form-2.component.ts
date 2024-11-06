@@ -95,7 +95,6 @@ export class CurriculumForm2Component implements OnInit {
     }
     this.curriculumService.getAcademicData(id).subscribe(
       (response: IAcademicData[]) => {
-        console.log('Dados acadêmicos recebidos:', response); // Verifique os dados recebido
         this.hasAcademicData = Array.isArray(response) && response.length > 0;
         this.updateFormWithAcademicData(response);
       },
@@ -179,9 +178,7 @@ export class CurriculumForm2Component implements OnInit {
       };
 
       this.http.put<ICurriculum>(curriculumUrl, body).subscribe(
-        (response) => {
-          console.log('Dados escolares adicionados');
-        },
+        (response) => {},
         (error) => {
           console.log(`Erro ao adicionar dados escolares: ${error}`);
         }
@@ -245,9 +242,7 @@ export class CurriculumForm2Component implements OnInit {
       };
 
       this.http.put<ICurriculum>(curriculumUrl, body).subscribe(
-        (response) => {
-          console.log('Dados escolares adicionados');
-        },
+        (response) => {},
         (error) => {
           console.log(`Erro ao adicionar dados escolares: ${error}`);
         }
@@ -294,7 +289,6 @@ export class CurriculumForm2Component implements OnInit {
             // Cria uma nova instituição se o ID não estiver presente
             this.http.post<IAcademicData>(apiUrl, institutionBody).subscribe(
               () => {
-                console.log('Nova instituição adicionada');
                 this.showAlertMessage(
                   'Nova instituição adicionada!',
                   'alert-success',
@@ -316,7 +310,6 @@ export class CurriculumForm2Component implements OnInit {
         'bi bi-check-circle'
       );
       setTimeout(() => {
-
         this.router.navigate(['/criar-curriculo/etapa3']);
       }, 2000);
     } else {

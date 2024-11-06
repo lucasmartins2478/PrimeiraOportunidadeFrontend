@@ -145,7 +145,6 @@ export class CurriculumForm3Component implements OnInit {
 
   onCheckboxChange(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
-    console.log('Checkbox mudou:', isChecked);
 
     // Disparar outra função ou lógica com base no valor
     if (isChecked) {

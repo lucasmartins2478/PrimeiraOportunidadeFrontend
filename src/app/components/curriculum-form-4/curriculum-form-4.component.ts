@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { ICurriculum } from '../../models/curriculum.interface';
+import { CurriculumService } from '../../services/curriculum/curriculum.service';
 
 @Component({
   selector: 'app-curriculum-form-4',
@@ -16,21 +17,42 @@ export class CurriculumForm4Component implements OnInit {
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
-
+  curriculumData!: ICurriculum;
   adictionalDataForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private userService: UserAuthService
+    private userService: UserAuthService,
+    private curriculumService: CurriculumService
   ) {}
 
   ngOnInit(): void {
+    this.getCurriculumData();
+  }
+
+  createForm() {
     this.adictionalDataForm = this.fb.group({
       attached: [''],
-      description: ['', [Validators.required]],
+      description: [
+        this.curriculumData.description || '',
+        [Validators.required],
+      ],
     });
+  }
+
+  getCurriculumData() {
+    const id = this.userService.getUserData()?.id;
+    this.curriculumService.getCurriculumData(id).subscribe(
+      (response) => {
+        this.curriculumData = response;
+        this.createForm();
+      },
+      (error) => {
+        console.error(`Erro ao buscar curriculo ${error}`);
+      }
+    );
   }
   onSubmit() {
     if (this.adictionalDataForm.valid) {
@@ -43,10 +65,6 @@ export class CurriculumForm4Component implements OnInit {
         description: formData.description,
         attached: formData.attached,
       };
-
-      console.log(apiUrl);
-      console.log(body);
-
       this.http.put<ICurriculum[]>(apiUrl, body).subscribe(
         (response) => {
           this.alertMessage = 'Formulário válido!';

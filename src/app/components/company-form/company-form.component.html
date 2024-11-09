@@ -1,6 +1,12 @@
-<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
+<app-alert
+  [message]="alertMessage"
+  [class]="alertClass"
+  [isVisible]="showAlert"
+  [title]="alertTitle"
+  [iconClass]="alertIconClass"
+></app-alert>
 
-<form *ngIf="companyForm" class="form" [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+<form *ngIf="companyForm" class="form" [formGroup]="companyForm">
   <h2>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -168,6 +174,7 @@
         placeholder="CEP"
         class="form-control"
         formControlName="cep"
+        mask="00000-000"
       />
     </div>
   </div>
@@ -238,7 +245,9 @@
     </button>
   </ng-container>
   <ng-template #submit>
-    <button class="btn btn-primary" type="submit">Cadastrar</button>
+    <button class="btn btn-primary" type="button" (click)="onSubmit()">
+      Cadastrar
+    </button>
     <p>Já possui conta?<a routerLink="/login/empresa">Login</a></p>
   </ng-template>
 </form>

@@ -48,7 +48,7 @@ export class UserFormComponent implements OnInit {
     this.userForm = this.fb.group({
       name: [
         this.user?.name || '',
-        [Validators.required, Validators.minLength(4)],
+        [Validators.required],
       ],
       phoneNumber: [
         this.user?.phoneNumber || '',

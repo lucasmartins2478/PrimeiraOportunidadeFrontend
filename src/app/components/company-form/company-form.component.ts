@@ -51,14 +51,14 @@ export class CompanyFormComponent implements OnInit {
       email: [this.company?.email || '', [Validators.required]],
       responsible: [this.company?.responsible || '', [Validators.required]],
       url: [this.company?.url || ''],
-      password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]],
+      password: [this.company.password || '', [Validators.required]],
+      confirmPassword: [this.company.password || '', [Validators.required]],
       city: [this.company?.city || '', [Validators.required]],
       cep: [this.company?.cep || '', [Validators.required]],
       address: [this.company?.address || '', [Validators.required]],
       addressNumber: [this.company?.addressNumber || '', [Validators.required]],
       uf: [this.company?.uf || '', [Validators.required]],
-      logo: [this.company?.logo || ''],
+      logo: [''],
     });
   }
 
@@ -93,7 +93,6 @@ export class CompanyFormComponent implements OnInit {
           this.showAlert = true;
           this.resetAlertAfterDelay();
         } else {
-
           this.http.post<ICompany>(apiUrl, formData).subscribe(
             (response) => {
               this.companyFormService.setFormData(this.companyForm.value);
@@ -136,15 +135,18 @@ export class CompanyFormComponent implements OnInit {
       const apiUrl = `http://localhost:3333/companies/${id}`;
       const formData = this.companyForm.value;
 
-
       this.http.put<ICompany>(apiUrl, formData).subscribe(
         (response) => {
           this.companyFormService.setFormData(this.companyForm.value);
           this.alertMessage = 'Empresa atualizada com sucesso!';
           this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-          this.router.navigate(['/minhas-vagas']);
+          setTimeout(() => {
+            this.router.navigate(['/minhas-vagas']);
+          }, 2000);
         },
         (error) => {
           console.log(`Erro ao atualizar a empresa: ${error}`);

@@ -5,6 +5,7 @@ import { UserFormService } from '../../services/user/user-form.service';
 import { Router } from '@angular/router';
 import { IUser } from '../../models/user.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
+import { CurriculumService } from '../../services/curriculum/curriculum.service';
 
 @Component({
   selector: 'app-user-form',
@@ -26,6 +27,7 @@ export class UserFormComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private userFormService: UserFormService,
+    private curriculumService: CurriculumService,
     private authService: UserAuthService
   ) {}
 
@@ -218,23 +220,55 @@ export class UserFormComponent implements OnInit {
   }
   deleteUser() {
     const id = this.userData?.id;
-    this.userFormService.deleteUserData(id).subscribe(
-      (response) => {
-        this.alertMessage = 'Dados excluidos!';
-        this.alertClass = 'alert alert-danger';
-        this.alertTitle = 'Erro';
-        this.alertIconClass = 'bi bi-x-circle';
-        this.showAlert = true;
-        this.resetAlertAfterDelay();
-        setTimeout(() => {
-          this.authService.logout();
-          this.router.navigate(['/']);
-        }, 2000);
-      },
-      (error) => {
-        console.error(`Erro ao deletar usuário ${error}`);
-      }
-    );
+
+    if (this.user.curriculumId != null) {
+      this.curriculumService.deleteCurriculum(id).subscribe(
+        (response) => {
+          // Somente após a exclusão bem-sucedida do currículo, exclua o usuário
+          this.userFormService.deleteUserData(id).subscribe(
+            (response) => {
+              this.alertMessage = 'Dados excluídos!';
+              this.alertClass = 'alert alert-danger';
+              this.alertTitle = 'Erro';
+              this.alertIconClass = 'bi bi-x-circle';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+
+              setTimeout(() => {
+                this.authService.logout();
+                this.router.navigate(['/']);
+              }, 2000);
+            },
+            (error) => {
+              console.error(`Erro ao deletar usuário: ${error}`);
+            }
+          );
+        },
+        (error) => {
+          console.error(`Erro ao excluir currículo: ${error}`);
+        }
+      );
+    } else {
+      // Se não houver currículo para excluir, apenas exclua o usuário
+      this.userFormService.deleteUserData(id).subscribe(
+        (response) => {
+          this.alertMessage = 'Dados excluídos!';
+          this.alertClass = 'alert alert-danger';
+          this.alertTitle = 'Erro';
+          this.alertIconClass = 'bi bi-x-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+
+          setTimeout(() => {
+            this.authService.logout();
+            this.router.navigate(['/']);
+          }, 2000);
+        },
+        (error) => {
+          console.error(`Erro ao deletar usuário: ${error}`);
+        }
+      );
+    }
   }
 
   resetAlertAfterDelay() {

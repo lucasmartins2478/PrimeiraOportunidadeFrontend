@@ -172,7 +172,7 @@
           *ngFor="let competence of competencies.controls; let i = index"
         >
           {{ competence.value.name }}
-          <button class="btn btn-sm float-end" (click)="removeCompetence(i)">
+          <button type="button" class="btn btn-sm float-end" (click)="removeCompetence(i)">
             X
           </button>
         </li>

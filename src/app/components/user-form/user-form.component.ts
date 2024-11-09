@@ -216,6 +216,26 @@ export class UserFormComponent implements OnInit {
       return false;
     }
   }
+  deleteUser() {
+    const id = this.userData?.id;
+    this.userFormService.deleteUserData(id).subscribe(
+      (response) => {
+        this.alertMessage = 'Dados excluidos!';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+        setTimeout(() => {
+          this.authService.logout();
+          this.router.navigate(['/']);
+        }, 2000);
+      },
+      (error) => {
+        console.error(`Erro ao deletar usuário ${error}`);
+      }
+    );
+  }
 
   resetAlertAfterDelay() {
     setTimeout(() => {

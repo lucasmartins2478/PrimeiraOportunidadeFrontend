@@ -159,7 +159,35 @@ export class CurriculumForm2Component implements OnInit {
   }
 
   removeInstitution(index: number) {
-    this.institutions.removeAt(index);
+    const institutionId = this.institutions.at(index).get('id')?.value;
+
+    if (!institutionId) {
+      console.error('ID da instituição não encontrado.');
+      return;
+    }
+
+    this.http
+      .delete(`http://localhost:3333/academicData/${institutionId}`)
+      .subscribe(
+        () => {
+          this.institutions.removeAt(index);
+          this.showAlertMessage(
+            'Instituição deletada com sucesso!',
+            'alert-success',
+            'Sucesso',
+            'bi bi-check-circle'
+          );
+        },
+        (error) => {
+          console.error('Erro ao deletar dados acadêmicos:', error);
+          this.showAlertMessage(
+            'Erro ao deletar dados acadêmicos.',
+            'alert-danger',
+            'Erro',
+            'bi bi-x-circle'
+          );
+        }
+      );
   }
 
   onSubmit() {

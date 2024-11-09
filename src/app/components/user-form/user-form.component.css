@@ -14,6 +14,14 @@ h3{
   justify-content: center;
   gap: 0.5rem;
 }
+.close-form{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.close-button{
+  background-color: transparent;
+}
 button{
   background-color: #004aad;
 }

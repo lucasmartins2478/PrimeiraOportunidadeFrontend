@@ -33,6 +33,15 @@ export class UserFormService {
       })
     );
   }
+  deleteUserData(id: number | undefined): Observable<IUser> {
+    const apiUrl = `http://localhost:3333/users/${id}`;
+    return this.http.delete<IUser>(apiUrl).pipe(
+      catchError((error: any) => {
+        console.error(`Erro ao delerar usuário ${error}`);
+        return throwError(error);
+      })
+    );
+  }
 
   setFormData(data: any) {
     this.formData = { ...this.formData, ...data };

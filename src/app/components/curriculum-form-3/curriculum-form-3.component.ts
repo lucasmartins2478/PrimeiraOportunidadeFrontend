@@ -140,7 +140,22 @@ export class CurriculumForm3Component implements OnInit {
 
   // Método para remover um curso pelo índice
   removeCourse(index: number): void {
-    this.courses.removeAt(index);
+    const courseId = this.courses.at(index).get('id')?.value;
+    if (!courseId) {
+      this.courses.removeAt(index);
+      return;
+    }
+    this.http
+      .delete(`http://localhost:3333/courseData/${courseId}`)
+      .subscribe(() => {
+        this.courses.removeAt(index);
+        this.showAlertMessage(
+          'Curso deletada com sucesso!',
+          'alert-success',
+          'Sucesso',
+          'bi bi-check-circle'
+        );
+      });
   }
 
   onCheckboxChange(event: Event): void {
@@ -175,7 +190,22 @@ export class CurriculumForm3Component implements OnInit {
 
   // Remover uma competência do FormArray
   removeCompetence(index: number): void {
-    this.competencies.removeAt(index);
+    const competenceId = this.competencies.at(index).get('id')?.value;
+    if (!competenceId) {
+      this.competencies.removeAt(index);
+      return;
+    }
+    this.http
+      .delete(`http://localhost:3333/competences/${competenceId}`)
+      .subscribe(() => {
+        this.competencies.removeAt(index);
+        this.showAlertMessage(
+          'Competencia deletada com sucesso!',
+          'alert-success',
+          'Sucesso',
+          'bi bi-check-circle'
+        );
+      });
   }
 
   // Método de submissão do formulário
@@ -360,7 +390,21 @@ export class CurriculumForm3Component implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
-
+  showAlertMessage(
+    message: string,
+    alertClass: string,
+    title: string,
+    icon: string
+  ) {
+    this.alertMessage = message;
+    this.alertClass = `alert ${alertClass}`;
+    this.alertTitle = title;
+    this.alertIconClass = icon;
+    this.showAlert = true;
+    setTimeout(() => {
+      this.showAlert = false;
+    }, 3000);
+  }
   resetAlertAfterDelay() {
     setTimeout(() => {
       this.showAlert = false;

@@ -53,4 +53,14 @@ export class CurriculumService {
       })
     );
   }
+  deleteCurriculum(id: number | undefined): Observable<ICurriculum> {
+    const apiUrl = `http://localhost:3333/userdata/${id}/${id}`;
+
+    return this.http.delete<ICurriculum>(apiUrl).pipe(
+      catchError((error: any) => {
+        console.error(`Erro ao deletar curriculo ${error}`);
+        return throwError(error);
+      })
+    );
+  }
 }

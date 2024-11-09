@@ -8,6 +8,14 @@
   padding: 1rem;
 
 }
+.close-form{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.close-button{
+  background-color: transparent;
+}
 h3{
   text-align: center;
   display: flex;

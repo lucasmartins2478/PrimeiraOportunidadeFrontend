@@ -176,34 +176,64 @@ export class CurriculumForm1Component implements OnInit {
 
       const apiUrl = `http://localhost:3333/curriculum/${id}`; // Verifique se este ID é realmente o ID do currículo
 
-      const body = {
-        dateOfBirth: formData.dateOfBirth,
-        age: formData.age,
-        gender: formData.gender,
-        race: formData.race,
-        city: formData.city,
-        address: formData.address,
-        addressNumber: formData.addressNumber,
-        cep: formData.cep,
-        uf: formData.uf,
-      };
-
-      this.http.put<ICurriculum>(apiUrl, body).subscribe(
-        (response) => {
-          this.alertMessage = 'Curriculo Atualizado com sucesso!';
-          this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Sucesso';
-          this.alertIconClass = 'bi bi-check-circle';
-          this.showAlert = true;
-          this.resetAlertAfterDelay();
-          setTimeout(() => {
-            this.router.navigate(['/criar-curriculo/etapa2']);
-          }, 2000);
-        },
-        (error) => {
-          window.alert(`Erro ao atualizar currículo: ${error}`);
-        }
-      );
+      if (
+        formData.name != this.user.name ||
+        formData.phoneNumber != this.user.phoneNumber ||
+        formData.email != this.user.email ||
+        formData.dateOfBirth != this.curriculumData.dateOfBirth ||
+        formData.age != this.curriculumData.age ||
+        formData.gender != this.curriculumData.gender ||
+        formData.race != this.curriculumData.race ||
+        formData.city != this.curriculumData.city ||
+        formData.address != this.curriculumData.address ||
+        formData.addressNumber != this.curriculumData.addressNumber ||
+        formData.cep != this.curriculumData.cep ||
+        formData.uf != this.curriculumData.uf
+      ) {
+        const userBody = {
+          name: formData.name,
+          cpf: this.user.cpf,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          password: this.user.password,
+          curriculumId: this.user.curriculumId,
+        };
+        const body = {
+          dateOfBirth: formData.dateOfBirth,
+          age: formData.age,
+          gender: formData.gender,
+          race: formData.race,
+          city: formData.city,
+          address: formData.address,
+          addressNumber: formData.addressNumber,
+          cep: formData.cep,
+          uf: formData.uf,
+        };
+        this.http.put(`http://localhost:3333/users/${id}`, userBody).subscribe(
+          (response) => {},
+          (error) => {
+            console.error(`Erro ao atualizar o usuáario ${error}`);
+          }
+        );
+        this.http.put<ICurriculum>(apiUrl, body).subscribe(
+          (response) => {
+            this.alertMessage = 'Curriculo Atualizado com sucesso!';
+            this.alertClass = 'alert alert-success';
+            this.alertTitle = 'Sucesso';
+            this.alertIconClass = 'bi bi-check-circle';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+            setTimeout(() => {
+              this.router.navigate(['/criar-curriculo/etapa2']);
+            }, 2000);
+          },
+          (error) => {
+            window.alert(`Erro ao atualizar currículo: ${error}`);
+          }
+        );
+      } else {
+        this.router.navigate(['/criar-curriculo/etapa2']);
+      }
     } else {
       this.alertMessage = 'Preencha os dados corretamente!';
       this.alertClass = 'alert alert-danger';
@@ -226,6 +256,26 @@ export class CurriculumForm1Component implements OnInit {
     } catch (error) {
       window.alert(`Erro ao fazer busca do currículo: ${error}`);
     }
+  }
+
+  deleteCurriculum() {
+    const id = this.userData?.id;
+    this.curriculumService.deleteCurriculum(id).subscribe(
+      (response) => {
+        this.alertMessage = 'Curriculo deletado!';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+        setTimeout(() => {
+          this.router.navigate(['/vagas']);
+        }, 2000);
+      },
+      (error) => {
+        console.error(`Erro ao excluir curriculo ${error}`);
+      }
+    );
   }
 
   resetAlertAfterDelay() {

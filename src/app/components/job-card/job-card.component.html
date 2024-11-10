@@ -1,14 +1,22 @@
-<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
+<app-alert
+  [message]="alertMessage"
+  [class]="alertClass"
+  [isVisible]="showAlert"
+  [title]="alertTitle"
+  [iconClass]="alertIconClass"
+></app-alert>
 <div class="col-6">
-  <h5>{{ job.title }}</h5>
+  <h5>
+    {{ job.title }}
+    <button type="button" class="close-button" (click)="editJob(job.id)">
+      <i class="bi bi-pencil-fill"></i>
+    </button>
+  </h5>
+
   <h6>Empresa: {{ job.companyName }}</h6>
   <h6>Modalidade: {{ job.modality }}</h6>
   <h6>Salário: {{ job.salary }}</h6>
-  <button
-    type="button"
-    class="btn btn-warning"
-    (click)="openModal(job)"
-  >
+  <button type="button" class="btn btn-warning" (click)="openModal(job)">
     Ver informações da vaga
   </button>
 </div>
@@ -34,7 +42,9 @@
         <h6><b>Descrição da vaga:</b> {{ selectedJob?.description }}</h6>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()">Sair</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Sair
+        </button>
         <button
           type="button"
           class="btn btn-primary"

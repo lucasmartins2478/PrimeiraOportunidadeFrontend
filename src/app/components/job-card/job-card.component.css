@@ -9,6 +9,9 @@ h5{
   text-align: center;
   color: #004AAD;
 }
+h5 button{
+  background-color: transparent;
+}
 .btn-warning{
   width: 100%;
   color: #fff;
@@ -70,7 +73,9 @@ h5{
   border: none;
   font-size: 1.5rem;
 }
-
+i{
+  color: #f46811;
+}
 @media(max-width:768px){
   .modal{
     width: 100%;

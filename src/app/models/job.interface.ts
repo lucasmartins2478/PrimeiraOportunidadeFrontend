@@ -14,3 +14,9 @@ export interface IJob {
   companyId: number;
   companyName: string;
 }
+
+export interface IQuestion{
+  id: number
+  question: string
+  vacancyId: number
+}

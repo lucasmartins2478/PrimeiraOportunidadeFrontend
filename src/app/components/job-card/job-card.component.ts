@@ -3,6 +3,7 @@ import { IJob } from '../../models/job.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { IApplication } from '../../models/application.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-job-card',
@@ -25,7 +26,7 @@ export class JobCardComponent implements OnInit {
   isModalOpen = false;
   selectedJob: IJob | null = null;
 
-  constructor(private authService: UserAuthService, private http: HttpClient) {}
+  constructor(private authService: UserAuthService, private http: HttpClient, private router : Router) {}
 
   ngOnInit(): void {
     this.userType = this.authService.getUserType();
@@ -40,6 +41,9 @@ export class JobCardComponent implements OnInit {
   // Fecha o modal
   closeModal() {
     this.isModalOpen = false;
+  }
+  editJob(jobId: number){
+    this.router.navigate(['/criar-vaga', jobId.toString()]);
   }
 
   async apply() {

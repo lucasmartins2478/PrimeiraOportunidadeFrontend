@@ -1,6 +1,12 @@
-<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
+<app-alert
+  [message]="alertMessage"
+  [class]="alertClass"
+  [isVisible]="showAlert"
+  [title]="alertTitle"
+  [iconClass]="alertIconClass"
+></app-alert>
 
-<form [formGroup]="jobForm" (ngSubmit)="onSubmit()" class="form">
+<form *ngIf="jobForm" [formGroup]="jobForm" class="form">
   <h3>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -195,21 +201,41 @@
     >
       Incluir Perguntas Adicionais
     </button>
-    <button type="submit" class="btn btn-primary">
-      Finalizar cadastro de vaga<svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-arrow-right"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-        />
-      </svg>
-    </button>
+    <ng-container *ngIf="isEditing; else submit">
+      <button type="button" class="btn btn-primary" (click)="onUpdate()">
+        Atualizar dados da vaga<svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
+    </ng-container>
+    <ng-template #submit>
+      <button type="button" class="btn btn-primary" (click)="onSubmit()">
+        Finalizar cadastro de vaga<svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
+    </ng-template>
+
     <div
       class="modal fade"
       id="exampleModal"
@@ -247,8 +273,12 @@
                 </div>
               </div>
             </div>
-            <div class="d-grid" style="margin-top: 1rem;">
-              <button class="btn btn-warning" (click)="adicionarPergunta()" type="button">
+            <div class="d-grid" style="margin-top: 1rem">
+              <button
+                class="btn btn-warning"
+                (click)="adicionarPergunta()"
+                type="button"
+              >
                 Adicionar pergunta
               </button>
             </div>
@@ -261,7 +291,13 @@
             >
               Sair
             </button>
-            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Confirmar</button>
+            <button
+              type="button"
+              class="btn btn-warning"
+              data-bs-dismiss="modal"
+            >
+              Confirmar
+            </button>
           </div>
         </div>
       </div>

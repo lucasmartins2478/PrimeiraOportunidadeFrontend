@@ -1,32 +1,81 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserAuthService } from '../../services/auth/auth.service';
-import { IJob } from '../../models/job.interface';
+import { IJob, IQuestion } from '../../models/job.interface';
+import { JobService } from '../../services/job/job.service';
+import { QuestionsService } from '../../services/questions/questions.service';
 
 @Component({
   selector: 'app-job-form',
   templateUrl: './job-form.component.html',
   styleUrl: './job-form.component.css',
 })
-export class JobFormComponent {
+export class JobFormComponent implements OnInit {
   alertMessage: string = '';
   alertTitle: string = '';
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
   companyData = this.authService.getCompanyData();
-
+  jobData!: IJob;
+  questionData: IQuestion[] = [];
+  jobId!: number | null;
   jobForm!: FormGroup;
+  isEditing: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: UserAuthService
+    private authService: UserAuthService,
+    private route: ActivatedRoute,
+    private jobService: JobService,
+    private questionService: QuestionsService
   ) {
     // Inicializando o jobForm
+  }
+  ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.jobId = +idParam; // Converte `string` para `number`
+      this.loadJobDataAndQuestions(idParam);
+    } else {
+      // Inicializa o formulário vazio para novo cadastro
+      this.createEmptyForm();
+    }
+  }
+  loadJobDataAndQuestions(id: string): void {
+    this.jobService.getJobById(id).subscribe(
+      (jobResponse) => {
+        this.jobData = jobResponse;
+        this.isEditing = !!this.jobData; // Atualiza a variável booleana com base nos dados de `jobData`
+        this.questionService.getMessagesByJobId(id).subscribe(
+          (questionsResponse) => {
+            this.questionData = Array.isArray(questionsResponse)
+              ? questionsResponse
+              : questionsResponse
+              ? [questionsResponse]
+              : [];
+
+            this.createForm(); // Cria o formulário com os dados de jobData e perguntas
+          },
+          (error) => {
+            console.error(`Erro ao buscar perguntas: ${error}`);
+            this.createForm(); // Cria o formulário mesmo que falhe ao buscar perguntas
+          }
+        );
+      },
+      (error) => {
+        console.error(`Erro ao buscar a vaga: ${error}`);
+        this.isEditing = false; // Se não houver dados, define como falso
+        this.createForm();
+      }
+    );
+  }
+
+  createEmptyForm(): void {
     this.jobForm = this.fb.group({
       title: ['', [Validators.required]],
       modality: ['', [Validators.required]],
@@ -40,7 +89,34 @@ export class JobFormComponent {
       requirements: ['', [Validators.required]],
       aboutCompany: ['', [Validators.required]],
       benefits: ['', [Validators.required]],
-      perguntas: this.fb.array([this.criarPergunta()]), // Array de perguntas
+      perguntas: this.fb.array([this.criarPergunta()]), // Formulário em branco inicia com uma pergunta vazia
+    });
+  }
+
+  createForm(): void {
+    const perguntasArray = this.fb.array(
+      this.questionData.length > 0
+        ? this.questionData.map((q) => this.fb.control(q.question || ''))
+        : [this.criarPergunta()] // Adiciona uma pergunta vazia se não houver perguntas
+    );
+
+    this.jobForm = this.fb.group({
+      title: [this.jobData.title || '', [Validators.required]],
+      modality: [this.jobData.modality || '', [Validators.required]],
+      locality: [this.jobData.locality || '', [Validators.required]],
+      uf: [this.jobData.uf || '', [Validators.required]],
+      contact: [this.companyData?.email, [Validators.required]],
+      salary: [
+        this.jobData.salary || '',
+        [Validators.required, Validators.maxLength(11)],
+      ],
+      toAgree: [false],
+      level: [this.jobData.level || '', [Validators.required]],
+      description: [this.jobData.description || ''],
+      requirements: [this.jobData.requirements || '', [Validators.required]],
+      aboutCompany: [this.jobData.aboutCompany || '', [Validators.required]],
+      benefits: [this.jobData.benefits || '', [Validators.required]],
+      perguntas: perguntasArray, // Array de perguntas preenchido dinamicamente
     });
   }
 
@@ -91,11 +167,10 @@ export class JobFormComponent {
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-          setTimeout(()=>{
+          setTimeout(() => {
             this.enviarPerguntas(response.id);
             this.router.navigate(['/minhas-vagas']);
-          }, 2000)
-
+          }, 2000);
         },
         (error) => {
           window.alert(`Erro ao cadastrar vaga: ${error}`);
@@ -110,6 +185,7 @@ export class JobFormComponent {
       this.resetAlertAfterDelay();
     }
   }
+  onUpdate() {}
 
   enviarPerguntas(vacancyId: number) {
     const questions = this.perguntas.value; // Obtém o array de perguntas do formulário

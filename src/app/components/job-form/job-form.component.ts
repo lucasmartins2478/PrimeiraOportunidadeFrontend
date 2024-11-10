@@ -185,27 +185,101 @@ export class JobFormComponent implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
-  onUpdate() {}
+  onUpdate() {
+    const id = this.jobData.id;
+    if (this.jobForm.valid) {
+      const apiUrl = 'http://localhost:3333/vacancy';
+      const formData = this.jobForm.value;
+
+      const body = {
+        title: formData.title,
+        modality: formData.modality,
+        locality: formData.locality,
+        uf: formData.uf,
+        contact: formData.contact,
+        salary: formData.salary,
+        level: formData.level,
+        description: formData.description,
+        requirements: formData.requirements,
+        aboutCompany: formData.aboutCompany,
+        benefits: formData.benefits,
+        companyName: this.companyData?.name,
+        companyId: this.companyData?.id,
+      };
+
+      this.http.put<IJob>(`${apiUrl}/${id}`, body).subscribe(
+        (response) => {
+          this.alertMessage = 'Vaga atualizada com sucesso!';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+
+          // Atualiza ou adiciona perguntas
+          setTimeout(() => {
+            this.enviarPerguntas(id);
+            this.router.navigate(['/minhas-vagas']);
+          }, 2000);
+        },
+        (error) => {
+          window.alert(`Erro ao atualizar a vaga: ${error}`);
+        }
+      );
+    } else {
+      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
 
   enviarPerguntas(vacancyId: number) {
     const questions = this.perguntas.value; // Obtém o array de perguntas do formulário
-    const ApiUrl = 'http://localhost:3333/vacancy/questions'; // Altere conforme sua API
+    const apiUrl = 'http://localhost:3333/vacancy/questions'; // Altere conforme sua API
 
-    questions.forEach((pergunta: string) => {
-      const body = {
-        question: pergunta, // A pergunta em si
-        vacancyId, // ID da vaga relacionada
-      };
+    // Atualiza ou adiciona perguntas existentes
+    questions.forEach((pergunta: string, index: number) => {
+      if (this.questionData[index]) {
+        // Atualiza pergunta existente
+        const questionId = this.questionData[index].id;
+        this.http
+          .put(
+            `http://localhost:3333/vacancy/${this.jobData.id}/questions/${questionId}`,
+            { question: pergunta, vacancyId }
+          )
+          .subscribe(
+            (response) => {
+              console.log(
+                `Pergunta ${index + 1} atualizada com sucesso:`,
+                response
+              );
+            },
+            (error) => {
+              console.error(
+                `Erro ao atualizar a pergunta ${index + 1}:`,
+                error
+              );
+            }
+          );
+      } else {
+        // Adiciona nova pergunta
+        const body = {
+          question: pergunta,
+          vacancyId,
+        };
 
-      // Faz uma requisição POST para salvar cada pergunta
-      this.http.post(ApiUrl, body).subscribe(
-        (response) => {
-          console.log('Pergunta enviada com sucesso:', response);
-        },
-        (error) => {
-          console.error('Erro ao enviar pergunta:', error);
-        }
-      );
+        this.http.post(apiUrl, body).subscribe(
+          (response) => {
+            console.log('Pergunta enviada com sucesso:', response);
+          },
+          (error) => {
+            console.error('Erro ao enviar pergunta:', error);
+          }
+        );
+      }
     });
   }
 

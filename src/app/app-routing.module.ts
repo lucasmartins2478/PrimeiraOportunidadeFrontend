@@ -24,7 +24,7 @@ import { Section3Component } from './pages/section-3/section-3.component';
 import { Section4Component } from './pages/section-4/section-4.component';
 import { ChatComponent } from './pages/chat/chat.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'empresas', component: CompaniesComponent },
   { path: 'vagas', component: JobsComponent },

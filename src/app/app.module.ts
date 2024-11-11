@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Importando o FormsModule
 import { BrowserModule } from '@angular/platform-browser';
 import { CompanyRegisterComponent } from './pages/company-register/company-register.component';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, routes } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -50,6 +50,8 @@ import { Section3Component } from './pages/section-3/section-3.component';
 import { Section4Component } from './pages/section-4/section-4.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
+import { RouterModule } from '@angular/router';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +99,7 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
     Section4Component,
     ChatComponent,
     ChatMessageComponent,
+    AboutUsComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,7 +109,11 @@ import { ChatMessageComponent } from './components/chat-message/chat-message.com
     NgxMaskDirective,
     NgxMaskPipe,
     FormsModule,
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'enabled', // Adiciona essa linha
+    }),
   ],
+  exports:[RouterModule],
   providers: [provideAnimationsAsync(), provideNgxMask()],
   bootstrap: [AppComponent],
 })

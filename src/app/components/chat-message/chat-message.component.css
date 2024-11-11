@@ -1,22 +1,22 @@
-button{
+button {
   background-color: #fff;
   border: none;
 }
-button:hover{
+button:hover {
   background-color: #ebebeb;
 }
-button i{
+button i {
   color: #000;
 }
 
-.chat-container{
+.chat-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .chat-window {
   height: 62vh;
-  width: 95%;
+  width: 80%;
   padding: 10px;
   display: flex;
   overflow-y: scroll;
@@ -26,35 +26,35 @@ button i{
 
 .chat-message-sent {
   align-self: flex-end;
-  max-width: 40%;
-  background-color: #E5E9FF;
+  max-width: 75%;
+  background-color: #e5e9ff;
   padding: 0.5rem 1rem;
   border-radius: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 7px;
   color: #000;
   word-wrap: break-word; /* Quebra as palavras longas */
-    overflow-wrap: break-word; /* Quebra as palavras para ajustar na linha */
-    white-space: pre-wrap;
+  overflow-wrap: break-word; /* Quebra as palavras para ajustar na linha */
+  white-space: pre-wrap;
 }
 
 .chat-message-received {
   align-self: flex-start;
-  max-width: 40%;
+  max-width: 75%;
   background-color: #f1f1f1;
   padding: 0.5rem 1rem;
   border-radius: 12px;
-  margin-bottom: 4px;
+  margin-bottom: 7px;
   color: #000;
   word-wrap: break-word; /* Quebra as palavras longas */
-    overflow-wrap: break-word; /* Quebra as palavras para ajustar na linha */
-    white-space: pre-wrap;
+  overflow-wrap: break-word; /* Quebra as palavras para ajustar na linha */
+  white-space: pre-wrap;
 }
 
-.user-name{
+.user-name {
   display: flex;
   align-items: center;
   gap: 5px;
 }
-.chat-message i{
+.chat-message i {
   font-size: 24px;
 }

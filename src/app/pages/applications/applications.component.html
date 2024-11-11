@@ -1,3 +1,18 @@
 <app-navbar></app-navbar>
-
+<div class="search-wrapper">
+  <h2>Minhas Candidaturas</h2>
+  <app-search-form></app-search-form>
+</div>
+<div class="card-wrapper">
+  <div class="row">
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of filteredJobs"
+      [job]="job"
+    ></app-job-card>
+  </div>
+</div>
+<ng-template *ngIf="filteredJobs.length === 0">
+  <p>Nenhuma vaga encontrada com o ID especificado.</p>
+</ng-template>
 <app-footer></app-footer>

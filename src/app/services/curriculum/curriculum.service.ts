@@ -15,7 +15,7 @@ export class CurriculumService {
   constructor(private http: HttpClient) {}
 
   getCurriculumData(id: number | undefined): Observable<ICurriculum> {
-    const apiUrl = `http://localhost:3333/curriculum/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/curriculum/${id}`;
     return this.http.get<ICurriculum>(apiUrl).pipe(
       catchError((error: any) => {
         console.error(`Erro ao buscar currículo ${error}`);
@@ -25,7 +25,7 @@ export class CurriculumService {
   }
 
   getAcademicData(id: number | undefined): Observable<IAcademicData[]> {
-    const apiUrl = `http://localhost:3333/academicData/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/academicData/${id}`;
     return this.http.get<IAcademicData[]>(apiUrl).pipe(
       catchError((error: any) => {
         console.error(`Erro ao buscar dados acadêmicos ${error}`);
@@ -35,7 +35,7 @@ export class CurriculumService {
   }
 
   getCoursesData(id: number | undefined): Observable<ICoursesData[]> {
-    const apiUrl = `http://localhost:3333/coursesData/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/coursesData/${id}`;
     return this.http.get<ICoursesData[]>(apiUrl).pipe(
       catchError((error: any) => {
         console.error(`Erro ao buscar cursos ${error}`);
@@ -45,7 +45,7 @@ export class CurriculumService {
   }
 
   getCompetences(id: number | undefined): Observable<ICompetences[]> {
-    const apiUrl = `http://localhost:3333/competences/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/competences/${id}`;
     return this.http.get<ICompetences[]>(apiUrl).pipe(
       catchError((error: any) => {
         console.error(`Erro ao buscar competências ${error}`);
@@ -54,7 +54,7 @@ export class CurriculumService {
     );
   }
   deleteCurriculum(id: number | undefined): Observable<ICurriculum> {
-    const apiUrl = `http://localhost:3333/userdata/${id}/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/userdata/${id}/${id}`;
 
     return this.http.delete<ICurriculum>(apiUrl).pipe(
       catchError((error: any) => {

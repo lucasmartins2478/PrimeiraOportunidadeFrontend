@@ -9,7 +9,7 @@ import { ICompany } from '../../models/company.interface';
 export class companyFormService {
 
 
-  private apiUrl: string = `http://localhost:3333/companies`;
+  private apiUrl: string = `https://backend-production-ff1f.up.railway.app/companies`;
 
   private formData: any = {};
 

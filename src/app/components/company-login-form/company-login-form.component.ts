@@ -36,7 +36,7 @@ export class CompanyLoginFormComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-      const apiUrl = 'http://localhost:3333/companies';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/companies';
 
       this.http.get<ICompany[]>(apiUrl).subscribe(
         (response) => {

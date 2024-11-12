@@ -131,7 +131,7 @@ export class UserAuthService {
   }
 
   async hasCurriculum(userId: number | undefined): Promise<boolean> {
-    const apiUrl = `http://localhost:3333/users/${userId}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${userId}`;
 
     try {
       const response = await lastValueFrom(this.http.get<IUser>(apiUrl));

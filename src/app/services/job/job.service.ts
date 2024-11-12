@@ -8,7 +8,7 @@ import { IApplication } from '../../models/application.interface';
   providedIn: 'root'
 })
 export class JobService {
-  private apiUrl = 'http://localhost:3333/vacancies'; // Altere para a URL correta da sua API
+  private apiUrl = 'https://backend-production-ff1f.up.railway.app/vacancies'; // Altere para a URL correta da sua API
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +20,7 @@ export class JobService {
   }
   getJobsByApplicationId(id: number | undefined): Observable<IApplication[]>{
     // Retorna os ids das vagas nas quais o usuário se cadastr
-    return this.http.get<IApplication[]>(`http://localhost:3333/applications/${id}`)
+    return this.http.get<IApplication[]>(`https://backend-production-ff1f.up.railway.app/applications/${id}`)
 
   }
 }

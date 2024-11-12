@@ -7,7 +7,7 @@ import { catchError, Observable, throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class UserFormService {
-  private apiUrl: string = `http://localhost:3333/users`;
+  private apiUrl: string = `https://backend-production-ff1f.up.railway.app/users`;
 
   private formData: any = {};
 
@@ -34,7 +34,7 @@ export class UserFormService {
     );
   }
   deleteUserData(id: number | undefined): Observable<IUser> {
-    const apiUrl = `http://localhost:3333/users/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${id}`;
     return this.http.delete<IUser>(apiUrl).pipe(
       catchError((error: any) => {
         console.error(`Erro ao delerar usuário ${error}`);

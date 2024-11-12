@@ -58,3 +58,8 @@ button i {
 .chat-message i {
   font-size: 24px;
 }
+@media(max-width:500px){
+  .chat-window{
+    width: 100%;
+  }
+}

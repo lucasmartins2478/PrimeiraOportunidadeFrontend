@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+  import { Component, Input, OnInit } from '@angular/core';
 import { IJob } from '../../models/job.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -82,6 +82,7 @@ export class JobCardComponent implements OnInit {
           }
         );
     } else {
+      this.closeModal()
       this.alertMessage = 'Você precisa ter um currículo cadastrado.';
       this.alertClass = 'alert alert-danger';
       this.alertTitle = 'Erro';

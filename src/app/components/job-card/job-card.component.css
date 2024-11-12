@@ -46,16 +46,20 @@ h5 button{
   z-index: 100000;
   width: 100%;
   height: 40rem;
-  max-width: 500px;
+  max-width: 600px;
   border-radius: 0.5rem;
   background-color: white;
 
 }
 
 .modal-dialog {
-  margin: 0; /* Remover margem automática do Bootstrap */
+  margin: 0;
+  max-width: none;
+  width: 100%;
   height: 100%;
 }
+
+
 
 .modal-content {
   padding: 20px;

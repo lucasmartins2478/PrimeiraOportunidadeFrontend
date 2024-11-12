@@ -78,7 +78,7 @@ export class CompanyFormComponent implements OnInit {
 
   async onSubmit() {
     if (this.companyForm.valid) {
-      const apiUrl = 'http://localhost:3333/companies';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/companies';
 
       const formData = this.companyForm.value;
 
@@ -132,7 +132,7 @@ export class CompanyFormComponent implements OnInit {
   async onUpdate() {
     if (this.companyForm.valid) {
       const id = this.companyData?.id;
-      const apiUrl = `http://localhost:3333/companies/${id}`;
+      const apiUrl = `https://backend-production-ff1f.up.railway.app/companies/${id}`;
       const formData = this.companyForm.value;
 
       this.http.put<ICompany>(apiUrl, formData).subscribe(
@@ -165,7 +165,7 @@ export class CompanyFormComponent implements OnInit {
   async verifyCnpj(cnpj: string): Promise<boolean> {
     try {
       const response = await this.http
-        .get<ICompany[]>('http://localhost:3333/companies')
+        .get<ICompany[]>('https://backend-production-ff1f.up.railway.app/companies')
         .toPromise();
 
       if (response && Array.isArray(response)) {

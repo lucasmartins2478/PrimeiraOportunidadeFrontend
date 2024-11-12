@@ -81,7 +81,7 @@ export class UserFormComponent implements OnInit {
 
   async onSubmit() {
     if (this.userForm.valid) {
-      const apiUrl = 'http://localhost:3333/users';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/users';
 
       const formData = this.userForm.value;
 
@@ -143,7 +143,7 @@ export class UserFormComponent implements OnInit {
     if (this.userForm.valid) {
       const id = this.userData?.id;
       const formData = this.userForm.value;
-      const apiUrl = `http://localhost:3333/users/${id}`;
+      const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${id}`;
       const hasCurriculum = await this.authService.hasCurriculum(id);
 
       if (hasCurriculum) {
@@ -204,7 +204,7 @@ export class UserFormComponent implements OnInit {
   async verifyEmail(email: string): Promise<boolean> {
     try {
       const response = await this.http
-        .get<IUser[]>('http://localhost:3333/users')
+        .get<IUser[]>('https://backend-production-ff1f.up.railway.app/users')
         .toPromise();
 
       if (response && Array.isArray(response)) {

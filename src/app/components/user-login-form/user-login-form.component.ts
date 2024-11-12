@@ -37,7 +37,7 @@ export class UserLoginFormComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       const formData = this.loginForm.value;
-      const apiUrl = 'http://localhost:3333/users';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/users';
 
       this.http.get<IUser[]>(apiUrl).subscribe(
         (response) => {

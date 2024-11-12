@@ -9,7 +9,7 @@ import { UserAuthService } from '../auth/auth.service';
   providedIn: 'root',
 })
 export class ChatService {
-  apiUrl: string = 'http://localhost:3333/messages';
+  apiUrl: string = 'https://backend-production-ff1f.up.railway.app/messages';
   private messagesSource = new BehaviorSubject<IMessage[]>([]);
   public messages$ = this.messagesSource.asObservable();
 
@@ -20,7 +20,7 @@ export class ChatService {
   }
 
   sendMessage(message: string): Observable<any> {
-    const apiUrl = 'http://localhost:3333/message';
+    const apiUrl = 'https://backend-production-ff1f.up.railway.app/message';
     const sender_id = this.authService.getUserData()?.id;
     const sender_name = this.authService.getUserData()?.name;
     const content = message;

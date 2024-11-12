@@ -36,9 +36,6 @@ a {
   top: 5.5rem;
   right: 0;
 }
-.navbar-collapse{
-
-}
 i {
   color: #000;
 
@@ -73,6 +70,9 @@ i {
     flex-direction: column;
   }
   i{
+    display: none;
+  }
+  svg{
     display: none;
   }
   #profile{

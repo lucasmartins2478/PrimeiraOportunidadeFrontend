@@ -3,11 +3,41 @@
   <h2>Minhas Candidaturas</h2>
   <app-search-form></app-search-form>
 </div>
-<div class="card-wrapper">
+<div class="card-wrapper" *ngIf="filteredJobs.length > 0">
   <div class="row">
+    <div class="col-10">
+      <h3>Ativas</h3>
+    </div>
     <app-job-card
       class="col-9 col-md-4"
-      *ngFor="let job of filteredJobs"
+      *ngFor="let item of filteredJobs"
+      [job]="item.job"
+      [applied]="true"
+      [applicationId]="item.applicationId"
+    ></app-job-card>
+  </div>
+</div>
+
+<div class="card-wrapper" *ngIf="canceledJobs.length > 0">
+  <div class="row">
+    <div class="col-10">
+      <h3>Canceladas por você</h3>
+    </div>
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of canceledJobs"
+      [job]="job"
+    ></app-job-card>
+  </div>
+</div>
+<div class="card-wrapper" *ngIf="finishedJobs.length > 0">
+  <div class="row">
+    <div class="col-10">
+      <h3>Finalizadas pela empresa</h3>
+    </div>
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of finishedJobs"
       [job]="job"
     ></app-job-card>
   </div>

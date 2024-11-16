@@ -5,9 +5,36 @@
 </div>
 <div class="card-wrapper">
   <div class="row">
+    <div class="col-10">
+      <h3>Vagas ativas</h3>
+    </div>
     <app-job-card
       class="col-9 col-md-4"
       *ngFor="let job of filteredJobs"
+      [job]="job"
+    ></app-job-card>
+  </div>
+</div>
+<div class="card-wrapper">
+  <div class="row">
+    <div class="col-10">
+      <h3>Vagas Canceladas</h3>
+    </div>
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of canceledJobs"
+      [job]="job"
+    ></app-job-card>
+  </div>
+</div>
+<div class="card-wrapper">
+  <div class="row">
+    <div class="col-10">
+      <h3>Vagas Preenchidas</h3>
+    </div>
+    <app-job-card
+      class="col-9 col-md-4"
+      *ngFor="let job of finishedJobs"
       [job]="job"
     ></app-job-card>
   </div>

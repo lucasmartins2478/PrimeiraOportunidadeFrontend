@@ -13,10 +13,12 @@ export interface IJob {
   benefits: string;
   companyId: number;
   companyName: string;
+  isActive: boolean;
+  isFilled: boolean;
 }
 
-export interface IQuestion{
-  id: number
-  question: string
-  vacancyId: number
+export interface IQuestion {
+  id: number;
+  question: string;
+  vacancyId: number;
 }

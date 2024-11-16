@@ -9,13 +9,8 @@
   <h5>
     {{ job.title }}
 
-    <button
-      type="button"
-      *ngIf="userType === 'company'"
-      class="close-button"
-      (click)="editJob(job.id)"
-    >
-      <i class="bi bi-pencil-fill"></i>
+    <button type="button" *ngIf="userType === 'company'" class="close-button">
+      <i class="bi bi-people-fill"></i>
     </button>
   </h5>
 
@@ -33,8 +28,27 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">{{ selectedJob?.title }}</h1>
-        <button type="button" class="btn-close" (click)="closeModal()"></button>
+        <h1 class="modal-title fs-5">
+          {{ selectedJob?.title }}
+        </h1>
+        <div class="button-wrapper">
+          <button
+            type="button"
+            class="btn-close"
+            (click)="editJob(job.id)"
+            *ngIf="userType === 'company'"
+          >
+            <i class="bi bi-pencil-fill"></i>
+          </button>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="cancelJob(job.id)"
+            *ngIf="userType === 'company'"
+          >
+            <i class="bi bi-trash3-fill"></i>
+          </button>
+        </div>
       </div>
       <div class="modal-body">
         <h6><b>Empresa:</b> {{ selectedJob?.companyName }}</h6>
@@ -51,13 +65,41 @@
         <button type="button" class="btn btn-secondary" (click)="closeModal()">
           Sair
         </button>
+        <ng-container *ngIf="applied; else applyTemplate">
+          <button
+            type="button"
+            class="btn btn-danger"
+            *ngIf="userType === 'user'"
+            (click)="cancelApplication()"
+          >
+            Cancelar
+          </button>
+        </ng-container>
+        <ng-template #applyTemplate>
+          <button
+            type="button"
+            class="btn btn-warning"
+            *ngIf="
+              userType === 'user' &&
+              job.isActive == true &&
+              job.isFilled == false
+            "
+            (click)="apply(job.id)"
+          >
+            Candidatar
+          </button>
+        </ng-template>
         <button
           type="button"
           class="btn btn-primary"
-          *ngIf="userType === 'user'"
-          (click)="apply()"
+          *ngIf="
+            userType === 'company' &&
+            job.isActive == true &&
+            job.isFilled == false
+          "
+          (click)="finishJob(job.id)"
         >
-          Candidatar
+          Preencher Vaga
         </button>
       </div>
     </div>

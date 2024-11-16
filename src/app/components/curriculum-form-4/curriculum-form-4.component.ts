@@ -59,13 +59,13 @@ export class CurriculumForm4Component implements OnInit {
       const id = this.userService.getUserData()?.id;
       const formData = this.adictionalDataForm.value;
 
-      const apiUrl = `http://localhost:3333/curriculum/${id}/addData`;
+      const apiUrl = `https://backend-production-ff1f.up.railway.app/curriculum/${id}/addData`;
 
       const body = {
         description: formData.description,
         attached: formData.attached,
       };
-      this.http.put<ICurriculum[]>(apiUrl, body).subscribe(
+      this.http.put<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
           this.alertMessage = 'Formulário válido!';
           this.alertClass = 'alert alert-success';

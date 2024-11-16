@@ -18,7 +18,7 @@ h5 button{
   background-color: #FF7B2A;
   border: none;
 }
-.btn-primary{
+.btn-warning{
   color: #fff;
   background-color: #FF7B2A;
   border: none;
@@ -30,11 +30,20 @@ h5 button{
 .modal-footer button{
   width: 10rem;
 }
-.btn-primary:hover{
+.btn-warning:hover{
   background-color: #f46811;
+}
+.btn-primary{
+  background-color: #004AAD;
 }
 .modal{
   z-index: 10000000;
+}
+.button-wrapper{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 /* Estilo do modal */
 .modal {
@@ -77,8 +86,15 @@ h5 button{
   border: none;
   font-size: 1.5rem;
 }
-i{
+
+.modal-header button .bi-pencil-fill{
   color: #f46811;
+}
+.modal-header button{
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 @media(max-width:768px){
   .modal{

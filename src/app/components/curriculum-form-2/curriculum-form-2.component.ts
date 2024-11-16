@@ -167,7 +167,7 @@ export class CurriculumForm2Component implements OnInit {
     }
 
     this.http
-      .delete(`http://localhost:3333/academicData/${institutionId}`)
+      .delete(`https://backend-production-ff1f.up.railway.app/academicData/${institutionId}`)
       .subscribe(
         () => {
           this.institutions.removeAt(index);
@@ -195,7 +195,7 @@ export class CurriculumForm2Component implements OnInit {
     if (this.academicForm.valid) {
       const formData = this.academicForm.value;
       const id = this.userService.getUserData()?.id;
-      const curriculumUrl = `http://localhost:3333/curriculum/${id}/addSchoolData`;
+      const curriculumUrl = `https://backend-production-ff1f.up.railway.app/curriculum/${id}/addSchoolData`;
 
       const body = {
         schoolName: formData.schoolName,
@@ -213,7 +213,7 @@ export class CurriculumForm2Component implements OnInit {
       );
 
       const institutionsData = this.institutions.value;
-      const apiUrl = 'http://localhost:3333/academicData';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/academicData';
 
       if (institutionsData && institutionsData.length > 0) {
         institutionsData.forEach((institution: IAcademicData) => {
@@ -259,7 +259,7 @@ export class CurriculumForm2Component implements OnInit {
     if (this.academicForm.valid) {
       const formData = this.academicForm.value;
       const id = this.userService.getUserData()?.id;
-      const curriculumUrl = `http://localhost:3333/curriculum/${id}/addSchoolData`;
+      const curriculumUrl = `https://backend-production-ff1f.up.railway.app/curriculum/${id}/addSchoolData`;
 
       const body = {
         schoolName: formData.schoolName,
@@ -277,7 +277,7 @@ export class CurriculumForm2Component implements OnInit {
       );
 
       const institutionsData = this.institutions.value;
-      const apiUrl = 'http://localhost:3333/academicData';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/academicData';
 
       if (institutionsData && institutionsData.length > 0) {
         institutionsData.forEach((institution: IAcademicData) => {

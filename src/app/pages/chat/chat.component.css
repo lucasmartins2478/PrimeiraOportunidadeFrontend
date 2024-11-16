@@ -60,7 +60,7 @@ img {
 }
 @media(max-width:500px){
   .chat-container{
-    padding: 0rem;
+    padding: 5px;
   }
 }
 

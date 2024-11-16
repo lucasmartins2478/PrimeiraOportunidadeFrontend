@@ -171,7 +171,7 @@
           class="list-group-item"
           *ngFor="let competence of competencies.controls; let i = index"
         >
-          {{ competence.value.name }}
+          {{ competence.value.name}}
           <button type="button" class="btn btn-sm float-end" (click)="removeCompetence(i)">
             X
           </button>

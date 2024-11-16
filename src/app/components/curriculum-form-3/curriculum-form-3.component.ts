@@ -146,7 +146,7 @@ export class CurriculumForm3Component implements OnInit {
       return;
     }
     this.http
-      .delete(`http://localhost:3333/courseData/${courseId}`)
+      .delete(`https://backend-production-ff1f.up.railway.app/courseData/${courseId}`)
       .subscribe(() => {
         this.courses.removeAt(index);
         this.showAlertMessage(
@@ -196,7 +196,7 @@ export class CurriculumForm3Component implements OnInit {
       return;
     }
     this.http
-      .delete(`http://localhost:3333/competences/${competenceId}`)
+      .delete(`https://backend-production-ff1f.up.railway.app/competences/${competenceId}`)
       .subscribe(() => {
         this.competencies.removeAt(index);
         this.showAlertMessage(
@@ -217,7 +217,7 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados dos cursos
       if (coursesData && coursesData.length > 0) {
         coursesData.forEach((course: ICoursesData) => {
-          const apiUrl = 'http://localhost:3333/courseData';
+          const apiUrl = 'https://backend-production-ff1f.up.railway.app/courseData';
 
           const body = {
             name: course.name,
@@ -248,7 +248,7 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados das competências
       if (competenciesData && competenciesData.length > 0) {
         competenciesData.forEach((competence: string) => {
-          const apiUrl = 'http://localhost:3333/competences';
+          const apiUrl = 'https://backend-production-ff1f.up.railway.app/competences';
 
           const body = {
             name: competence,
@@ -291,7 +291,7 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados dos cursos
       if (coursesData && coursesData.length > 0) {
         coursesData.forEach((course: ICoursesData) => {
-          const apiUrl = 'http://localhost:3333/courseData';
+          const apiUrl = 'https://backend-production-ff1f.up.railway.app/courseData';
 
           const body = {
             name: course.name,
@@ -339,7 +339,7 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados das competências
       if (competenciesData && competenciesData.length > 0) {
         competenciesData.forEach((competence: ICompetences) => {
-          const apiUrl = 'http://localhost:3333/competences';
+          const apiUrl = 'https://backend-production-ff1f.up.railway.app/competences';
           const body = {
             name: competence.name,
             curriculumId: this.userService.getUserData()?.id,

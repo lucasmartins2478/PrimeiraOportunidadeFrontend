@@ -138,7 +138,7 @@ export class JobFormComponent implements OnInit {
   // Método chamado quando o formulário for enviado
   onSubmit() {
     if (this.jobForm.valid) {
-      const apiUrl = 'http://localhost:3333/vacancy';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/vacancy';
       const formData = this.jobForm.value;
 
       const body = {
@@ -188,7 +188,7 @@ export class JobFormComponent implements OnInit {
   onUpdate() {
     const id = this.jobData.id;
     if (this.jobForm.valid) {
-      const apiUrl = 'http://localhost:3333/vacancy';
+      const apiUrl = 'https://backend-production-ff1f.up.railway.app/vacancy';
       const formData = this.jobForm.value;
 
       const body = {
@@ -238,7 +238,7 @@ export class JobFormComponent implements OnInit {
 
   enviarPerguntas(vacancyId: number) {
     const questions = this.perguntas.value; // Obtém o array de perguntas do formulário
-    const apiUrl = 'http://localhost:3333/vacancy/questions'; // Altere conforme sua API
+    const apiUrl = 'https://backend-production-ff1f.up.railway.app/vacancy/questions'; // Altere conforme sua API
 
     // Atualiza ou adiciona perguntas existentes
     questions.forEach((pergunta: string, index: number) => {
@@ -247,7 +247,7 @@ export class JobFormComponent implements OnInit {
         const questionId = this.questionData[index].id;
         this.http
           .put(
-            `http://localhost:3333/vacancy/${this.jobData.id}/questions/${questionId}`,
+            `https://backend-production-ff1f.up.railway.app/vacancy/${this.jobData.id}/questions/${questionId}`,
             { question: pergunta, vacancyId }
           )
           .subscribe(

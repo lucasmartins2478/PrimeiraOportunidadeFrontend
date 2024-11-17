@@ -25,8 +25,15 @@ export class MyJobsComponent implements OnInit {
       (data) => {
         this.jobs = data;
         // Filtra as vagas com o id especificado
-        this.canceledJobs = this.jobs.filter((job) => job.isActive == false);
-        this.finishedJobs = this.jobs.filter((job) => job.isFilled == true && job.isActive == true);
+        this.canceledJobs = this.jobs.filter(
+          (job) => job.companyId === this.targetId && job.isActive == false
+        );
+        this.finishedJobs = this.jobs.filter(
+          (job) =>
+            job.companyId === this.targetId &&
+            job.isFilled == true &&
+            job.isActive == true
+        );
         this.filteredJobs = this.jobs.filter(
           (job) =>
             job.companyId === this.targetId &&

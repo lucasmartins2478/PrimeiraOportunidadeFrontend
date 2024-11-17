@@ -3,7 +3,7 @@
   <h2>Minhas Vagas</h2>
   <app-search-form></app-search-form>
 </div>
-<div class="card-wrapper">
+<div class="card-wrapper" *ngIf="filteredJobs.length > 0">
   <div class="row">
     <div class="col-10">
       <h3>Vagas ativas</h3>
@@ -15,7 +15,7 @@
     ></app-job-card>
   </div>
 </div>
-<div class="card-wrapper">
+<div class="card-wrapper" *ngIf="canceledJobs.length > 0">
   <div class="row">
     <div class="col-10">
       <h3>Vagas Canceladas</h3>
@@ -27,7 +27,7 @@
     ></app-job-card>
   </div>
 </div>
-<div class="card-wrapper">
+<div class="card-wrapper" *ngIf="finishedJobs.length > 0">
   <div class="row">
     <div class="col-10">
       <h3>Vagas Preenchidas</h3>

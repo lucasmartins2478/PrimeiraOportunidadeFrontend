@@ -127,7 +127,8 @@ export class CurriculumForm1Component implements OnInit {
     if (this.curriculumForm.valid) {
       const formData = this.curriculumForm.value;
 
-      const apiUrl = 'http://localhost:3333/curriculum';
+      const apiUrl =
+        'https://backend-production-ff1f.up.railway.app/curriculum';
 
       const body = {
         id: this.userData?.id,
@@ -174,7 +175,7 @@ export class CurriculumForm1Component implements OnInit {
       const formData = this.curriculumForm.value;
       const id = this.userData?.id; // Aqui você deve garantir que o ID do currículo correto está sendo utilizado
 
-      const apiUrl = `http://localhost:3333/curriculum/${id}`; // Verifique se este ID é realmente o ID do currículo
+      const apiUrl = `https://backend-production-ff1f.up.railway.app/curriculum/${id}`; // Verifique se este ID é realmente o ID do currículo
 
       if (
         formData.name != this.user.name ||
@@ -209,12 +210,17 @@ export class CurriculumForm1Component implements OnInit {
           cep: formData.cep,
           uf: formData.uf,
         };
-        this.http.put(`http://localhost:3333/users/${id}`, userBody).subscribe(
-          (response) => {},
-          (error) => {
-            console.error(`Erro ao atualizar o usuáario ${error}`);
-          }
-        );
+        this.http
+          .put(
+            `https://backend-production-ff1f.up.railway.app/users/${id}`,
+            userBody
+          )
+          .subscribe(
+            (response) => {},
+            (error) => {
+              console.error(`Erro ao atualizar o usuáario ${error}`);
+            }
+          );
         this.http.put<ICurriculum>(apiUrl, body).subscribe(
           (response) => {
             this.alertMessage = 'Curriculo Atualizado com sucesso!';
@@ -245,7 +251,7 @@ export class CurriculumForm1Component implements OnInit {
   }
 
   async addCurriculum(id: number | undefined) {
-    const apiUrl = `http://localhost:3333/users/${id}/curriculum`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${id}/curriculum`;
 
     const body = {
       curriculumId: this.userData?.id,

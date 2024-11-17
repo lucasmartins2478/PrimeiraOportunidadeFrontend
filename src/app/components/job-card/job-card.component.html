@@ -105,3 +105,51 @@
     </div>
   </div>
 </div>
+
+<div class="modal-backdrop" *ngIf="isModalQuestionOpen"></div>
+<div class="modal" tabindex="-1" *ngIf="isModalQuestionOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Perguntas da empresa</h1>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div>
+            <div class="row" *ngFor="let question of questionData; let i = index">
+              <div class="col-12">
+                <label [for]="'question' + i" class="form-label">{{ question.question }}</label>
+                <input
+                  type="text"
+                  id="question" 
+                  placeholder="Digite sua resposta"
+                  class="form-control"
+                  [(ngModel)]="respostas[i]"
+                  [name]="'pergunta' + i"
+                />
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeQuestionModal()"
+        >
+          Sair
+        </button>
+        <button
+          type="button"
+          class="btn btn-warning"
+          *ngIf="userType === 'user'"
+          (click)="apply(job.id)"
+        >
+          Finalizar candidatura
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -51,7 +51,7 @@ export class JobFormComponent implements OnInit {
       (jobResponse) => {
         this.jobData = jobResponse;
         this.isEditing = !!this.jobData; // Atualiza a variável booleana com base nos dados de `jobData`
-        this.questionService.getMessagesByJobId(id).subscribe(
+        this.questionService.getQuestionsByJobId(id).subscribe(
           (questionsResponse) => {
             this.questionData = Array.isArray(questionsResponse)
               ? questionsResponse

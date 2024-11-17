@@ -7,10 +7,10 @@ import { IQuestion } from '../../models/job.interface';
   providedIn: 'root',
 })
 export class QuestionsService {
-  apiUrl = `http://localhost:3333/questions/vacancy`;
+  apiUrl = `https://backend-production-ff1f.up.railway.app/questions/vacancy`;
   constructor(private http: HttpClient) {}
 
-  getMessagesByJobId(id: string | null): Observable<IQuestion> {
+  getQuestionsByJobId(id: string | null): Observable<IQuestion> {
     return this.http.get<IQuestion>(`${this.apiUrl}/${id}`);
   }
 }

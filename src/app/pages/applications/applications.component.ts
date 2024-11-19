@@ -38,7 +38,7 @@ export class ApplicationsComponent implements OnInit {
   async getJobsId(): Promise<void> {
     try {
       const response = await this.jobService
-        .getJobsByApplicationId(this.targetId)
+        .getApplicationsByUserId(this.targetId)
         .toPromise();
       if (response) {
         // Filtra para garantir que o job não seja undefined antes de criar o objeto

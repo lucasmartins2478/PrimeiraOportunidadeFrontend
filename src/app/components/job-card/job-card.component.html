@@ -9,7 +9,12 @@
   <h5>
     {{ job.title }}
 
-    <button type="button" *ngIf="userType === 'company'" class="close-button">
+    <button
+      type="button"
+      *ngIf="userType === 'company'"
+      class="close-button"
+      (click)="openApplicationModal(job.id)"
+    >
       <i class="bi bi-people-fill"></i>
     </button>
   </h5>
@@ -31,7 +36,10 @@
         <h1 class="modal-title fs-5">
           {{ selectedJob?.title }}
         </h1>
-        <div class="button-wrapper">
+        <div
+          class="button-wrapper"
+          *ngIf="job.isActive == true && job.isFilled == false"
+        >
           <button
             type="button"
             class="btn-close"
@@ -116,12 +124,17 @@
       <div class="modal-body">
         <form>
           <div>
-            <div class="row" *ngFor="let question of questionData; let i = index">
+            <div
+              class="row"
+              *ngFor="let question of questionData; let i = index"
+            >
               <div class="col-12">
-                <label [for]="'question' + i" class="form-label">{{ question.question }}</label>
+                <label [for]="'question' + i" class="form-label">{{
+                  question.question
+                }}</label>
                 <input
                   type="text"
-                  id="question" 
+                  id="question"
                   placeholder="Digite sua resposta"
                   class="form-control"
                   [(ngModel)]="respostas[i]"
@@ -129,7 +142,6 @@
                 />
               </div>
             </div>
-
           </div>
         </form>
       </div>
@@ -153,3 +165,107 @@
     </div>
   </div>
 </div>
+
+<div class="modal" tabindex="-1" *ngIf="isModalApplicationOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Pessoas que se candidataram</h1>
+        <div class="button-wrapper">
+          <h1 class="modal-title fs-5" style="margin-right: 5px;">{{applications.length}}</h1>
+          <i class="bi bi-people-fill" (click)="closeApplicationModal()"></i>
+        </div>
+
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let application of applications">
+          <div
+            *ngIf="userData[application.userId] as user"
+            class="applications"
+          >
+            <p>{{ user.name }}</p>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="createUserCurriculum(application.userId)"
+            >
+              Visualizar currículo
+            </button>
+          </div>
+          <div *ngIf="!userData[application.userId]">
+            <p>Carregando dados do usuário...</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeApplicationModal()"
+        >
+          Sair
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" *ngIf="isModalCurriculumOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">
+          {{ selectedUserId !== null ? userData[selectedUserId]?.name : "" }}
+        </h1>
+      </div>
+      <div class="modal-body">
+        <p><strong>Email:</strong> {{ selectedUserId !== null ? userData[selectedUserId]?.email : ''}}</p>
+        <p><strong>Telefone:</strong> {{ selectedUserId !== null ? userData[selectedUserId]?.phoneNumber : '' }}</p>
+        <!-- Currículo -->
+        <div *ngIf="selectedUserCurriculum">
+
+        </div>
+
+        <!-- Dados Acadêmicos -->
+        <div *ngIf="selectedAcademicData.length > 0">
+          <p><strong>Dados Acadêmicos:</strong></p>
+          <ul>
+            <li *ngFor="let academic of selectedAcademicData">
+              Curso: {{ academic.name }}, Instituição: {{ academic.institutionName }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Cursos -->
+        <div *ngIf="selectedCoursesData.length > 0">
+          <p><strong>Cursos:</strong></p>
+          <ul>
+            <li *ngFor="let course of selectedCoursesData">
+              Nome do Curso: {{ course.name }}, Instituição: {{ course.institutionName }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Competências -->
+        <div *ngIf="selectedCompetences.length > 0">
+          <p><strong>Competências:</strong></p>
+          <ul>
+            <li *ngFor="let competence of selectedCompetences">
+              {{ competence.name }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeCurriculumModal()"
+        >
+          Sair
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -20,10 +20,15 @@ export class JobService {
   getJobById(id: string | null): Observable<IJob> {
     return this.http.get<IJob>(`${this.apiUrl}/${id}`);
   }
-  getJobsByApplicationId(id: number | undefined): Observable<IApplication[]> {
+  getApplicationsByUserId(id: number | undefined): Observable<IApplication[]> {
     // Retorna os ids das vagas nas quais o usuário se cadastr
     return this.http.get<IApplication[]>(
       `https://backend-production-ff1f.up.railway.app/applications/${id}`
+    );
+  }
+  getApplicationsByJobId(id: number): Observable<IApplication[]> {
+    return this.http.get<IApplication[]>(
+      `https://backend-production-ff1f.up.railway.app/applications/vacancy/${id}`
     );
   }
 
@@ -42,10 +47,9 @@ export class JobService {
     let canceledJobs = this.getCanceledJobs();
 
     // Filtramos o array para remover a vaga com o ID especificado
-    canceledJobs = canceledJobs.filter(job => job.id !== jobId);
+    canceledJobs = canceledJobs.filter((job) => job.id !== jobId);
 
     // Atualizamos o local storage com a lista de vagas atualizada
     localStorage.setItem(this.storageKey, JSON.stringify(canceledJobs));
   }
-
 }

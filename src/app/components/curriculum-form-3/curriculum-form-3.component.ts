@@ -247,11 +247,11 @@ export class CurriculumForm3Component implements OnInit {
 
       // Enviar dados das competências
       if (competenciesData && competenciesData.length > 0) {
-        competenciesData.forEach((competence: string) => {
+        competenciesData.forEach((competence: ICompetences) => {
           const apiUrl = 'https://backend-production-ff1f.up.railway.app/competences';
 
           const body = {
-            name: competence,
+            name: competence.name,
             curriculumId: this.userService.getUserData()?.id,
           };
 

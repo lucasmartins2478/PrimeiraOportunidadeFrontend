@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IJob, IQuestion } from '../../models/job.interface';
+import { IAnswer, IJob, IQuestion } from '../../models/job.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { IApplication } from '../../models/application.interface';
@@ -16,7 +16,13 @@ import {
 import { UserFormService } from '../../services/user/user-form.service';
 import { CurriculumService } from '../../services/curriculum/curriculum.service';
 import { IUser } from '../../models/user.interface';
-import { IAcademicData, ICompetences, ICoursesData, ICurriculum } from '../../models/curriculum.interface';
+import {
+  IAcademicData,
+  ICompetences,
+  ICoursesData,
+  ICurriculum,
+} from '../../models/curriculum.interface';
+import { AnswersService } from '../../services/answers/answers.service';
 
 @Component({
   selector: 'app-job-card',
@@ -45,10 +51,12 @@ export class JobCardComponent implements OnInit {
   applications: IApplication[] = [];
   userData: { [key: number]: IUser } = {};
   selectedUserId: number | null = null; // ID do usuário selecionado
-selectedUserCurriculum: ICurriculum | null = null;
-selectedAcademicData: IAcademicData[] = [];
-selectedCoursesData: ICoursesData[] = [];
-selectedCompetences: ICompetences[] = [];
+  selectedUserCurriculum: ICurriculum | null = null;
+  selectedAcademicData: IAcademicData[] = [];
+  selectedCoursesData: ICoursesData[] = [];
+  selectedCompetences: ICompetences[] = [];
+  questions: { question: IQuestion }[] = [];
+  answers!: IAnswer;
 
   constructor(
     private authService: UserAuthService,
@@ -58,7 +66,8 @@ selectedCompetences: ICompetences[] = [];
     private userService: UserFormService,
     private curriculumService: CurriculumService,
     private jobService: JobService,
-    private questionService: QuestionsService
+    private questionService: QuestionsService,
+    private answerService: AnswersService
   ) {}
 
   ngOnInit(): void {
@@ -154,11 +163,24 @@ selectedCompetences: ICompetences[] = [];
         console.error(`Erro ao buscar dados do usuário: ${error}`);
       }
     );
-
   }
 
+  getAnswerForQuestion(userId: number, questionId: number) {
+    this.answerService.getAnswerOfQuestion(questionId, userId).subscribe(
+      (answer) => {
+        if (answer) {
+          this.answers = answer;
+        } else {
+          console.log('Nenhuma resposta encontrada para este usuário.');
+        }
+      },
+      (error) => {
+        console.error('Erro ao buscar resposta:', error);
+      }
+    );
+  }
 
-  createUserCurriculum(userId: number) {
+  async createUserCurriculum(userId: number) {
     this.selectedUserId = userId; // Armazena o ID do candidato selecionado
     this.closeApplicationModal();
     this.curriculumService.getCurriculumData(userId).subscribe(
@@ -166,7 +188,9 @@ selectedCompetences: ICompetences[] = [];
         this.selectedUserCurriculum = response;
       },
       (error) => {
-        console.error(`Erro ao buscar currículo do usuário ${userId}: ${error}`);
+        console.error(
+          `Erro ao buscar currículo do usuário ${userId}: ${error}`
+        );
       }
     );
 
@@ -176,7 +200,9 @@ selectedCompetences: ICompetences[] = [];
         this.selectedAcademicData = response || [];
       },
       (error) => {
-        console.error(`Erro ao buscar dados acadêmicos do usuário ${userId}: ${error}`);
+        console.error(
+          `Erro ao buscar dados acadêmicos do usuário ${userId}: ${error}`
+        );
       }
     );
 
@@ -196,113 +222,118 @@ selectedCompetences: ICompetences[] = [];
         this.selectedCompetences = response || [];
       },
       (error) => {
-        console.error(`Erro ao buscar competências do usuário ${userId}: ${error}`);
+        console.error(
+          `Erro ao buscar competências do usuário ${userId}: ${error}`
+        );
       }
     );
+
+    const questions = await this.getQuestions(this.job.id.toString());
+    if (questions) {
+      // Associe as perguntas às respostas do candidato (simulação de resposta para demonstração)
+      this.questions = questions.map((question) => ({
+        question,
+        answer: this.getAnswerForQuestion(userId, question.id), // Simula a obtenção da resposta
+      }));
+    }
 
     // Exibe o modal do currículo
     this.openCurriculumModal();
   }
 
   async apply(jobId: number) {
-    const questions = await this.getQuestions(jobId.toString());
+    try {
+      const vacancyId = this.selectedJob?.id;
+      const userId = this.userId;
 
-    const vacancyId = this.selectedJob?.id;
-    const userId = this.userId;
-
-    if (userId !== undefined && vacancyId !== undefined) {
-      const isVerified = await this.verifyApplication(userId, vacancyId);
-
-      if (isVerified) {
-        // Código a ser executado se a verificação for verdadeira
-        this.closeModal();
-        this.closeQuestionModal();
-        this.alertMessage = 'Você já se candidatou a essa vaga.';
-        this.alertClass = 'alert alert-danger';
-        this.alertTitle = 'Erro';
-        this.alertIconClass = 'bi bi-x-circle';
-        this.showAlert = true;
-        this.resetAlertAfterDelay();
-        return; // Retorna para cancelar a operação
+      if (!userId) {
+        this.showAlertMessage(
+          'Você precisa estar logado para se candidatar.',
+          'Erro',
+          'alert alert-danger',
+          'bi bi-x-circle'
+        );
+        return;
       }
-    }
 
-    if (!this.userId) {
-      this.alertMessage = 'Você precisa estar logado para se candidatar.';
-      this.alertClass = 'alert alert-danger';
-      this.alertTitle = 'Erro';
-      this.alertIconClass = 'bi bi-x-circle';
-      this.showAlert = true;
-      this.resetAlertAfterDelay();
-      return;
-    }
+      if (!vacancyId) {
+        console.error('ID da vaga não encontrado.');
+        return;
+      }
 
-    const exist = await this.checkCurriculum(this.userId);
+      // Verificar se o usuário já se candidatou
+      const isVerified = await this.verifyApplication(userId, vacancyId);
+      if (isVerified) {
+        this.showAlertMessage(
+          'Você já se candidatou a essa vaga.',
+          'Erro',
+          'alert alert-danger',
+          'bi bi-x-circle'
+        );
+        return;
+      }
 
-    if (exist) {
-      if (questions !== undefined && questions.length > 0) {
+      // Verificar se o currículo existe
+      const hasCurriculum = await this.checkCurriculum(userId);
+      if (!hasCurriculum) {
+        this.showAlertMessage(
+          'É necessário ter um currículo cadastrado para se candidatar.',
+          'Erro',
+          'alert alert-danger',
+          'bi bi-x-circle'
+        );
+        return;
+      }
+
+      // Obter perguntas associadas à vaga
+      const questions = await this.getQuestions(jobId.toString());
+
+      if (questions && questions.length > 0) {
+        // Abrir modal para responder perguntas
         this.closeModal();
         this.openQuestionModal();
 
+        // Salvar respostas
         for (const [index, resposta] of this.respostas.entries()) {
-          const questionId = this.questionData[index].id;
-          const body = {
-            answer: resposta,
-            questionId: questionId,
-            userId: this.userId,
-          };
+          const questionId = this.questionData[index]?.id;
+          if (questionId) {
+            const answerBody = {
+              answer: resposta,
+              questionId,
+              userId,
+            };
 
-          try {
             await this.http
               .post(
-                `https://backend-production-ff1f.up.railway.app/answer`,
-                body
+                'https://backend-production-ff1f.up.railway.app/answer',
+                answerBody
               )
               .toPromise();
-            const applicationBody = { userId, vacancyId };
-
-            await this.http
-              .post<IApplication>(
-                'https://backend-production-ff1f.up.railway.app/application',
-                applicationBody
-              )
-              .toPromise();
-
-            this.closeQuestionModal();
-            this.closeModal();
-            this.jobService.removeCanceledJob(jobId);
-            this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
-            this.alertClass = 'alert alert-success';
-            this.alertTitle = 'Sucesso';
-            this.alertIconClass = 'bi bi-check-circle';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
-          } catch (error) {
-            console.error(`Erro ao enviar resposta ou candidatura: ${error}`);
           }
         }
-      } else {
-        const body = { userId, vacancyId };
-
-        try {
-          await this.http
-            .post<IApplication>(
-              'https://backend-production-ff1f.up.railway.app/application',
-              body
-            )
-            .toPromise();
-          this.closeModal();
-          this.jobService.removeCanceledJob(jobId);
-          this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
-          this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Sucesso';
-          this.alertIconClass = 'bi bi-check-circle';
-          this.showAlert = true;
-          this.resetAlertAfterDelay();
-        } catch (error) {
-          console.error(`Erro ao adicionar candidatura: ${error}`);
-        }
       }
+
+      // Salvar candidatura
+      const applicationBody = { userId, vacancyId };
+      await this.http
+        .post<IApplication>(
+          'https://backend-production-ff1f.up.railway.app/application',
+          applicationBody
+        )
+        .toPromise();
+
+      // Sucesso: Fechar modais e exibir mensagem
+      this.closeModal();
+      this.closeQuestionModal();
+      this.jobService.removeCanceledJob(jobId);
+      this.showAlertMessage(
+        'Parabéns, candidatura realizada com sucesso!',
+        'Sucesso',
+        'alert alert-success',
+        'bi bi-check-circle'
+      );
+    } catch (error) {
+      console.error(`Erro ao realizar candidatura: ${error}`);
     }
   }
 
@@ -378,6 +409,19 @@ selectedCompetences: ICompetences[] = [];
       console.error(`Erro ao buscar candidaturas ${error}`);
       return undefined;
     }
+  }
+  private showAlertMessage(
+    message: string,
+    title: string,
+    cssClass: string,
+    iconClass: string
+  ) {
+    this.alertMessage = message;
+    this.alertClass = cssClass;
+    this.alertTitle = title;
+    this.alertIconClass = iconClass;
+    this.showAlert = true;
+    this.resetAlertAfterDelay();
   }
 
   resetAlertAfterDelay() {

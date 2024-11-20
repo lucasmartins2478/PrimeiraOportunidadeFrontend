@@ -22,3 +22,9 @@ export interface IQuestion {
   question: string;
   vacancyId: number;
 }
+export interface IAnswer {
+  id: number;
+  answer: string;
+  questionId: number;
+  userId: number;
+}

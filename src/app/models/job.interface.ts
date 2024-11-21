@@ -28,3 +28,8 @@ export interface IAnswer {
   questionId: number;
   userId: number;
 }
+
+export interface IQuestionWithAnswer {
+  question: IQuestion;
+  answer?: IAnswer; // Opcional caso não tenha resposta
+}

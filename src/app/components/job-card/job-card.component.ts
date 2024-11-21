@@ -242,98 +242,105 @@ export class JobCardComponent implements OnInit {
   }
 
   async apply(jobId: number) {
-    try {
-      const vacancyId = this.selectedJob?.id;
-      const userId = this.userId;
+    const questions = await this.getQuestions(jobId.toString());
 
-      if (!userId) {
-        this.showAlertMessage(
-          'Você precisa estar logado para se candidatar.',
-          'Erro',
-          'alert alert-danger',
-          'bi bi-x-circle'
-        );
-        return;
-      }
+    const vacancyId = this.selectedJob?.id;
+    const userId = this.userId;
 
-      if (!vacancyId) {
-        console.error('ID da vaga não encontrado.');
-        return;
-      }
-
-      // Verificar se o usuário já se candidatou
+    if (userId !== undefined && vacancyId !== undefined) {
       const isVerified = await this.verifyApplication(userId, vacancyId);
+
       if (isVerified) {
-        this.showAlertMessage(
-          'Você já se candidatou a essa vaga.',
-          'Erro',
-          'alert alert-danger',
-          'bi bi-x-circle'
-        );
-        return;
+        // Código a ser executado se a verificação for verdadeira
+        this.closeModal();
+        this.closeQuestionModal();
+        this.alertMessage = 'Você já se candidatou a essa vaga.';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+        return; // Retorna para cancelar a operação
       }
+    }
 
-      // Verificar se o currículo existe
-      const hasCurriculum = await this.checkCurriculum(userId);
-      if (!hasCurriculum) {
-        this.showAlertMessage(
-          'É necessário ter um currículo cadastrado para se candidatar.',
-          'Erro',
-          'alert alert-danger',
-          'bi bi-x-circle'
-        );
-        return;
-      }
+    if (!this.userId) {
+      this.alertMessage = 'Você precisa estar logado para se candidatar.';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+      return;
+    }
 
-      // Obter perguntas associadas à vaga
-      const questions = await this.getQuestions(jobId.toString());
+    const exist = await this.checkCurriculum(this.userId);
 
-      if (questions && questions.length > 0) {
-        // Abrir modal para responder perguntas
+    if (exist) {
+      if (questions !== undefined && questions.length > 0) {
         this.closeModal();
         this.openQuestionModal();
 
-        // Salvar respostas
         for (const [index, resposta] of this.respostas.entries()) {
-          const questionId = this.questionData[index]?.id;
-          if (questionId) {
-            const answerBody = {
-              answer: resposta,
-              questionId,
-              userId,
-            };
+          const questionId = this.questionData[index].id;
+          const body = {
+            answer: resposta,
+            questionId: questionId,
+            userId: this.userId,
+          };
 
+          try {
             await this.http
               .post(
                 'https://backend-production-ff1f.up.railway.app/answer',
-                answerBody
+                body
               )
               .toPromise();
+            const applicationBody = { userId, vacancyId };
+
+            await this.http
+              .post<IApplication>(
+                'https://backend-production-ff1f.up.railway.app/application',
+                applicationBody
+              )
+              .toPromise();
+
+            this.closeQuestionModal();
+            this.closeModal();
+            this.jobService.removeCanceledJob(jobId);
+            this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
+            this.alertClass = 'alert alert-success';
+            this.alertTitle = 'Sucesso';
+            this.alertIconClass = 'bi bi-check-circle';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+            return
+          } catch (error) {
+            console.error(`Erro ao enviar resposta ou candidatura: ${error}`);
           }
         }
+      } else {
+        const body = { userId, vacancyId };
+
+        try {
+          await this.http
+            .post<IApplication>(
+              'https://backend-production-ff1f.up.railway.app/application',
+              body
+            )
+            .toPromise();
+          this.closeModal();
+          this.jobService.removeCanceledJob(jobId);
+          this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+        } catch (error) {
+          console.error(`Erro ao adicionar candidatura: ${error}`);
+        }
       }
-
-      // Salvar candidatura
-      const applicationBody = { userId, vacancyId };
-      await this.http
-        .post<IApplication>(
-          'https://backend-production-ff1f.up.railway.app/application',
-          applicationBody
-        )
-        .toPromise();
-
-      // Sucesso: Fechar modais e exibir mensagem
-      this.closeModal();
-      this.closeQuestionModal();
-      this.jobService.removeCanceledJob(jobId);
-      this.showAlertMessage(
-        'Parabéns, candidatura realizada com sucesso!',
-        'Sucesso',
-        'alert alert-success',
-        'bi bi-check-circle'
-      );
-    } catch (error) {
-      console.error(`Erro ao realizar candidatura: ${error}`);
     }
   }
 
@@ -427,4 +434,12 @@ export class JobCardComponent implements OnInit {
   resetAlertAfterDelay() {
     setTimeout(() => (this.showAlert = false), 3000);
   }
+  private closeModals() {
+    this.closeModal();
+    this.closeQuestionModal();
+  }
+
+
 }
+
+

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { ICurriculum } from '../../models/curriculum.interface';
 import { CurriculumService } from '../../services/curriculum/curriculum.service';
+import { IUser } from '../../models/user.interface';
+import { UserFormService } from '../../services/user/user-form.service';
 
 @Component({
   selector: 'app-curriculum-form-4',
@@ -19,19 +21,58 @@ export class CurriculumForm4Component implements OnInit {
   showAlert: boolean = false;
   curriculumData!: ICurriculum;
   adictionalDataForm!: FormGroup;
+  confirmedPassword!: string;
+  userId = this.userService.getUserData()?.id
+  user!: IUser;
+  isModalPasswordOpen!: boolean;
+  actionToPerform!: () => void;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
+    private userFormService: UserFormService,
     private userService: UserAuthService,
     private curriculumService: CurriculumService
   ) {}
 
-  ngOnInit(): void {
-    this.getCurriculumData();
+  getUserData() {
+    const id = this.userId
+    this.userFormService.getUserData(id).subscribe(
+      (response: IUser) => {
+        this.user = response;
+      },
+      (error) => {
+        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+      }
+    );
   }
 
+  ngOnInit(): void {
+    this.getUserData()
+    this.getCurriculumData();
+  }
+  openModalPassword(action: () => void) {
+    this.actionToPerform = action;
+    this.isModalPasswordOpen = true;
+  }
+  closeModalPassword() {
+    this.isModalPasswordOpen = false;
+    this.confirmedPassword = '';
+  }
+  confirmPassword() {
+    if (this.user.password === this.confirmedPassword) {
+      this.actionToPerform();
+      this.closeModalPassword();
+    } else {
+      this.alertMessage = 'Senha incorreta!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
   createForm() {
     this.adictionalDataForm = this.fb.group({
       attached: [''],

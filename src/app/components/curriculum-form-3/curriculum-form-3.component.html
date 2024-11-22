@@ -88,7 +88,6 @@
             <option value="Presencial">Presencial</option>
             <option value="Online">Online</option>
             <option value="Semipresencial">Semipresencial</option>
-            <option value="EAD">EAD</option>
             <option value="Outros">Outros</option>
           </select>
         </div>
@@ -171,8 +170,12 @@
           class="list-group-item"
           *ngFor="let competence of competencies.controls; let i = index"
         >
-          {{ competence.value.name}}
-          <button type="button" class="btn btn-sm float-end" (click)="removeCompetence(i)">
+          {{ competence.value.name }}
+          <button
+            type="button"
+            class="btn btn-sm float-end"
+            (click)="removeCompetence(i)"
+          >
             X
           </button>
         </li>

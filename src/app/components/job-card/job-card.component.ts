@@ -23,6 +23,8 @@ import {
   ICurriculum,
 } from '../../models/curriculum.interface';
 import { AnswersService } from '../../services/answers/answers.service';
+import { ICompany } from '../../models/company.interface';
+import { companyFormService } from '../../services/company/company-form.service';
 
 @Component({
   selector: 'app-job-card',
@@ -44,8 +46,10 @@ export class JobCardComponent implements OnInit {
   userType: string | null = null;
   isModalOpen = false;
   selectedJob: IJob | null = null;
+  companyData = this.authService.getCompanyData();
   isModalQuestionOpen = false;
   isModalApplicationOpen!: boolean;
+  company!: ICompany;
   isModalCurriculumOpen!: boolean;
   respostas: string[] = [];
   applications: IApplication[] = [];
@@ -57,6 +61,10 @@ export class JobCardComponent implements OnInit {
   selectedCompetences: ICompetences[] = [];
   questions: { question: IQuestion }[] = [];
   answers!: IAnswer;
+  confirmedPassword!: string;
+  isModalPasswordOpen!: boolean;
+  actionToPerform!: () => void;
+  user!: IUser;
 
   constructor(
     private authService: UserAuthService,
@@ -64,6 +72,7 @@ export class JobCardComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private userService: UserFormService,
+    private companyService: companyFormService,
     private curriculumService: CurriculumService,
     private jobService: JobService,
     private questionService: QuestionsService,
@@ -73,11 +82,92 @@ export class JobCardComponent implements OnInit {
   ngOnInit(): void {
     this.userType = this.authService.getUserType();
   }
+  getUser() {
+    const id = this.userId;
+    this.userService.getUserData(id).subscribe(
+      (response: IUser) => {
+        this.user = response;
+      },
+      (error) => {
+        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+      }
+    );
+  }
+  getCompanyData() {
+    if (this.companyData?.id) {
+      this.companyService.getUserData(this.companyData.id).subscribe(
+        (data) => {
+          this.company = data; // Atribui os dados retornados à propriedade
+        },
+        (error) => {
+          console.error(`Erro ao buscar os dados da empresa: ${error}`);
+        }
+      );
+    } else {
+      console.error('ID da empresa não definido');
+    }
+  }
+  prepareModalPassword(action: (...args: any[]) => void, ...params: any[]) {
+    this.openModalPassword(() => action.apply(this, params));
+  }
+
 
   // Abre o modal e define o job selecionado
   openModal(job: IJob) {
+    if(!this.authService.isAuthenticated()){
+      this.alertMessage = 'Você precisa estar logado para acessar mais informações!';
+        this.alertClass = 'alert alert-warning';
+        this.alertTitle = 'Ops!';
+        this.alertIconClass = 'bi bi-exclamation-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+        return
+    }
     this.selectedJob = job;
     this.isModalOpen = true;
+  }
+  confirmPassword() {
+    if (this.userType === 'user') {
+      if (this.user.password === this.confirmedPassword) {
+        this.actionToPerform();
+        this.closeModalPassword();
+      } else {
+        this.alertMessage = 'Senha incorreta!';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+      }
+    } else if (this.userType === 'company') {
+      if (this.company.password === this.confirmedPassword) {
+        this.actionToPerform();
+        this.closeModalPassword();
+      } else {
+        this.alertMessage = 'Senha incorreta!';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+      }
+    }
+  }
+  openModalPassword(action: () => void) {
+    if (this.userType === 'user') {
+      this.getUser();
+    } else if (this.userType === 'company') {
+      this.getCompanyData();
+    }
+    this.closeApplicationModal();
+    this.closeCurriculumModal();
+    this.closeModal();
+    this.actionToPerform = action;
+    this.isModalPasswordOpen = true;
+  }
+  closeModalPassword() {
+    this.isModalPasswordOpen = false;
+    this.confirmedPassword = '';
   }
 
   // Fecha o modal
@@ -140,10 +230,10 @@ export class JobCardComponent implements OnInit {
       .subscribe(
         (response) => {
           this.closeModal();
-          this.alertMessage = 'Você precisa estar logado para se candidatar.';
-          this.alertClass = 'alert alert-danger';
+          this.alertMessage = 'Vaga cancelada com sucesso!.';
+          this.alertClass = 'alert alert-success';
           this.alertTitle = 'Erro';
-          this.alertIconClass = 'bi bi-x-circle';
+          this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
         },
@@ -152,7 +242,30 @@ export class JobCardComponent implements OnInit {
         }
       );
   }
-  cancelJob(jobId: number) {}
+  cancelJob(jobId: number) {
+    const body = {
+      isActive: false,
+    };
+    this.http
+      .put<IJob>(
+        `https://backend-production-ff1f.up.railway.app/vacancyIsFilled/${jobId}`,
+        body
+      )
+      .subscribe(
+        (response) => {
+          this.closeModal();
+          this.alertMessage = 'Vaga cancelada com sucesso!.';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Erro';
+          this.alertIconClass = 'bi bi-check-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
+        },
+        (error) => {
+          console.error(`Erro ao finalizar vaga ${error}`);
+        }
+      );
+  }
 
   getUserData(userId: number) {
     this.userService.getUserData(userId).subscribe(
@@ -314,7 +427,7 @@ export class JobCardComponent implements OnInit {
             this.alertIconClass = 'bi bi-check-circle';
             this.showAlert = true;
             this.resetAlertAfterDelay();
-            return
+            return;
           } catch (error) {
             console.error(`Erro ao enviar resposta ou candidatura: ${error}`);
           }
@@ -438,8 +551,4 @@ export class JobCardComponent implements OnInit {
     this.closeModal();
     this.closeQuestionModal();
   }
-
-
 }
-
-

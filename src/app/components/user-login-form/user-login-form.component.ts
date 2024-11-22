@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -42,24 +41,32 @@ export class UserLoginFormComponent implements OnInit {
       this.http.get<IUser[]>(apiUrl).subscribe(
         (response) => {
           const user = response.find((user) => user.email === formData.email);
-          if (user && user.password === formData.password) {
-            this.alertMessage = `Seja bem-vindo(a) ${user.name}`;
-            this.alertClass = 'alert alert-success';
-            this.alertTitle = 'Sucesso';
-            this.alertIconClass = 'bi bi-check-circle';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
+          if (user && user.email === formData.email) {
+            if (user && user.password === formData.password) {
+              this.alertMessage = `Seja bem-vindo(a) ${user.name}`;
+              this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Sucesso';
+              this.alertIconClass = 'bi bi-check-circle';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
 
-            setTimeout(() => {
-              // Armazena os dados do usuário no AuthService
-              this.authService.login(user);
+              setTimeout(() => {
+                // Armazena os dados do usuário no AuthService
+                this.authService.login(user);
 
-              // Navega para a próxima página após o tempo do alerta
-              this.router.navigate(['/vagas']);
-            }, 2000);
-
+                // Navega para a próxima página após o tempo do alerta
+                this.router.navigate(['/vagas']);
+              }, 2000);
+            } else {
+              this.alertMessage = 'A senha informada está incorreta!';
+              this.alertTitle = 'Erro';
+              this.alertIconClass = 'bi bi-x-circle';
+              this.alertClass = 'alert alert-danger';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+            }
           } else {
-            this.alertMessage = 'Usuário ou senha incorretos!';
+            this.alertMessage = 'O email informado está incorreto!';
             this.alertTitle = 'Erro';
             this.alertIconClass = 'bi bi-x-circle';
             this.alertClass = 'alert alert-danger';
@@ -72,7 +79,7 @@ export class UserLoginFormComponent implements OnInit {
         }
       );
     } else {
-      this.alertMessage = 'Preencha os dados corretamente!';
+      this.alertMessage = 'Preencha os campos antes de fazer login!';
       this.alertClass = 'alert alert-danger';
       this.alertTitle = 'Erro';
       this.alertIconClass = 'bi bi-x-circle';

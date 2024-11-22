@@ -37,7 +37,7 @@ export class UserFormService {
     const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${id}`;
     return this.http.delete<IUser>(apiUrl).pipe(
       catchError((error: any) => {
-        console.error(`Erro ao delerar usuário ${error}`);
+        console.error(`Erro ao deletar usuário ${error}`);
         return throwError(error);
       })
     );

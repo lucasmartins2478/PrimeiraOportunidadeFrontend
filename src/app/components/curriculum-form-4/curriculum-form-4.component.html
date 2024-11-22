@@ -1,6 +1,12 @@
-<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
+<app-alert
+  [message]="alertMessage"
+  [class]="alertClass"
+  [isVisible]="showAlert"
+  [title]="alertTitle"
+  [iconClass]="alertIconClass"
+></app-alert>
 
-<form *ngIf="adictionalDataForm" [formGroup]="adictionalDataForm" (ngSubmit)="onSubmit()" class="form">
+<form *ngIf="adictionalDataForm" [formGroup]="adictionalDataForm" class="form">
   <h3>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +52,7 @@
       class="form-check-input"
       type="checkbox"
       value=""
-      id="flexCheckDefault"
+      id="termos_uso"
     />
     <label class="form-check-label" for="flexCheckDefault">
       Termos de Uso
@@ -57,14 +63,18 @@
       class="form-check-input"
       type="checkbox"
       value=""
-      id="flexCheckDefault"
+      id="politica_privacidade"
     />
     <label class="form-check-label" for="flexCheckdefault">
       Política de Privacidade
     </label>
   </div>
 
-  <button class="btn btn-primary">
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="openModalPassword(onSubmit)"
+  >
     Finalizar cadastro<svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"
@@ -122,3 +132,47 @@
     </svg>
   </div>
 </form>
+
+<div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
+<div class="modal" tabindex="-1" *ngIf="isModalPasswordOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Confirme sua senha para prosseguir</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <label class="form-label"
+              >Informe sua senha para confirmar que é você</label
+            >
+            <input
+              type="password"
+              name="passwordUser"
+              id="passwordUser"
+              placeholder="Senha"
+              class="form-control"
+              [(ngModel)]="confirmedPassword"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModalPassword()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="confirmPassword()"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

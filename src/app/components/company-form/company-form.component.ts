@@ -20,6 +20,9 @@ export class CompanyFormComponent implements OnInit {
   company!: ICompany;
   companyForm!: FormGroup;
   companyData = this.authService.getCompanyData();
+  confirmedPassword!: string;
+  isModalPasswordOpen!: boolean;
+  actionToPerform!: () => void;
 
   constructor(
     private fb: FormBuilder,
@@ -72,6 +75,43 @@ export class CompanyFormComponent implements OnInit {
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
+  }
+  openModalPassword(action: () => void) {
+    this.actionToPerform = action;
+    this.isModalPasswordOpen = true;
+  }
+  closeModalPassword() {
+    this.isModalPasswordOpen = false;
+    this.confirmedPassword = '';
+  }
+  confirmPassword() {
+    if (this.company.password === this.confirmedPassword) {
+      this.actionToPerform();
+      this.closeModalPassword();
+    } else {
+      this.alertMessage = 'Senha incorreta!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+  deleteCompany() {
+    const id = this.company.id;
+    this.companyFormService.deleteCompanyData(id).subscribe(
+      (response) => {
+        this.alertMessage = 'Dados excluídos com sucesso!';
+        this.alertClass = 'alert alert-success';
+        this.alertTitle = 'Concluído';
+        this.alertIconClass = 'bi bi-check-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+      },
+      (error) => {
+        console.error(`Erro ao deletar empresa ${error}`);
+      }
+    );
   }
 
   // Método chamado ao selecionar um arquivo de imagem
@@ -165,7 +205,9 @@ export class CompanyFormComponent implements OnInit {
   async verifyCnpj(cnpj: string): Promise<boolean> {
     try {
       const response = await this.http
-        .get<ICompany[]>('https://backend-production-ff1f.up.railway.app/companies')
+        .get<ICompany[]>(
+          'https://backend-production-ff1f.up.railway.app/companies'
+        )
         .toPromise();
 
       if (response && Array.isArray(response)) {

@@ -37,7 +37,15 @@ export class companyFormService {
       })
     );
   }
-
+  deleteCompanyData(id: number | undefined): Observable<ICompany> {
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/company/${id}`;
+    return this.http.delete<ICompany>(apiUrl).pipe(
+      catchError((error: any) => {
+        console.error(`Erro ao deletar empresa ${error}`);
+        return throwError(error);
+      })
+    );
+  }
 
   setFormData(data: any) {
     this.formData = { ...this.formData, ...data };

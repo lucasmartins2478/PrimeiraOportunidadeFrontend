@@ -21,6 +21,9 @@ export class UserFormComponent implements OnInit {
   user!: IUser;
   userForm!: FormGroup;
   userData = this.authService.getUserData();
+  confirmedPassword!: string;
+  isModalPasswordOpen!: boolean;
+  actionToPerform!: () => void;
 
   constructor(
     private fb: FormBuilder,
@@ -46,10 +49,7 @@ export class UserFormComponent implements OnInit {
 
   createUserForm(user: IUser) {
     this.userForm = this.fb.group({
-      name: [
-        this.user?.name || '',
-        [Validators.required],
-      ],
+      name: [this.user?.name || '', [Validators.required]],
       phoneNumber: [
         this.user?.phoneNumber || '',
         [Validators.required, Validators.minLength(9)],
@@ -67,6 +67,14 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  openModalPassword(action: () => void) {
+    this.actionToPerform = action;
+    this.isModalPasswordOpen = true;
+  }
+  closeModalPassword() {
+    this.isModalPasswordOpen = false;
+    this.confirmedPassword = '';
+  }
   ngOnInit(): void {
     if (this.isAuthenticated()) {
       this.getUserData();
@@ -89,9 +97,9 @@ export class UserFormComponent implements OnInit {
         const exists = await this.verifyEmail(formData.email);
         if (exists) {
           this.alertMessage = 'Email já vinculado a uma conta existente!';
-          this.alertClass = 'alert alert-danger';
-          this.alertTitle = 'Erro';
-          this.alertIconClass = 'bi bi-x-circle';
+          this.alertClass = 'alert alert-warning';
+          this.alertTitle = 'Ops!';
+          this.alertIconClass = 'bi bi-exclamation-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
         } else {
@@ -159,11 +167,15 @@ export class UserFormComponent implements OnInit {
         this.http.put<IUser>(apiUrl, body).subscribe(
           (response) => {
             this.userFormService.setFormData(this.userForm.value);
-            this.alertMessage = 'Usuário cadastrado com sucesso!';
-            this.alertClass = 'success';
+            this.alertMessage = 'Usuário atualizado com sucesso!';
+            this.alertClass = 'alert alert-success';
+            this.alertTitle = 'Sucesso';
+            this.alertIconClass = 'bi bi-check-circle';
             this.showAlert = true;
             this.resetAlertAfterDelay();
-            this.router.navigate(['/vagas']);
+            setTimeout(() => {
+              this.router.navigate(['/vagas']);
+            }, 2000);
           },
           (error) => {
             console.log(`erro ao atualizar usuário ${error}`);
@@ -181,11 +193,15 @@ export class UserFormComponent implements OnInit {
         this.http.put<IUser>(apiUrl, body).subscribe(
           (response) => {
             this.userFormService.setFormData(this.userForm.value);
-            this.alertMessage = 'Usuário cadastrado com sucesso!';
+            this.alertMessage = 'Usuário atualizado com sucesso!';
             this.alertClass = 'alert alert-success';
+            this.alertTitle = 'Sucesso';
+            this.alertIconClass = 'bi bi-check-circle';
             this.showAlert = true;
             this.resetAlertAfterDelay();
-            this.router.navigate(['/vagas']);
+            setTimeout(() => {
+              this.router.navigate(['/vagas']);
+            }, 2000);
           },
           (error) => {
             console.log(`erro ao atualizar usuário ${error}`);
@@ -218,6 +234,20 @@ export class UserFormComponent implements OnInit {
       return false;
     }
   }
+  confirmPassword() {
+    if (this.user.password === this.confirmedPassword) {
+      this.actionToPerform();
+      this.closeModalPassword();
+    } else {
+      this.alertMessage = 'Senha incorreta!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+
   deleteUser() {
     const id = this.userData?.id;
 
@@ -227,10 +257,10 @@ export class UserFormComponent implements OnInit {
           // Somente após a exclusão bem-sucedida do currículo, exclua o usuário
           this.userFormService.deleteUserData(id).subscribe(
             (response) => {
-              this.alertMessage = 'Dados excluídos!';
-              this.alertClass = 'alert alert-danger';
-              this.alertTitle = 'Erro';
-              this.alertIconClass = 'bi bi-x-circle';
+              this.alertMessage = 'Dados excluídos com sucesso!';
+              this.alertClass = 'alert alert-success';
+              this.alertTitle = 'Concluído';
+              this.alertIconClass = 'bi bi-check-circle';
               this.showAlert = true;
               this.resetAlertAfterDelay();
 
@@ -252,8 +282,8 @@ export class UserFormComponent implements OnInit {
       // Se não houver currículo para excluir, apenas exclua o usuário
       this.userFormService.deleteUserData(id).subscribe(
         (response) => {
-          this.alertMessage = 'Dados excluídos!';
-          this.alertClass = 'alert alert-danger';
+          this.alertMessage = 'Dados excluídos com sucesso!';
+          this.alertClass = 'alert alert-success';
           this.alertTitle = 'Erro';
           this.alertIconClass = 'bi bi-x-circle';
           this.showAlert = true;

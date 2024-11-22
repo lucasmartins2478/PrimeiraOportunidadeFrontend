@@ -6,6 +6,8 @@ import { UserAuthService } from '../../services/auth/auth.service';
 import { IJob, IQuestion } from '../../models/job.interface';
 import { JobService } from '../../services/job/job.service';
 import { QuestionsService } from '../../services/questions/questions.service';
+import { ICompany } from '../../models/company.interface';
+import { companyFormService } from '../../services/company/company-form.service';
 
 @Component({
   selector: 'app-job-form',
@@ -20,10 +22,14 @@ export class JobFormComponent implements OnInit {
   showAlert: boolean = false;
   companyData = this.authService.getCompanyData();
   jobData!: IJob;
+  company!: ICompany
   questionData: IQuestion[] = [];
   jobId!: number | null;
   jobForm!: FormGroup;
   isEditing: boolean = false;
+  confirmedPassword!: string;
+  isModalPasswordOpen!: boolean;
+  actionToPerform!: () => void;
 
   constructor(
     private fb: FormBuilder,
@@ -31,12 +37,15 @@ export class JobFormComponent implements OnInit {
     private router: Router,
     private authService: UserAuthService,
     private route: ActivatedRoute,
+    private companyService: companyFormService,
     private jobService: JobService,
     private questionService: QuestionsService
   ) {
     // Inicializando o jobForm
   }
+
   ngOnInit(): void {
+    this.getCompanyData()
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.jobId = +idParam; // Converte `string` para `number`
@@ -46,6 +55,23 @@ export class JobFormComponent implements OnInit {
       this.createEmptyForm();
     }
   }
+  getCompanyData() {
+    if (this.companyData?.id) {
+      this.companyService.getUserData(this.companyData.id).subscribe(
+        (data) => {
+
+          this.company = data; // Atribui os dados retornados à propriedade
+          console.log(this.company)
+        },
+        (error) => {
+          console.error(`Erro ao buscar os dados da empresa: ${error}`);
+        }
+      );
+    } else {
+      console.error('ID da empresa não definido');
+    }
+  }
+
   loadJobDataAndQuestions(id: string): void {
     this.jobService.getJobById(id).subscribe(
       (jobResponse) => {
@@ -133,6 +159,27 @@ export class JobFormComponent implements OnInit {
   // Getter para acessar o FormArray de perguntas
   get perguntas(): FormArray {
     return this.jobForm.get('perguntas') as FormArray;
+  }
+  openModalPassword(action: () => void) {
+    this.actionToPerform = action;
+    this.isModalPasswordOpen = true;
+  }
+  closeModalPassword() {
+    this.isModalPasswordOpen = false;
+    this.confirmedPassword = '';
+  }
+  confirmPassword() {
+    if (this.company.password === this.confirmedPassword) {
+      this.actionToPerform();
+      this.closeModalPassword();
+    } else {
+      this.alertMessage = 'Senha incorreta!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
   }
 
   // Método chamado quando o formulário for enviado
@@ -236,9 +283,16 @@ export class JobFormComponent implements OnInit {
     }
   }
 
+  openPasswordModal() {
+    this.isModalPasswordOpen = true;
+  }
+  closePasswordModal() {
+    this.isModalPasswordOpen = false;
+  }
   enviarPerguntas(vacancyId: number) {
     const questions = this.perguntas.value; // Obtém o array de perguntas do formulário
-    const apiUrl = 'https://backend-production-ff1f.up.railway.app/vacancy/questions'; // Altere conforme sua API
+    const apiUrl =
+      'https://backend-production-ff1f.up.railway.app/vacancy/questions'; // Altere conforme sua API
 
     // Atualiza ou adiciona perguntas existentes
     questions.forEach((pergunta: string, index: number) => {

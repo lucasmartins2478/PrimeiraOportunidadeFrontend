@@ -1,4 +1,4 @@
-.form{
+.form {
   display: flex;
   flex-direction: column;
   max-width: 37rem;
@@ -7,38 +7,107 @@
   margin-bottom: 5.5rem;
   padding: 1rem;
 }
-h3{
+h3 {
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
-.close-form{
+.modal-footer {
+  display: flex;
+  justify-content: space-around;
+}
+.modal-footer button {
+  width: 10rem;
+}
+.close-form {
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
 }
-.close-button{
+.modal {
+  z-index: 10000000;
+}
+.button-wrapper {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+/* Estilo do modal */
+.modal {
+  display: block; /* Garantir que o modal seja exibido corretamente */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100000;
+  width: 100%;
+  height: 20rem;
+  max-width: 600px;
+  border-radius: 0.5rem;
+  background-color: white;
+}
+
+.modal-dialog {
+  margin: 0;
+  max-width: none;
+  width: 100%;
+  height: 100%;
+}
+
+.modal-content {
+  padding: 20px;
+  height: 100%;
+}
+
+.modal-backdrop {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo para o botão de fechar */
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+}
+.modal-header button .bi-pencil-fill {
+  color: #f46811;
+}
+.modal-header button {
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .modal {
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+.close-button {
   background-color: transparent;
 }
-button{
+.btn-primary {
   background-color: #004aad;
 }
-svg{
+svg {
   font-weight: 600;
   cursor: pointer;
 }
-p{
+p {
   text-align: center;
 }
-a{
-  color: #FF7B2A;
+a {
+  color: #ff7b2a;
   text-decoration: none;
   margin-left: 0.5rem;
 }
-@media(max-width:1244px){
-  h3{
+@media (max-width: 1244px) {
+  h3 {
     gap: 3px;
   }
 }

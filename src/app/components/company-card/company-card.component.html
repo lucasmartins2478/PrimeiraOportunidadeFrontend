@@ -1,4 +1,9 @@
 <div>
-  <img [src]="company.logo" alt="">
+  <ng-container *ngIf="company.logo == ''; else generic ">
+    <img [src]="company.logo" alt="">
+  </ng-container>
+  <ng-template #generic>
+    <i class="bi bi-briefcase-fill"></i>
+  </ng-template>
 </div>
 <h4>{{company.name}}</h4>

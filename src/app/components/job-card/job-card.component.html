@@ -51,7 +51,7 @@
           <button
             type="button"
             class="btn-close"
-            (click)="cancelJob(job.id)"
+            (click)="prepareModalPassword(cancelJob, job.id)"
             *ngIf="userType === 'company'"
           >
             <i class="bi bi-trash3-fill"></i>
@@ -78,7 +78,7 @@
             type="button"
             class="btn btn-danger"
             *ngIf="userType === 'user'"
-            (click)="cancelApplication()"
+            (click)="prepareModalPassword(cancelApplication)"
           >
             Cancelar
           </button>
@@ -105,7 +105,7 @@
             job.isActive == true &&
             job.isFilled == false
           "
-          (click)="finishJob(job.id)"
+          (click)="prepareModalPassword(finishJob, job.id)"
         >
           Preencher Vaga
         </button>
@@ -284,6 +284,50 @@
           (click)="closeCurriculumModal()"
         >
           Sair
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Vertically centered modal -->
+<div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
+<div class="modal" id="password" tabindex="-1" *ngIf="isModalPasswordOpen">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>Confirme sua senha para prosseguir</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <label class="form-label"
+              >Informe sua senha para confirmar que é você</label
+            >
+            <input
+              type="password"
+              name="passwordUser"
+              id="passwordUser"
+              placeholder="Senha"
+              class="form-control"
+              [(ngModel)]="confirmedPassword"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeModalPassword()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="confirmPassword()"
+        >
+          Confirmar
         </button>
       </div>
     </div>

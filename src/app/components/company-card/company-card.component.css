@@ -7,6 +7,10 @@ div{
   align-items: center;
   justify-content: center;
 }
+i{
+  font-size: 80px;
+  color: #cad0f1;
+}
 img{
   width: 120px;
   height: 120px;

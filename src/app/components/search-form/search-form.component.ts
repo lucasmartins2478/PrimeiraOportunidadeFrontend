@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-search-form',
@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrl: './search-form.component.css'
 })
 export class SearchFormComponent {
+  @Output() searchEvent = new EventEmitter<string>();
+
+  onSearch(value: string) {
+    this.searchEvent.emit(value); // Emite o valor da pesquisa para o componente pai
+  }
 
 }

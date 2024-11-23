@@ -2,12 +2,12 @@
   <input
     class="form-control me-2"
     type="search"
-    placeholder="Pesquise por palavras chaves, modalidade ou localização"
+    placeholder="Pesquise por palavras-chave, modalidade ou localização"
     aria-label="Search"
-
-
+    (input)="onSearch(searchInput.value)"
+    #searchInput
   />
-  <button type="submit">
+  <button type="submit" (click)="$event.preventDefault()">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"

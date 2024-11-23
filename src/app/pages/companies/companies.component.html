@@ -1,13 +1,13 @@
 <app-navbar></app-navbar>
 <div class="search-wrapper">
   <h2>Empresas</h2>
-  <app-search-form></app-search-form>
+  <app-search-form (searchEvent)="onSearch($event)"></app-search-form>
 </div>
 <div class="card-wrapper">
   <div class="row">
     <app-company-card
       class="col-6 col-md-3"
-      *ngFor="let company of companies"
+      *ngFor="let company of filteredCompanies"
       [company]="company"
     ></app-company-card>
   </div>

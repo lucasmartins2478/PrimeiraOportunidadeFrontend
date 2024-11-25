@@ -34,7 +34,7 @@ export class UserFormService {
     );
   }
   deleteUserData(id: number | undefined): Observable<IUser> {
-    const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${id}`;
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${id}/`;
     return this.http.delete<IUser>(apiUrl).pipe(
       catchError((error: any) => {
         console.error(`Erro ao deletar usuário ${error}`);

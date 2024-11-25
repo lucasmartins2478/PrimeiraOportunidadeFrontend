@@ -59,14 +59,14 @@
         </div>
       </div>
       <div class="modal-body">
-        <h6><b>Empresa:</b> {{ selectedJob?.companyName }}</h6>
-        <h6><b>Modalidade:</b> {{ selectedJob?.modality }}</h6>
-        <h6><b>Localidade:</b> {{ selectedJob?.locality }}</h6>
+        <h6><b>Empresa:</b> {{ job?.companyName }}</h6>
+        <h6><b>Modalidade:</b> {{ job?.modality }}</h6>
+        <h6><b>Localidade:</b> {{ job?.locality }}</h6>
         <h6><b>Estado:</b> {{ selectedJob?.uf }}</h6>
         <h6><b>Nível da vaga:</b> {{ selectedJob?.level }}</h6>
         <h6><b>Contato:</b> {{ selectedJob?.contact }}</h6>
-        <h6><b>Requisitos:</b> {{ selectedJob?.requirements }}</h6>
-        <h6><b>Benefícios:</b> {{ selectedJob?.benefits }}</h6>
+        <h6><b>Requisitos:</b> {{ job?.requirements }}</h6>
+        <h6><b>Benefícios:</b> {{ job?.benefits }}</h6>
         <h6><b>Descrição da vaga:</b> {{ selectedJob?.description }}</h6>
       </div>
       <div class="modal-footer">
@@ -78,7 +78,7 @@
             type="button"
             class="btn btn-danger"
             *ngIf="userType === 'user'"
-            (click)="prepareModalPassword(cancelApplication)"
+            (click)="prepareModalPassword(cancelApplication, selectedJob?.id)"
           >
             Cancelar
           </button>
@@ -100,14 +100,10 @@
         <button
           type="button"
           class="btn btn-primary"
-          *ngIf="
-            userType === 'company' &&
-            job.isActive == true &&
-            job.isFilled == false
-          "
-          (click)="prepareModalPassword(finishJob, job.id)"
+          (click)="prepareModalPassword(finishJob, job?.id)"
+          *ngIf="userType === 'company' && job.isActive == true && job.isFilled == false"
         >
-          Preencher Vaga
+          Preencher vaga
         </button>
       </div>
     </div>

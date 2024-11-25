@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 <div class="search-wrapper">
   <h2>Minhas Vagas</h2>
-  <app-search-form></app-search-form>
+  <app-search-form (searchEvent)="onSearch($event)"></app-search-form>
 </div>
 <div class="card-wrapper" *ngIf="filteredJobs.length > 0">
   <div class="row">
@@ -10,7 +10,7 @@
     </div>
     <app-job-card
       class="col-9 col-md-4"
-      *ngFor="let job of filteredJobs"
+      *ngFor="let job of searchedJobs"
       [job]="job"
     ></app-job-card>
   </div>
@@ -22,7 +22,7 @@
     </div>
     <app-job-card
       class="col-9 col-md-4"
-      *ngFor="let job of canceledJobs"
+      *ngFor="let job of searchedJobs"
       [job]="job"
     ></app-job-card>
   </div>

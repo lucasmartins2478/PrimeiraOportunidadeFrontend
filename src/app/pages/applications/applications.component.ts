@@ -11,11 +11,12 @@ import { IApplication } from '../../models/application.interface'; // Adicione i
   styleUrl: './applications.component.css',
 })
 export class ApplicationsComponent implements OnInit {
-  jobs: IJob[] = [];
-  filteredJobs: { job: IJob; applicationId: number }[] = []; // Armazena objetos com job e applicationId
+  jobs: IJob[]  = [];
+  filteredJobs: IJob[] = []; // Armazena objetos com job e applicationId
   filteredIds: number[] = [];
   canceledJobs: IJob[] = [];
   finishedJobs: IJob[] = [];
+  searchedJobs: IJob[] = []
   targetId = this.userService.getUserData()?.id;
 
   constructor(
@@ -24,57 +25,65 @@ export class ApplicationsComponent implements OnInit {
     private jobService: JobService
   ) {}
 
-  async getJobs(): Promise<void> {
+  // Método para buscar todas as vagas e filtrar as candidaturas
+  async fetchJobs(): Promise<void> {
     try {
-      const response = await this.jobService.getVagas().toPromise();
+      // Buscar todas as vagas
+      const jobsResponse = await this.jobService.getVagas().toPromise();
+      this.jobs = jobsResponse || [];
 
-      this.jobs = response || []; // Garante que jobs seja um array, mesmo que a resposta seja undefined
+      // Buscar os IDs das candidaturas
+      const applicationsResponse = await this.jobService
+        .getApplicationsByUserId(this.targetId)
+        .toPromise();
+      this.filteredIds =
+        applicationsResponse?.map((application) => application.vacancyId) || [];
+
+      // Filtrar as vagas com base nos IDs
+      this.filteredJobs = this.jobs.filter((job) =>
+        this.filteredIds.includes(job.id)
+      );
+      this.canceledJobs = this.jobs.filter(
+        (job) => job.isActive == false && job.isFilled == false
+      );
+      this.finishedJobs = this.filteredJobs.filter(
+        (job) => job.isFilled == true || job.isActive == false
+      );
+      this.searchedJobs = this.filteredJobs
     } catch (error) {
-      console.error('Erro ao buscar as vagas:', error);
-      this.jobs = []; // Em caso de erro, inicializa como array vazio
+      console.error('Erro ao buscar dados:', error);
+      this.filteredJobs = []; // Inicializar como vazio em caso de erro
     }
   }
 
-  async getJobsId(): Promise<void> {
-    try {
-      const response = await this.jobService
-        .getApplicationsByUserId(this.targetId)
-        .toPromise();
-      if (response) {
-        // Filtra para garantir que o job não seja undefined antes de criar o objeto
-        this.filteredJobs = response
-          .map((application) => {
-            const job = this.jobs.find(
-              (job) => job.id === application.vacancyId
-            );
-            return job ? { job, applicationId: application.id } : null; // Retorna null se job for undefined
-          })
-          .filter((item) => item !== null) as {
-          job: IJob;
-          applicationId: number;
-        }[]; // Filtra os nulls e força o tipo correto
-        this.finishedJobs = this.jobs.filter((job) => job.isFilled == true && job.isActive == true)
-      } else {
-        this.filteredJobs = []; // Garante que filteredJobs seja um array válido
-      }
-    } catch (error) {
-      console.error(`Erro ao buscar candidaturas: ${error}`);
-      this.filteredJobs = []; // Em caso de erro, inicializa como array vazio
-    }
+  onSearch(value: string) {
+    const searchValue = this.removeAccents(value.toLowerCase());
+    this.searchedJobs = this.filteredJobs.filter((job) =>
+      this.removeAccents(job.title.toLowerCase()).includes(searchValue) // Compara sem acentos
+    );
+  }
+
+  private removeAccents(text: string): string {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove acentos
+  }
+
+  // Método chamado no ngOnInit
+  ngOnInit(): void {
+    this.fetchJobs();
   }
 
   // Filtra as vagas com base no applicationId e exibe as vagas associadas
   filterJobs(): void {
     // Aqui, já estamos passando tanto a vaga quanto o ID da candidatura
     this.filteredJobs = this.filteredJobs.filter(
-      (item) => item.job !== undefined
+      (item) => item.id !== undefined
     );
   }
 
-  async ngOnInit(): Promise<void> {
-    this.canceledJobs = this.jobService.getCanceledJobs();
-    await this.getJobs();
-    await this.getJobsId();
-    this.filterJobs();
-  }
+  // async ngOnInit(): Promise<void> {
+  //   this.canceledJobs = this.jobService.getCanceledJobs();
+  //   await this.getJobs();
+  //   await this.getJobsId();
+  //   this.filterJobs();
+  // }
 }

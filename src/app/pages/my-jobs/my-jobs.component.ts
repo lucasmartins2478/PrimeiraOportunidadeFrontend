@@ -13,12 +13,23 @@ export class MyJobsComponent implements OnInit {
   filteredJobs: IJob[] = []; // Vagas filtradas
   canceledJobs: IJob[] = [];
   finishedJobs: IJob[] = [];
+  searchedJobs: IJob[] = []
   targetId = this.authService.getCompanyData()?.id; // Substitua pelo ID desejado
 
   constructor(
     private jobService: JobService,
     private authService: UserAuthService
   ) {}
+  onSearch(value: string) {
+    const searchValue = this.removeAccents(value.toLowerCase());
+    this.searchedJobs = this.filteredJobs.filter((job) =>
+      this.removeAccents(job.title.toLowerCase()).includes(searchValue) // Compara sem acentos
+    );
+  }
+
+  private removeAccents(text: string): string {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove acentos
+  }
 
   ngOnInit(): void {
     this.jobService.getVagas().subscribe(
@@ -40,6 +51,7 @@ export class MyJobsComponent implements OnInit {
             job.isActive == true &&
             job.isFilled == false
         );
+        this.searchedJobs = this.filteredJobs
       },
       (error) => {
         console.error('Erro ao buscar as vagas:', error);

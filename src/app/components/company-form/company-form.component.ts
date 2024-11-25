@@ -23,6 +23,7 @@ export class CompanyFormComponent implements OnInit {
   confirmedPassword!: string;
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
+  attemptCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -86,15 +87,24 @@ export class CompanyFormComponent implements OnInit {
   }
   confirmPassword() {
     if (this.company.password === this.confirmedPassword) {
+      this.attemptCount = 0;
       this.actionToPerform();
       this.closeModalPassword();
     } else {
-      this.alertMessage = 'Senha incorreta!';
+      this.attemptCount++; // Incrementa o contador de tentativas.
+      this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
       this.alertClass = 'alert alert-danger';
-      this.alertTitle = 'Erro';
+      this.alertTitle = 'Senha incorreta!';
       this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
+
+      if (this.attemptCount >= 3) {
+        // Fecha o modal e executa o logout após 3 tentativas falhas.
+        this.router.navigate(["/realize-login"])
+        this.closeModalPassword();
+        this.authService.logout(); // Supondo que `logout` está no `authService`.
+      }
     }
   }
   deleteCompany() {

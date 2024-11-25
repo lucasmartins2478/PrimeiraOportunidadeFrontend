@@ -22,10 +22,11 @@ export class CurriculumForm4Component implements OnInit {
   curriculumData!: ICurriculum;
   adictionalDataForm!: FormGroup;
   confirmedPassword!: string;
-  userId = this.userService.getUserData()?.id
+  userId = this.userService.getUserData()?.id;
   user!: IUser;
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
+  attemptCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -37,7 +38,7 @@ export class CurriculumForm4Component implements OnInit {
   ) {}
 
   getUserData() {
-    const id = this.userId
+    const id = this.userId;
     this.userFormService.getUserData(id).subscribe(
       (response: IUser) => {
         this.user = response;
@@ -49,7 +50,7 @@ export class CurriculumForm4Component implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUserData()
+    this.getUserData();
     this.getCurriculumData();
   }
   openModalPassword(action: () => void) {
@@ -65,12 +66,21 @@ export class CurriculumForm4Component implements OnInit {
       this.actionToPerform();
       this.closeModalPassword();
     } else {
-      this.alertMessage = 'Senha incorreta!';
+      this.attemptCount++; // Incrementa o contador de tentativas.
+      this.alertMessage =
+        'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
       this.alertClass = 'alert alert-danger';
-      this.alertTitle = 'Erro';
+      this.alertTitle = 'Senha incorreta!';
       this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
+
+      if (this.attemptCount >= 3) {
+        // Fecha o modal e executa o logout após 3 tentativas falhas.
+        this.router.navigate(['/realize-login']);
+        this.closeModalPassword();
+        this.userService.logout(); // Supondo que `logout` está no `authService`.
+      }
     }
   }
   createForm() {

@@ -22,7 +22,7 @@ export class JobFormComponent implements OnInit {
   showAlert: boolean = false;
   companyData = this.authService.getCompanyData();
   jobData!: IJob;
-  company!: ICompany
+  company!: ICompany;
   questionData: IQuestion[] = [];
   jobId!: number | null;
   jobForm!: FormGroup;
@@ -30,6 +30,7 @@ export class JobFormComponent implements OnInit {
   confirmedPassword!: string;
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
+  attemptCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -45,7 +46,7 @@ export class JobFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCompanyData()
+    this.getCompanyData();
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.jobId = +idParam; // Converte `string` para `number`
@@ -59,9 +60,8 @@ export class JobFormComponent implements OnInit {
     if (this.companyData?.id) {
       this.companyService.getUserData(this.companyData.id).subscribe(
         (data) => {
-
           this.company = data; // Atribui os dados retornados à propriedade
-          console.log(this.company)
+          console.log(this.company);
         },
         (error) => {
           console.error(`Erro ao buscar os dados da empresa: ${error}`);
@@ -173,12 +173,21 @@ export class JobFormComponent implements OnInit {
       this.actionToPerform();
       this.closeModalPassword();
     } else {
-      this.alertMessage = 'Senha incorreta!';
+      this.attemptCount++; // Incrementa o contador de tentativas.
+      this.alertMessage =
+        'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
       this.alertClass = 'alert alert-danger';
-      this.alertTitle = 'Erro';
+      this.alertTitle = 'Senha incorreta!';
       this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
+
+      if (this.attemptCount >= 3) {
+        // Fecha o modal e executa o logout após 3 tentativas falhas.
+        this.router.navigate(['/realize-login']);
+        this.closeModalPassword();
+        this.authService.logout(); // Supondo que `logout` está no `authService`.
+      }
     }
   }
 

@@ -34,7 +34,6 @@ import { companyFormService } from '../../services/company/company-form.service'
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
   @Input() applied!: boolean;
-  @Input() applicationId!: number;
 
   alertMessage: string = '';
   alertTitle: string = '';
@@ -65,6 +64,8 @@ export class JobCardComponent implements OnInit {
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
   user!: IUser;
+  attemptCount: number = 0;
+
 
   constructor(
     private authService: UserAuthService,
@@ -111,17 +112,17 @@ export class JobCardComponent implements OnInit {
     this.openModalPassword(() => action.apply(this, params));
   }
 
-
   // Abre o modal e define o job selecionado
   openModal(job: IJob) {
-    if(!this.authService.isAuthenticated()){
-      this.alertMessage = 'Você precisa estar logado para acessar mais informações!';
-        this.alertClass = 'alert alert-warning';
-        this.alertTitle = 'Ops!';
-        this.alertIconClass = 'bi bi-exclamation-circle';
-        this.showAlert = true;
-        this.resetAlertAfterDelay();
-        return
+    if (!this.authService.isAuthenticated()) {
+      this.alertMessage =
+        'Você precisa estar logado para acessar mais informações!';
+      this.alertClass = 'alert alert-warning';
+      this.alertTitle = 'Ops!';
+      this.alertIconClass = 'bi bi-exclamation-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+      return;
     }
     this.selectedJob = job;
     this.isModalOpen = true;
@@ -132,24 +133,40 @@ export class JobCardComponent implements OnInit {
         this.actionToPerform();
         this.closeModalPassword();
       } else {
-        this.alertMessage = 'Senha incorreta!';
+        this.attemptCount++; // Incrementa o contador de tentativas.
+        this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
         this.alertClass = 'alert alert-danger';
-        this.alertTitle = 'Erro';
+        this.alertTitle = 'Senha incorreta!';
         this.alertIconClass = 'bi bi-x-circle';
         this.showAlert = true;
         this.resetAlertAfterDelay();
+
+        if (this.attemptCount >= 3) {
+          // Fecha o modal e executa o logout após 3 tentativas falhas.
+          this.router.navigate(["/realize-login"])
+          this.closeModalPassword();
+          this.authService.logout(); // Supondo que `logout` está no `authService`.
+        }
       }
     } else if (this.userType === 'company') {
       if (this.company.password === this.confirmedPassword) {
         this.actionToPerform();
         this.closeModalPassword();
       } else {
-        this.alertMessage = 'Senha incorreta!';
+        this.attemptCount++; // Incrementa o contador de tentativas.
+        this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
         this.alertClass = 'alert alert-danger';
-        this.alertTitle = 'Erro';
+        this.alertTitle = 'Senha incorreta!';
         this.alertIconClass = 'bi bi-x-circle';
         this.showAlert = true;
         this.resetAlertAfterDelay();
+
+        if (this.attemptCount >= 3) {
+          // Fecha o modal e executa o logout após 3 tentativas falhas.
+          this.router.navigate(["/realize-login"])
+          this.closeModalPassword();
+          this.authService.logout(); // Supondo que `logout` está no `authService`.
+        }
       }
     }
   }
@@ -198,7 +215,7 @@ export class JobCardComponent implements OnInit {
   editJob(jobId: number) {
     this.router.navigate(['/criar-vaga', jobId.toString()]);
   }
-  cancelApplication() {
+  cancelApplication(jobId: number) {
     this.applied = false;
     this.jobService.addCanceledJob(this.job); // Adiciona a vaga ao cancelado
 
@@ -207,7 +224,7 @@ export class JobCardComponent implements OnInit {
     // Agora, usamos o ID da candidatura (não o da vaga)
     this.http
       .delete<IApplication>(
-        `https://backend-production-ff1f.up.railway.app/application/${this.applicationId}`
+        `https://backend-production-ff1f.up.railway.app/application/${this.userId}/${jobId}`
       )
       .subscribe(
         (response) => {

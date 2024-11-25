@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { IJob } from '../../models/job.interface';
 import { HttpClient } from '@angular/common/http';
 import { IApplication } from '../../models/application.interface';
@@ -15,7 +15,11 @@ export class JobService {
   constructor(private http: HttpClient) {}
 
   getVagas(): Observable<IJob[]> {
-    return this.http.get<IJob[]>(this.apiUrl);
+    return this.http.get<IJob[]>(this.apiUrl).pipe(
+      catchError((error:any)=>{
+        return throwError(error)
+      })
+    )
   }
   getJobById(id: string | null): Observable<IJob> {
     return this.http.get<IJob>(`${this.apiUrl}/${id}`);
@@ -24,8 +28,14 @@ export class JobService {
     // Retorna os ids das vagas nas quais o usuário se cadastr
     return this.http.get<IApplication[]>(
       `https://backend-production-ff1f.up.railway.app/applications/${id}`
-    );
+    ).pipe(
+      catchError((error: any)=>{
+        console.error(`Erro ao buscar vagas: ${error}`);
+        return throwError(error);
+      })
+    )
   }
+
   getApplicationsByJobId(id: number): Observable<IApplication[]> {
     return this.http.get<IApplication[]>(
       `https://backend-production-ff1f.up.railway.app/applications/vacancy/${id}`

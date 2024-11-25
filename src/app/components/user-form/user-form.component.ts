@@ -24,6 +24,7 @@ export class UserFormComponent implements OnInit {
   confirmedPassword!: string;
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
+  attemptCount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -234,71 +235,78 @@ export class UserFormComponent implements OnInit {
       return false;
     }
   }
-  confirmPassword() {
-    if (this.user.password === this.confirmedPassword) {
-      this.actionToPerform();
+   // Adicione esta propriedade na classe do componente.
+
+confirmPassword() {
+  if (this.user.password === this.confirmedPassword) {
+    this.attemptCount = 0; // Redefine o contador em caso de sucesso.
+    this.actionToPerform();
+    this.closeModalPassword();
+  } else {
+    this.attemptCount++; // Incrementa o contador de tentativas.
+    this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
+    this.alertClass = 'alert alert-danger';
+    this.alertTitle = 'Senha incorreta!';
+    this.alertIconClass = 'bi bi-x-circle';
+    this.showAlert = true;
+    this.resetAlertAfterDelay();
+
+    if (this.attemptCount >= 3) {
+      // Fecha o modal e executa o logout após 3 tentativas falhas.
+      this.router.navigate(["/realize-login"])
       this.closeModalPassword();
-    } else {
-      this.alertMessage = 'Senha incorreta!';
-      this.alertClass = 'alert alert-danger';
-      this.alertTitle = 'Erro';
-      this.alertIconClass = 'bi bi-x-circle';
-      this.showAlert = true;
-      this.resetAlertAfterDelay();
+      this.authService.logout(); // Supondo que `logout` está no `authService`.
     }
   }
+}
+
 
   deleteUser() {
-    const id = this.userData?.id;
+    const id = this.user.id;
 
-    if (this.user.curriculumId != null) {
-      this.curriculumService.deleteCurriculum(id).subscribe(
-        (response) => {
-          // Somente após a exclusão bem-sucedida do currículo, exclua o usuário
-          this.userFormService.deleteUserData(id).subscribe(
-            (response) => {
-              this.alertMessage = 'Dados excluídos com sucesso!';
-              this.alertClass = 'alert alert-success';
-              this.alertTitle = 'Concluído';
-              this.alertIconClass = 'bi bi-check-circle';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
-
-              setTimeout(() => {
-                this.authService.logout();
-                this.router.navigate(['/']);
-              }, 2000);
-            },
-            (error) => {
-              console.error(`Erro ao deletar usuário: ${error}`);
-            }
-          );
-        },
-        (error) => {
-          console.error(`Erro ao excluir currículo: ${error}`);
-        }
-      );
-    } else {
-      // Se não houver currículo para excluir, apenas exclua o usuário
+    const deleteUserCallback = () => {
       this.userFormService.deleteUserData(id).subscribe(
-        (response) => {
-          this.alertMessage = 'Dados excluídos com sucesso!';
-          this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Erro';
-          this.alertIconClass = 'bi bi-x-circle';
-          this.showAlert = true;
-          this.resetAlertAfterDelay();
-
+        () => {
+          this.showSuccessAlert('Dados excluídos com sucesso!');
           setTimeout(() => {
             this.authService.logout();
             this.router.navigate(['/']);
           }, 2000);
         },
         (error) => {
-          console.error(`Erro ao deletar usuário: ${error}`);
+          this.showErrorAlert(`Erro ao deletar usuário: ${error.message}`);
         }
       );
+    };
+
+    if (this.user.curriculumId !== null) {
+      this.curriculumService.deleteCurriculum(id).subscribe(
+        () => deleteUserCallback(),
+        (error) => {
+          this.showErrorAlert(`Erro ao excluir currículo: ${error.message}`);
+        }
+      );
+    } else {
+      deleteUserCallback();
     }
+  }
+
+  showSuccessAlert(message: string) {
+    this.alertMessage = message;
+    this.alertClass = 'alert alert-success';
+    this.alertTitle = 'Concluído';
+    this.alertIconClass = 'bi bi-check-circle';
+    this.showAlert = true;
+    this.resetAlertAfterDelay();
+  }
+
+  showErrorAlert(message: string) {
+    this.alertMessage = message;
+    this.alertClass = 'alert alert-danger';
+    this.alertTitle = 'Erro';
+    this.alertIconClass = 'bi bi-x-circle';
+    this.showAlert = true;
+    this.resetAlertAfterDelay();
   }
 
   resetAlertAfterDelay() {

@@ -40,6 +40,7 @@ export class JobCardComponent implements OnInit {
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
+
   questionData!: IQuestion[];
   userId = this.authService.getUserData()?.id;
   userType: string | null = null;
@@ -58,14 +59,14 @@ export class JobCardComponent implements OnInit {
   selectedAcademicData: IAcademicData[] = [];
   selectedCoursesData: ICoursesData[] = [];
   selectedCompetences: ICompetences[] = [];
-  questions: { question: IQuestion }[] = [];
-  answers!: IAnswer;
+  questions: IQuestion[] = [];
+  answers: IAnswer[] = [];
   confirmedPassword!: string;
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
   user!: IUser;
   attemptCount: number = 0;
-
+  answerWithQuestion: any = [];
 
   constructor(
     private authService: UserAuthService,
@@ -134,7 +135,8 @@ export class JobCardComponent implements OnInit {
         this.closeModalPassword();
       } else {
         this.attemptCount++; // Incrementa o contador de tentativas.
-        this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
+        this.alertMessage =
+          'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
         this.alertClass = 'alert alert-danger';
         this.alertTitle = 'Senha incorreta!';
         this.alertIconClass = 'bi bi-x-circle';
@@ -143,7 +145,7 @@ export class JobCardComponent implements OnInit {
 
         if (this.attemptCount >= 3) {
           // Fecha o modal e executa o logout após 3 tentativas falhas.
-          this.router.navigate(["/realize-login"])
+          this.router.navigate(['/realize-login']);
           this.closeModalPassword();
           this.authService.logout(); // Supondo que `logout` está no `authService`.
         }
@@ -154,7 +156,8 @@ export class JobCardComponent implements OnInit {
         this.closeModalPassword();
       } else {
         this.attemptCount++; // Incrementa o contador de tentativas.
-        this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
+        this.alertMessage =
+          'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
         this.alertClass = 'alert alert-danger';
         this.alertTitle = 'Senha incorreta!';
         this.alertIconClass = 'bi bi-x-circle';
@@ -163,7 +166,7 @@ export class JobCardComponent implements OnInit {
 
         if (this.attemptCount >= 3) {
           // Fecha o modal e executa o logout após 3 tentativas falhas.
-          this.router.navigate(["/realize-login"])
+          this.router.navigate(['/realize-login']);
           this.closeModalPassword();
           this.authService.logout(); // Supondo que `logout` está no `authService`.
         }
@@ -295,14 +298,11 @@ export class JobCardComponent implements OnInit {
     );
   }
 
-  getAnswerForQuestion(userId: number, questionId: number) {
-    this.answerService.getAnswerOfQuestion(questionId, userId).subscribe(
-      (answer) => {
-        if (answer) {
-          this.answers = answer;
-        } else {
-          console.log('Nenhuma resposta encontrada para este usuário.');
-        }
+  getAnswersForQuestion(questionId: number) {
+    this.answerService.getAnswerOfQuestion(questionId).subscribe(
+      (answers) => {
+        // Associando as respostas de uma pergunta específica
+        this.answers = answers;
       },
       (error) => {
         console.error('Erro ao buscar resposta:', error);
@@ -358,21 +358,105 @@ export class JobCardComponent implements OnInit {
       }
     );
 
-    const questions = await this.getQuestions(this.job.id.toString());
-    if (questions) {
-      // Associe as perguntas às respostas do candidato (simulação de resposta para demonstração)
-      this.questions = questions.map((question) => ({
-        question,
-        answer: this.getAnswerForQuestion(userId, question.id), // Simula a obtenção da resposta
-      }));
-    }
+    await this.getQuestions(this.job.id.toString());
+    this.answerWithQuestion = []; // Certifique-se de inicializar o array
+
+    this.questionData.forEach((question) => {
+      this.answerService.getAnswerOfQuestion(question.id).subscribe(
+        (responses) => {
+          responses.forEach((answer) => {
+            if (
+              userId === answer.userId &&
+              question.id === answer.questionId &&
+              question.vacancyId == this.job.id
+            ) {
+              this.answerWithQuestion.push({
+                question: question.question,
+                answer: answer.answer,
+              });
+            }
+          });
+        },
+        (error) => {
+          console.error(
+            `Erro ao buscar resposta para a pergunta ${question.id}:`,
+            error
+          );
+        }
+      );
+    });
 
     // Exibe o modal do currículo
     this.openCurriculumModal();
   }
 
+  async submitAnswers(jobId: number) {
+    try {
+      // Itera pelas respostas fornecidas no formulário
+      for (const [index, resposta] of this.respostas.entries()) {
+        // Obtém o ID da pergunta associada ao índice atual
+        const questionId = this.questions[index]?.id;
+
+        if (!questionId || !resposta) {
+          console.warn(
+            `Pergunta ou resposta ausente para o índice ${index}: Ignorando envio.`
+          );
+          continue; // Pula perguntas/respostas inválidas
+        }
+
+        // Monta o corpo da requisição para salvar a resposta
+        const answerBody = {
+          answer: resposta,
+          questionId: questionId,
+          userId: this.userId,
+        };
+
+        // Envia a resposta ao backend
+        await this.http
+          .post(
+            'https://backend-production-ff1f.up.railway.app/answer',
+            answerBody
+          )
+          .toPromise();
+
+        console.log(
+          `Resposta para a pergunta ${questionId} enviada com sucesso.`
+        );
+      }
+
+      // Após enviar todas as respostas, cria a candidatura
+      const applicationBody = { userId: this.userId, vacancyId: jobId };
+
+      await this.http
+        .post<IApplication>(
+          'https://backend-production-ff1f.up.railway.app/application',
+          applicationBody
+        )
+        .toPromise();
+
+      // Exibe mensagem de sucesso e limpa os modais
+      this.closeQuestionModal();
+      this.closeModal();
+      this.jobService.removeCanceledJob(this.job.id);
+      this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
+      this.alertClass = 'alert alert-success';
+      this.alertTitle = 'Sucesso';
+      this.alertIconClass = 'bi bi-check-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    } catch (error) {
+      console.error(`Erro ao enviar respostas ou candidatura:`, error);
+      this.alertMessage = 'Ocorreu um erro ao realizar a candidatura.';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-exclamation-triangle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+    }
+  }
+
   async apply(jobId: number) {
-    const questions = await this.getQuestions(jobId.toString());
+    await this.getQuestions(jobId.toString());
 
     const vacancyId = this.selectedJob?.id;
     const userId = this.userId;
@@ -404,50 +488,45 @@ export class JobCardComponent implements OnInit {
       return;
     }
 
-    const exist = await this.checkCurriculum(this.userId);
+    const exist = await this.checkCurriculum();
+    console.log(exist)
 
     if (exist) {
-      if (questions !== undefined && questions.length > 0) {
-        this.closeModal();
-        this.openQuestionModal();
-
-        for (const [index, resposta] of this.respostas.entries()) {
-          const questionId = this.questionData[index].id;
-          const body = {
-            answer: resposta,
-            questionId: questionId,
-            userId: this.userId,
-          };
-
-          try {
-            await this.http
-              .post(
-                'https://backend-production-ff1f.up.railway.app/answer',
-                body
-              )
-              .toPromise();
-            const applicationBody = { userId, vacancyId };
-
-            await this.http
-              .post<IApplication>(
-                'https://backend-production-ff1f.up.railway.app/application',
-                applicationBody
-              )
-              .toPromise();
-
-            this.closeQuestionModal();
-            this.closeModal();
-            this.jobService.removeCanceledJob(jobId);
-            this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
-            this.alertClass = 'alert alert-success';
-            this.alertTitle = 'Sucesso';
-            this.alertIconClass = 'bi bi-check-circle';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
-            return;
-          } catch (error) {
-            console.error(`Erro ao enviar resposta ou candidatura: ${error}`);
+      if (this.questionData !== undefined && this.questionData.length > 0) {
+        this.questions = [];
+        this.questionData.forEach((question) => {
+          if (question.vacancyId === jobId) {
+            this.questions.push(question);
           }
+        });
+        if (this.questions.length >= 1) {
+          this.closeModal();
+          this.openQuestionModal();
+          return;
+        } else {
+          const applicationBody = { userId, vacancyId };
+
+          this.http
+            .post(
+              'https://backend-production-ff1f.up.railway.app/application',
+              applicationBody
+            )
+            .subscribe(
+              (response) => {
+                this.closeQuestionModal();
+                this.closeModal();
+                this.jobService.removeCanceledJob(jobId);
+                this.alertMessage =
+                  'Parabéns, candidatura realizada com sucesso!';
+                this.alertClass = 'alert alert-success';
+                this.alertTitle = 'Sucesso';
+                this.alertIconClass = 'bi bi-check-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+                return;
+              },
+              (error) => {}
+            );
         }
       } else {
         const body = { userId, vacancyId };
@@ -471,20 +550,26 @@ export class JobCardComponent implements OnInit {
           console.error(`Erro ao adicionar candidatura: ${error}`);
         }
       }
+    }else{
+      this.alertMessage = 'Primeiro você precisa criar um currículo';
+      this.alertClass = 'alert alert-warning';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-exclamation-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+      return
     }
   }
 
-  async checkCurriculum(id: number): Promise<boolean> {
-    try {
-      const response = await this.http
-        .get(`https://backend-production-ff1f.up.railway.app/curriculum/${id}`)
-        .toPromise();
-      return !!response;
-    } catch (error) {
-      console.error(`Erro ao buscar currículo: ${error}`);
-      return false;
+    async checkCurriculum(): Promise<boolean> {
+      const user = this.authService.getUserData()
+
+      if(user?.curriculumId !== null){
+        return true
+      }else{
+        return false
+      }
     }
-  }
 
   async verifyApplication(userId: number, jobId: number): Promise<boolean> {
     try {
@@ -514,6 +599,7 @@ export class JobCardComponent implements OnInit {
         .toPromise();
       if (Array.isArray(response)) {
         this.questionData = response;
+
         // Chama createForm somente depois de garantir que questionData está preenchido
         return response.filter(
           (question): question is IQuestion => question !== undefined

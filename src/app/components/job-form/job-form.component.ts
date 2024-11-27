@@ -305,6 +305,12 @@ export class JobFormComponent implements OnInit {
 
     // Atualiza ou adiciona perguntas existentes
     questions.forEach((pergunta: string, index: number) => {
+      // Ignorar perguntas que são strings vazias
+      if (!pergunta || pergunta.trim() === '') {
+        console.warn(`Pergunta no índice ${index} está vazia e será ignorada.`);
+        return; // Pula para a próxima iteração
+      }
+
       if (this.questionData[index]) {
         // Atualiza pergunta existente
         const questionId = this.questionData[index].id;
@@ -321,10 +327,7 @@ export class JobFormComponent implements OnInit {
               );
             },
             (error) => {
-              console.error(
-                `Erro ao atualizar a pergunta ${index + 1}:`,
-                error
-              );
+              console.error(`Erro ao atualizar a pergunta ${index + 1}:`, error);
             }
           );
       } else {
@@ -345,6 +348,7 @@ export class JobFormComponent implements OnInit {
       }
     });
   }
+
 
   // Método para exibir o alerta e fechá-lo automaticamente após 3 segundos
   resetAlertAfterDelay() {

@@ -91,6 +91,7 @@
               userType === 'user' &&
               job.isActive == true &&
               job.isFilled == false
+
             "
             (click)="apply(job.id)"
           >
@@ -122,7 +123,7 @@
           <div>
             <div
               class="row"
-              *ngFor="let question of questionData; let i = index"
+              *ngFor="let question of questions; let i = index"
             >
               <div class="col-12">
                 <label [for]="'question' + i" class="form-label">{{
@@ -153,7 +154,7 @@
           type="button"
           class="btn btn-warning"
           *ngIf="userType === 'user'"
-          (click)="apply(job.id)"
+          (click)="submitAnswers(job.id)"
         >
           Finalizar candidatura
         </button>
@@ -260,18 +261,18 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="questions.length > 0">
+        <div *ngIf="answerWithQuestion.length > 0">
           <p><strong>Perguntas e Respostas:</strong></p>
           <ul>
-            <li *ngFor="let qa of questions">
-              <p><strong>Pergunta:</strong> {{ qa.question.question }}</p>
-              <p>
-                <strong>Resposta:</strong>
-                {{ answers.answer || "Sem resposta" }}
-              </p>
-            </li>
+            <div *ngFor="let item of answerWithQuestion">
+              <p><strong>{{ item.question }}</strong></p>
+              <p>{{item.answer}}</p>
+
+            </div>
+
           </ul>
         </div>
+
       </div>
       <div class="modal-footer">
         <button

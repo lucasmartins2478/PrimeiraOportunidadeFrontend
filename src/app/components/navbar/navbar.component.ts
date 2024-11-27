@@ -13,18 +13,24 @@ export class NavbarComponent implements OnInit {
 
   constructor(private authService: UserAuthService) {}
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     this.userType = this.authService.getUserType();
 
     if (this.userType === 'user') {
       const id = this.authService.getUserData()?.id;  // Pegue o ID do usuário autenticado
       if (id) {
         // Verifique se o usuário tem um currículo
-        this.hasCurriculum = await this.authService.hasCurriculum(id);
+        const curriculum = this.authService.getUserData()?.curriculumId
+        if(curriculum !== null && curriculum !== undefined){
+          this.hasCurriculum = true
+        }else{
+          this.hasCurriculum = false
+        }
+        console.log(this.hasCurriculum)
+        console.log(this.authService.getUserData()?.curriculumId)
       }
     }
   }
-
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }

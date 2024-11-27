@@ -75,6 +75,9 @@ h5 button{
   position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
 }
+.modal-body{
+  overflow-y: scroll;
+}
 
 /* Estilo para o botão de fechar */
 .btn-close {

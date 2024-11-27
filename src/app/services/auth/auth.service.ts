@@ -29,10 +29,16 @@ export class UserAuthService {
   }
 
   login(user: IUser) {
+    if (!user || !user.id) {
+      console.error('Erro: Usuário inválido.');
+      return;
+    }
+
     this.user = user;
     localStorage.setItem('userType', 'user');
     this.saveUserDataToStorage(user); // Salvar dados no localStorage ao logar
   }
+
 
   loginCompany(company: ICompany) {
     this.company = company;
@@ -63,10 +69,26 @@ export class UserAuthService {
       console.error('Erro: O ID do usuário está indefinido ou nulo.');
     }
 
-    localStorage.setItem('name', user.name);
-    localStorage.setItem('email', user.email);
-    localStorage.setItem('phoneNumber', user.phoneNumber);
+    if (user.curriculumId !== null && user.curriculumId !== undefined) {
+      localStorage.setItem('curriculumId', user.curriculumId.toString());
+    } else {
+      localStorage.removeItem('curriculumId'); // Remove o valor antigo, se existir
+    }
+
+    if (user.name) {
+      localStorage.setItem('name', user.name);
+    }
+
+    if (user.email) {
+      localStorage.setItem('email', user.email);
+    }
+
+    if (user.phoneNumber) {
+      localStorage.setItem('phoneNumber', user.phoneNumber);
+    }
   }
+
+
 
   private saveCompanyDataToStorage(company: ICompany): void {
     localStorage.setItem('responsible', company.responsible);
@@ -81,7 +103,8 @@ export class UserAuthService {
     const phoneNumber = localStorage.getItem('phoneNumber');
     const id = Number(localStorage.getItem('id'));
 
-    if (name && email && phoneNumber && id > 0) { // Verificando se o id é válido
+    if (name && email && phoneNumber && id > 0) {
+      // Verificando se o id é válido
       return {
         name,
         email,
@@ -118,6 +141,7 @@ export class UserAuthService {
     localStorage.removeItem('responsible');
     localStorage.removeItem('companyEmail');
     localStorage.removeItem('companyId');
+    localStorage.removeItem('curriculumId');
   }
 
   // Função pública para obter dados do usuário (pode ser chamada a partir de um componente)
@@ -135,11 +159,10 @@ export class UserAuthService {
 
     try {
       const response = await lastValueFrom(this.http.get<IUser>(apiUrl));
-      if(response.curriculumId != null){
-        return true
-      }
-      else{
-        return false
+      if (response.curriculumId != null) {
+        return true;
+      } else {
+        return false;
       }
     } catch (error) {
       console.log(`Erro ao buscar usuários: ${error}`);

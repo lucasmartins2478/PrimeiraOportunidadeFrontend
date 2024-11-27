@@ -2,7 +2,7 @@
   margin: 0 auto;
   margin-top: 2rem;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 .card-wrapper{
   width: 100%;

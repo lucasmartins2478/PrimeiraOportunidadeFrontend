@@ -5,7 +5,7 @@ export interface IUser{
   email:string,
   phoneNumber:string,
   password:string,
-  curriculumId?:number
+  curriculumId:number
   vacancyId?:number
   type: 'user',
 }

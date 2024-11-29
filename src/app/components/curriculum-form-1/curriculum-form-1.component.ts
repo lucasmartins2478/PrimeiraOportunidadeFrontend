@@ -24,6 +24,7 @@ export class CurriculumForm1Component implements OnInit {
   curriculumData!: ICurriculum;
   curriculumForm!: FormGroup;
   hasCurriculum!: boolean;
+  isLoading: boolean = true
 
   constructor(
     private fb: FormBuilder,
@@ -33,70 +34,97 @@ export class CurriculumForm1Component implements OnInit {
     private userFormService: UserFormService,
     private curriculumService: CurriculumService
   ) {}
+  private async loadData(): Promise<void> {
+    this.isLoading = true; // Define como true no início
+    try {
+      await this.checkCurriculum();
+      await this.getCurriculumData();
+
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
+    }
+  }
 
   ngOnInit(): void {
-    this.checkCurriculum();
+    this.createForm()
+    this.loadData()
   }
 
-  checkCurriculum() {
+  async checkCurriculum(): Promise<void> {
     const id = this.userData?.id;
 
     if (!id) {
       console.log('ID do usuário não encontrado.');
       return;
     }
-
-    this.userFormService.getUserData(id).subscribe(
-      (response) => {
-        this.hasCurriculum = response.curriculumId != null;
-        this.getUserData(); // Carrega os dados do usuário e chama createForm
-      },
-      (error) => {
-        console.log('Erro ao fazer busca do usuário:', error);
-      }
-    );
-  }
-
-  getUserData() {
-    const id = this.userData?.id;
-
-    if (!id) {
-      console.log('ID do usuário não encontrado.');
-      return;
-    }
-
-    this.userFormService.getUserData(id).subscribe(
-      (response: IUser) => {
-        this.user = response;
-        if (this.hasCurriculum) {
-          this.getCurriculumData(); // Se o currículo existe, carrega os dados
-        } else {
-          this.createForm(); // Caso contrário, cria o formulário vazio
+    return new Promise<void>((resolve, reject)=>{
+      this.userFormService.getUserData(id).subscribe(
+        (response) => {
+          this.hasCurriculum = response.curriculumId != null;
+          this.getUserData(); // Carrega os dados do usuário e chama createForm
+          resolve()
+        },
+        (error) => {
+          console.log('Erro ao fazer busca do usuário:', error);
+          reject(error)
         }
-      },
-      (error) => {
-        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
-      }
-    );
+      );
+    })
+
   }
 
-  getCurriculumData() {
+  async getUserData(): Promise<void> {
     const id = this.userData?.id;
 
     if (!id) {
       console.log('ID do usuário não encontrado.');
       return;
     }
+    return new Promise<void>((resolve, reject)=>{
+      this.userFormService.getUserData(id).subscribe(
+        (response: IUser) => {
+          this.user = response;
+          if (this.hasCurriculum) {
+            this.getCurriculumData(); // Se o currículo existe, carrega os dados
+          } else {
+            this.createForm(); // Caso contrário, cria o formulário vazio
+          }
+          resolve()
+        },
+        (error) => {
+          console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+          reject(error)
+        }
+      );
+    })
 
-    this.curriculumService.getCurriculumData(id).subscribe(
-      (response: ICurriculum) => {
-        this.curriculumData = response;
-        this.createForm(); // Atualiza o formulário com os dados do currículo
-      },
-      (error) => {
-        console.log(`Erro ao buscar currículo: ${error}`);
-      }
-    );
+
+  }
+
+  async getCurriculumData() :Promise<void>{
+    const id = this.userData?.id;
+
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+    return new Promise<void>((resolve, reject)=>{
+      this.curriculumService.getCurriculumData(id).subscribe(
+        (response: ICurriculum) => {
+          this.curriculumData = response;
+          this.createForm();// Atualiza o formulário com os dados do currículo
+          resolve()
+        },
+        (error) => {
+          console.log(`Erro ao buscar currículo: ${error}`);
+          reject(error)
+        }
+      );
+    })
+
+
   }
 
   createForm() {

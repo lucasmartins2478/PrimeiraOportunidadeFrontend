@@ -1,4 +1,4 @@
-.form{
+.form {
   display: flex;
   flex-direction: column;
   max-width: 40rem;
@@ -6,24 +6,23 @@
   gap: 0.75rem;
   margin-bottom: 5rem;
   padding: 1rem;
-
 }
-.close-form{
+.close-form {
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
 }
-.close-button{
+.close-button {
   background-color: transparent;
 }
-h3{
+h3 {
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
 }
-button{
+button {
   background-color: #004aad;
   display: flex;
   align-items: center;
@@ -31,25 +30,25 @@ button{
   gap: 1rem;
   padding-left: 1rem;
 }
-svg{
+i {
   font-weight: 600;
   cursor: pointer;
 }
-p{
+p {
   text-align: center;
 }
-nav{
+nav {
   margin: 0 auto;
 }
-.progress{
+.progress {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   background-color: transparent;
 }
-@media(max-width:1244px){
-  h3{
+@media (max-width: 1244px) {
+  h3 {
     gap: 3px;
   }
 }

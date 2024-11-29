@@ -22,6 +22,8 @@ export class CurriculumForm2Component implements OnInit {
   userData = this.userService.getUserData();
   hasCurriculum!: boolean;
   hasAcademicData!: boolean;
+  isLoading: boolean = true; // Inicializada como true
+
 
   constructor(
     private fb: FormBuilder,
@@ -34,9 +36,23 @@ export class CurriculumForm2Component implements OnInit {
   get institutions(): FormArray {
     return this.academicForm.get('institutions') as FormArray;
   }
+  private async loadData(): Promise<void> {
+    this.isLoading = true; // Define como true no início
+    try {
+      await this.checkCurriculum();
+      await this.getCurriculumData();
+      await this.getAcademicData();
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
+    }
+  }
+
 
   ngOnInit(): void {
-    this.checkCurriculum();
+    this.createForm();
+    this.loadData();
   }
 
   checkCurriculum() {
@@ -49,9 +65,6 @@ export class CurriculumForm2Component implements OnInit {
     this.curriculumService.getCurriculumData(id).subscribe(
       (response) => {
         this.hasCurriculum = response.schoolName != null;
-        this.createForm(); // Mover para antes de chamar getAcademicData()
-        this.getCurriculumData();
-        this.getAcademicData();
       },
       (error) => {
         console.log('Erro ao fazer busca do usuário:', error);
@@ -70,44 +83,53 @@ export class CurriculumForm2Component implements OnInit {
     });
   }
 
-  getCurriculumData() {
+  async getCurriculumData(): Promise<void> {
     const id = this.userData?.id;
     if (!id) {
       console.log('ID do usuário não encontrado.');
       return;
     }
-    this.curriculumService.getCurriculumData(id).subscribe(
-      (response: ICurriculum) => {
-        this.curriculumData = response;
-        this.updateFormWithCurriculumData();
-      },
-      (error) => {
-        console.log(`Erro ao buscar currículo: ${error}`);
-      }
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.curriculumService.getCurriculumData(id).subscribe(
+        (response: ICurriculum) => {
+          this.curriculumData = response;
+          this.updateFormWithCurriculumData();
+          resolve();
+        },
+        (error) => {
+          console.log(`Erro ao buscar currículo: ${error}`);
+          reject(error);
+        }
+      );
+    });
   }
 
-  getAcademicData() {
+  async getAcademicData(): Promise<void> {
     const id = this.userData?.id;
     if (!id) {
       console.log('ID do usuário não encontrado.');
       return;
     }
-    this.curriculumService.getAcademicData(id).subscribe(
-      (response: IAcademicData[]) => {
-        this.hasAcademicData = Array.isArray(response) && response.length > 0;
-        this.updateFormWithAcademicData(response);
-      },
-      (error) => {
-        console.log(`Erro ao buscar dados acadêmicos: ${error}`);
-        this.showAlertMessage(
-          'Erro ao buscar dados acadêmicos.',
-          'alert-danger',
-          'Erro',
-          'bi bi-x-circle'
-        );
-      }
-    );
+    return new Promise<void>((resolve, reject)=>{
+      this.curriculumService.getAcademicData(id).subscribe(
+        (response: IAcademicData[]) => {
+          this.hasAcademicData = Array.isArray(response) && response.length > 0;
+          this.updateFormWithAcademicData(response);
+          resolve()
+        },
+        (error) => {
+          console.log(`Erro ao buscar dados acadêmicos: ${error}`);
+          this.showAlertMessage(
+            'Erro ao buscar dados acadêmicos.',
+            'alert-danger',
+            'Erro',
+            'bi bi-x-circle'
+          );
+          reject(error)
+        }
+      );
+    })
+
   }
 
   updateFormWithCurriculumData() {
@@ -167,7 +189,9 @@ export class CurriculumForm2Component implements OnInit {
     }
 
     this.http
-      .delete(`https://backend-production-ff1f.up.railway.app/academicData/${institutionId}`)
+      .delete(
+        `https://backend-production-ff1f.up.railway.app/academicData/${institutionId}`
+      )
       .subscribe(
         () => {
           this.institutions.removeAt(index);
@@ -213,7 +237,8 @@ export class CurriculumForm2Component implements OnInit {
       );
 
       const institutionsData = this.institutions.value;
-      const apiUrl = 'https://backend-production-ff1f.up.railway.app/academicData';
+      const apiUrl =
+        'https://backend-production-ff1f.up.railway.app/academicData';
 
       if (institutionsData && institutionsData.length > 0) {
         institutionsData.forEach((institution: IAcademicData) => {
@@ -277,7 +302,8 @@ export class CurriculumForm2Component implements OnInit {
       );
 
       const institutionsData = this.institutions.value;
-      const apiUrl = 'https://backend-production-ff1f.up.railway.app/academicData';
+      const apiUrl =
+        'https://backend-production-ff1f.up.railway.app/academicData';
 
       if (institutionsData && institutionsData.length > 0) {
         institutionsData.forEach((institution: IAcademicData) => {

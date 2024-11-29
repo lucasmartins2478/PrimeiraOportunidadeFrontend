@@ -1,45 +1,55 @@
-<app-navbar></app-navbar>
-<div class="search-wrapper">
-  <h2>Minhas Vagas</h2>
-  <app-search-form (searchEvent)="onSearch($event)"></app-search-form>
-</div>
-<div class="card-wrapper" *ngIf="filteredJobs.length > 0">
-  <div class="row">
-    <div class="col-10">
-      <h3>Vagas ativas</h3>
-    </div>
-    <app-job-card
-      class="col-9 col-md-4"
-      *ngFor="let job of searchedJobs"
-      [job]="job"
-    ></app-job-card>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
   </div>
 </div>
-<div class="card-wrapper" *ngIf="canceledJobs.length > 0">
-  <div class="row">
-    <div class="col-10">
-      <h3>Vagas Canceladas</h3>
-    </div>
-    <app-job-card
-      class="col-9 col-md-4"
-      *ngFor="let job of searchedJobs"
-      [job]="job"
-    ></app-job-card>
+<div ngIf="!isLoading">
+  <app-navbar></app-navbar>
+  <div class="search-wrapper">
+    <h2>Minhas Vagas</h2>
+    <app-search-form (searchEvent)="onSearch($event)"></app-search-form>
   </div>
-</div>
-<div class="card-wrapper" *ngIf="finishedJobs.length > 0">
-  <div class="row">
-    <div class="col-10">
-      <h3>Vagas Preenchidas</h3>
+  <div class="card-wrapper" *ngIf="filteredJobs.length > 0">
+    <div class="row">
+      <div class="col-10">
+        <h3>Vagas ativas</h3>
+      </div>
+      <app-job-card
+        class="col-9 col-md-4"
+        *ngFor="let job of searchedJobs"
+        [job]="job"
+      ></app-job-card>
     </div>
-    <app-job-card
-      class="col-9 col-md-4"
-      *ngFor="let job of finishedJobs"
-      [job]="job"
-    ></app-job-card>
   </div>
+  <div class="card-wrapper" *ngIf="canceledJobs.length > 0">
+    <div class="row">
+      <div class="col-10">
+        <h3>Vagas Canceladas</h3>
+      </div>
+      <app-job-card
+        class="col-9 col-md-4"
+        *ngFor="let job of searchedJobs"
+        [job]="job"
+      ></app-job-card>
+    </div>
+  </div>
+  <div class="card-wrapper" *ngIf="finishedJobs.length > 0">
+    <div class="row">
+      <div class="col-10">
+        <h3>Vagas Preenchidas</h3>
+      </div>
+      <app-job-card
+        class="col-9 col-md-4"
+        *ngFor="let job of finishedJobs"
+        [job]="job"
+      ></app-job-card>
+    </div>
+  </div>
+  <ng-template *ngIf="filteredJobs.length === 0">
+    <p>Nenhuma vaga encontrada com o ID especificado.</p>
+  </ng-template>
+  <app-footer></app-footer>
 </div>
-<ng-template *ngIf="filteredJobs.length === 0">
-  <p>Nenhuma vaga encontrada com o ID especificado.</p>
-</ng-template>
-<app-footer></app-footer>

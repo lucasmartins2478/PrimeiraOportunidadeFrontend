@@ -26,6 +26,7 @@ export class CurriculumForm3Component implements OnInit {
   courseForm!: FormGroup;
   userData = this.userService.getUserData();
   hasCoursesData!: boolean;
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -36,47 +37,66 @@ export class CurriculumForm3Component implements OnInit {
   ) {
     // Cria o FormGroup para o formulário
   }
-
-  getCousesData() {
-    const id = this.userData?.id;
-    if (!id) {
-      console.log('ID do usuário não encontrado.');
-      return;
+  private async loadData(): Promise<void> {
+    try {
+      await this.getCousesData();
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
     }
-    this.curriculumService.getCoursesData(id).subscribe(
-      (response: ICoursesData[]) => {
-        this.hasCoursesData = response.length > 0;
-        this.cousesData = response;
-
-        this.updateFormWithCoursesData(response);
-
-        // Verifica `hasCoursesData` após definir o valor
-        if (!this.hasCoursesData) {
-          this.addCourse();
-        }
-
-        this.getCompetencesData();
-      },
-      (error) => {
-        console.log(`Erro ao buscar currículo: ${error}`);
-      }
-    );
   }
-  getCompetencesData() {
+
+  async getCousesData(): Promise<void> {
     const id = this.userData?.id;
     if (!id) {
       console.log('ID do usuário não encontrado.');
       return;
     }
-    this.curriculumService.getCompetences(id).subscribe(
-      (response: ICompetences[]) => {
-        this.competencesData = response;
-        this.updateFormWithCompetencesData(response);
-      },
-      (error) => {
-        console.log(`Erro ao buscar currículo: ${error}`);
-      }
-    );
+
+    return new Promise<void>((resolve, reject) => {
+      this.curriculumService.getCoursesData(id).subscribe(
+        (response: ICoursesData[]) => {
+          this.hasCoursesData = response.length > 0;
+          this.cousesData = response;
+
+          this.updateFormWithCoursesData(response);
+
+          if (!this.hasCoursesData) {
+            this.addCourse();
+          }
+
+          // Aguarda o carregamento das competências
+          this.getCompetencesData().then(resolve).catch(reject);
+        },
+        (error) => {
+          console.log(`Erro ao buscar cursos: ${error}`);
+          reject(error);
+        }
+      );
+    });
+  }
+
+  async getCompetencesData(): Promise<void> {
+    const id = this.userData?.id;
+    if (!id) {
+      console.log('ID do usuário não encontrado.');
+      return;
+    }
+
+    return new Promise<void>((resolve, reject) => {
+      this.curriculumService.getCompetences(id).subscribe(
+        (response: ICompetences[]) => {
+          this.competencesData = response;
+          this.updateFormWithCompetencesData(response);
+          resolve();
+        },
+        (error) => {
+          console.log(`Erro ao buscar competências: ${error}`);
+          reject(error);
+        }
+      );
+    });
   }
 
   createForm() {
@@ -116,7 +136,7 @@ export class CurriculumForm3Component implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
-    this.getCousesData();
+    this.loadData(); // Controla o carregamento dos dados
   }
 
   // Getter para o FormArray de courses
@@ -146,7 +166,9 @@ export class CurriculumForm3Component implements OnInit {
       return;
     }
     this.http
-      .delete(`https://backend-production-ff1f.up.railway.app/courseData/${courseId}`)
+      .delete(
+        `https://backend-production-ff1f.up.railway.app/courseData/${courseId}`
+      )
       .subscribe(() => {
         this.courses.removeAt(index);
         this.showAlertMessage(
@@ -196,7 +218,9 @@ export class CurriculumForm3Component implements OnInit {
       return;
     }
     this.http
-      .delete(`https://backend-production-ff1f.up.railway.app/competences/${competenceId}`)
+      .delete(
+        `https://backend-production-ff1f.up.railway.app/competences/${competenceId}`
+      )
       .subscribe(() => {
         this.competencies.removeAt(index);
         this.showAlertMessage(
@@ -217,7 +241,8 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados dos cursos
       if (coursesData && coursesData.length > 0) {
         coursesData.forEach((course: ICoursesData) => {
-          const apiUrl = 'https://backend-production-ff1f.up.railway.app/courseData';
+          const apiUrl =
+            'https://backend-production-ff1f.up.railway.app/courseData';
 
           const body = {
             name: course.name,
@@ -248,7 +273,8 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados das competências
       if (competenciesData && competenciesData.length > 0) {
         competenciesData.forEach((competence: ICompetences) => {
-          const apiUrl = 'https://backend-production-ff1f.up.railway.app/competences';
+          const apiUrl =
+            'https://backend-production-ff1f.up.railway.app/competences';
 
           const body = {
             name: competence.name,
@@ -291,7 +317,8 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados dos cursos
       if (coursesData && coursesData.length > 0) {
         coursesData.forEach((course: ICoursesData) => {
-          const apiUrl = 'https://backend-production-ff1f.up.railway.app/courseData';
+          const apiUrl =
+            'https://backend-production-ff1f.up.railway.app/courseData';
 
           const body = {
             name: course.name,
@@ -339,7 +366,8 @@ export class CurriculumForm3Component implements OnInit {
       // Enviar dados das competências
       if (competenciesData && competenciesData.length > 0) {
         competenciesData.forEach((competence: ICompetences) => {
-          const apiUrl = 'https://backend-production-ff1f.up.railway.app/competences';
+          const apiUrl =
+            'https://backend-production-ff1f.up.railway.app/competences';
           const body = {
             name: competence.name,
             curriculumId: this.userService.getUserData()?.id,

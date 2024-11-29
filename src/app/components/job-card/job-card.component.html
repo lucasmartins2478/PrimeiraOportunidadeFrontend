@@ -5,6 +5,7 @@
   [title]="alertTitle"
   [iconClass]="alertIconClass"
 ></app-alert>
+
 <div class="col-6">
   <h5>
     {{ job.title }}
@@ -91,7 +92,6 @@
               userType === 'user' &&
               job.isActive == true &&
               job.isFilled == false
-
             "
             (click)="apply(job.id)"
           >
@@ -102,7 +102,11 @@
           type="button"
           class="btn btn-primary"
           (click)="prepareModalPassword(finishJob, job?.id)"
-          *ngIf="userType === 'company' && job.isActive == true && job.isFilled == false"
+          *ngIf="
+            userType === 'company' &&
+            job.isActive == true &&
+            job.isFilled == false
+          "
         >
           Preencher vaga
         </button>
@@ -121,10 +125,7 @@
       <div class="modal-body">
         <form>
           <div>
-            <div
-              class="row"
-              *ngFor="let question of questions; let i = index"
-            >
+            <div class="row" *ngFor="let question of questions; let i = index">
               <div class="col-12">
                 <label [for]="'question' + i" class="form-label">{{
                   question.question
@@ -265,14 +266,13 @@
           <p><strong>Perguntas e Respostas:</strong></p>
           <ul>
             <div *ngFor="let item of answerWithQuestion">
-              <p><strong>{{ item.question }}</strong></p>
-              <p>{{item.answer}}</p>
-
+              <p>
+                <strong>{{ item.question }}</strong>
+              </p>
+              <p>{{ item.answer }}</p>
             </div>
-
           </ul>
         </div>
-
       </div>
       <div class="modal-footer">
         <button

@@ -1,293 +1,271 @@
-<app-alert [message]="alertMessage" [class]="alertClass" [isVisible]="showAlert" [title]="alertTitle" [iconClass]="alertIconClass"></app-alert>
-
-<form *ngIf="academicForm" [formGroup]="academicForm" class="form">
-  <h3>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="35"
-      height="35"
-      fill="currentColor"
-      class="bi bi-arrow-left-circle"
-      viewBox="0 0 16 16"
-      routerLink="/criar-curriculo/etapa1"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-      />
-    </svg>
-    Dados Acadêmicos
-  </h3>
-  <div class="row">
-    <div class="col-12">
-      <label for="institutionNameUser" class="form-label"
-        >Nome da Instituição de Ensino</label
-      >
-      <input
-        type="text"
-        formControlName="schoolName"
-        placeholder="Insira o nome da instituição de ensino"
-        class="form-control"
-      />
-    </div>
+<app-alert
+  [message]="alertMessage"
+  [class]="alertClass"
+  [isVisible]="showAlert"
+  [title]="alertTitle"
+  [iconClass]="alertIconClass"
+></app-alert>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
   </div>
-  <div class="row">
-    <div class="col-12 col-md-4">
-      <label class="form-label">Ano/Semestre</label>
-      <select
-        class="form-select"
-        formControlName="schoolYear"
-        aria-label="Default select example"
+</div>
+
+<div *ngIf="!isLoading">
+  <form *ngIf="academicForm" [formGroup]="academicForm" class="form">
+    <h3>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="35"
+        height="35"
+        fill="currentColor"
+        class="bi bi-arrow-left-circle"
+        viewBox="0 0 16 16"
+        routerLink="/criar-curriculo/etapa1"
       >
-        <option value="">Selecione</option>
-        <option value="1º Médio">1º Ano Ensino Médio</option>
-        <option value="2º Médio">2º Ano Ensino Médio</option>
-        <option value="3º Médio">3º Ano Ensino Médio</option>
-      </select>
-    </div>
-    <div class="col-12 col-md-4">
-      <label for="dateOfBeginUser" class="form-label">Data de Início</label>
-      <input
-        type="text"
-        formControlName="schoolStartDate"
-        placeholder="mm/aaaa"
-        mask="00/0000"
-        class="form-control"
-      />
-    </div>
-    <div class="col-12 col-md-4">
-      <label for="dateOfEndUser" class="form-label">Data de Conclusão</label>
-      <input
-        type="text"
-        formControlName="schoolEndDate"
-        class="form-control"
-        placeholder="mm/aaaa"
-        mask="00/0000"
-      />
-      <div class="check-input">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          formControlName="currentlyStudying"
-          id="flexCheckDefault"
+        <path
+          fill-rule="evenodd"
+          d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
         />
-        <label for="flexCheckDefault">Estudo aqui atualmente</label>
+      </svg>
+      Dados Acadêmicos
+    </h3>
+    <div class="row">
+      <div class="col-12">
+        <label for="institutionNameUser" class="form-label"
+          >Nome da Instituição de Ensino</label
+        >
+        <input
+          type="text"
+          formControlName="schoolName"
+          placeholder="Insira o nome da instituição de ensino"
+          class="form-control"
+        />
       </div>
     </div>
-  </div>
-  <div formArrayName="institutions">
-    <div
-      *ngFor="let institution of institutions.controls; let i = index"
-      [formGroupName]="i"
-      class="institution-group"
-    >
-      <div class="close-form">
-        <button
-          type="button"
-          class="close-button"
-          (click)="removeInstitution(i)"
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <label class="form-label">Ano/Semestre</label>
+        <select
+          class="form-select"
+          formControlName="schoolYear"
+          aria-label="Default select example"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            class="bi bi-trash3-fill"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
-            />
-          </svg>
-        </button>
+          <option value="">Selecione</option>
+          <option value="1º Médio">1º Ano Ensino Médio</option>
+          <option value="2º Médio">2º Ano Ensino Médio</option>
+          <option value="3º Médio">3º Ano Ensino Médio</option>
+        </select>
       </div>
+      <div class="col-12 col-md-4">
+        <label for="dateOfBeginUser" class="form-label">Data de Início</label>
+        <input
+          type="text"
+          formControlName="schoolStartDate"
+          placeholder="mm/aaaa"
+          mask="00/0000"
+          class="form-control"
+        />
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="dateOfEndUser" class="form-label">Data de Conclusão</label>
+        <input
+          type="text"
+          formControlName="schoolEndDate"
+          class="form-control"
+          placeholder="mm/aaaa"
+          mask="00/0000"
+        />
+        <div class="check-input">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            formControlName="currentlyStudying"
+            id="flexCheckDefault"
+          />
+          <label for="flexCheckDefault">Estudo aqui atualmente</label>
+        </div>
+      </div>
+    </div>
+    <div formArrayName="institutions">
+      <div
+        *ngFor="let institution of institutions.controls; let i = index"
+        [formGroupName]="i"
+        class="institution-group"
+      >
+        <div class="close-form">
+          <button
+            type="button"
+            class="close-button"
+            (click)="removeInstitution(i)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-trash3-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+              />
+            </svg>
+          </button>
+        </div>
 
-      <div class="row">
-        <div class="col-12">
-          <label for="institutionNameUser" class="form-label"
-            >Nome da Instituição de Ensino</label
-          >
-          <input
-            type="text"
-            formControlName="institutionName"
-            placeholder="Insira o nome da instituição de ensino"
-            class="form-control"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 col-md-4">
-          <label class="form-label">Semestre</label>
-          <select
-            class="form-select"
-            formControlName="semester"
-            aria-label="Default select example"
-          >
-            <option value="">Selecione</option>
-            <option value="1º Semestre">1º Semestre</option>
-            <option value="2º Semestre">2º Semestre</option>
-            <option value="3º Semestre">3º Semestre</option>
-            <option value="4º Semestre">4º Semestre</option>
-            <option value="5º Semestre">5º Semestre</option>
-            <option value="6º Semestre">6º Semestre</option>
-            <option value="7º Semestre">7º Semestre</option>
-            <option value="8º Semestre">8º Semestre</option>
-            <option value="9º Semestre">9º Semestre</option>
-            <option value="10º Semestre">10º Semestre</option>
-          </select>
-        </div>
-        <div class="col-12 col-md-4">
-          <label for="dateOfBeginUser" class="form-label">Data de Início</label>
-          <input
-            type="text"
-            formControlName="startDate"
-            placeholder="mm/aaaa"
-            mask="00/0000"
-            class="form-control"
-          />
-        </div>
-        <div class="col-12 col-md-4">
-          <label for="dateOfEndUser" class="form-label"
-            >Data de Conclusão</label
-          >
-          <input
-            type="text"
-            formControlName="endDate"
-            class="form-control"
-            placeholder="mm/aaaa"
-            mask="00/0000"
-          />
-          <div class="check-input">
+        <div class="row">
+          <div class="col-12">
+            <label for="institutionNameUser" class="form-label"
+              >Nome da Instituição de Ensino</label
+            >
             <input
-              class="form-check-input"
-              type="checkbox"
-              formControlName="isCurrentlyStudying"
-              id="flexCheckDefault"
+              type="text"
+              formControlName="institutionName"
+              placeholder="Insira o nome da instituição de ensino"
+              class="form-control"
             />
-            <label for="flexCheckDefault">Estudo aqui atualmente</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <label class="form-label">Semestre</label>
+            <select
+              class="form-select"
+              formControlName="semester"
+              aria-label="Default select example"
+            >
+              <option value="">Selecione</option>
+              <option value="1º Semestre">1º Semestre</option>
+              <option value="2º Semestre">2º Semestre</option>
+              <option value="3º Semestre">3º Semestre</option>
+              <option value="4º Semestre">4º Semestre</option>
+              <option value="5º Semestre">5º Semestre</option>
+              <option value="6º Semestre">6º Semestre</option>
+              <option value="7º Semestre">7º Semestre</option>
+              <option value="8º Semestre">8º Semestre</option>
+              <option value="9º Semestre">9º Semestre</option>
+              <option value="10º Semestre">10º Semestre</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-4">
+            <label for="dateOfBeginUser" class="form-label"
+              >Data de Início</label
+            >
+            <input
+              type="text"
+              formControlName="startDate"
+              placeholder="mm/aaaa"
+              mask="00/0000"
+              class="form-control"
+            />
+          </div>
+          <div class="col-12 col-md-4">
+            <label for="dateOfEndUser" class="form-label"
+              >Data de Conclusão</label
+            >
+            <input
+              type="text"
+              formControlName="endDate"
+              class="form-control"
+              placeholder="mm/aaaa"
+              mask="00/0000"
+            />
+            <div class="check-input">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="isCurrentlyStudying"
+                id="flexCheckDefault"
+              />
+              <label for="flexCheckDefault">Estudo aqui atualmente</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <label for="nameCourseUser" class="form-label">Nome do Curso</label>
+            <input
+              type="text"
+              formControlName="name"
+              placeholder="Se graduação ou técnico, insira o nome do curso"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 col-md-5">
+            <label class="form-label">Nível de Escolaridade</label>
+            <select
+              class="form-select"
+              formControlName="degree"
+              aria-label="Default select example"
+            >
+              <option value="">Selecione</option>
+              <option value="Fundamental">Ensino Fundamental</option>
+              <option value="Médio">Ensino Médio</option>
+              <option value="Técnico">Ensino Técnico</option>
+              <option value="Graduação">Graduação</option>
+            </select>
+          </div>
+          <div class="col-12 col-md-7">
+            <label for="cityOfCourseUser" class="form-label">Cidade</label>
+            <input
+              type="text"
+              formControlName="city"
+              placeholder="Cidade"
+              class="form-control"
+            />
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <label for="nameCourseUser" class="form-label">Nome do Curso</label>
-          <input
-            type="text"
-            formControlName="name"
-            placeholder="Se graduação ou técnico, insira o nome do curso"
-            class="form-control"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 col-md-5">
-          <label class="form-label">Nível de Escolaridade</label>
-          <select
-            class="form-select"
-            formControlName="degree"
-            aria-label="Default select example"
-          >
-            <option value="">Selecione</option>
-            <option value="Fundamental">Ensino Fundamental</option>
-            <option value="Médio">Ensino Médio</option>
-            <option value="Técnico">Ensino Técnico</option>
-            <option value="Graduação">Graduação</option>
-          </select>
-        </div>
-        <div class="col-12 col-md-7">
-          <label for="cityOfCourseUser" class="form-label">Cidade</label>
-          <input
-            type="text"
-            formControlName="city"
-            placeholder="Cidade"
-            class="form-control"
-          />
-        </div>
-      </div>
     </div>
-  </div>
 
-  <button type="button" class="btn btn-warning" (click)="addInstitution()">
-    Adicionar Instituição
-  </button>
-  <ng-container *ngIf="hasCurriculum; else submit">
-    <button class="btn btn-primary" type="button" (click)="onUpdate()">
-      Cursos e Competências<svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-arrow-right"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-        />
-      </svg>
+    <button type="button" class="btn btn-warning" (click)="addInstitution()">
+      Adicionar nova instituição
     </button>
-  </ng-container>
-  <ng-template #submit>
-    <button class="btn btn-primary" type="button" (click)="onSubmit()">
-      Cursos e Competências<svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-arrow-right"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-        />
-      </svg>
-    </button>
-  </ng-template>
-  <div class="progress">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle-fill"
-      viewBox="0 0 16 16"
-    >
-      <circle cx="8" cy="8" r="8" />
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle-fill"
-      viewBox="0 0 16 16"
-    >
-      <circle cx="8" cy="8" r="8" />
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle"
-      viewBox="0 0 16 16"
-    >
-      <path
-        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-      />
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle"
-      viewBox="0 0 16 16"
-    >
-      <path
-        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-      />
-    </svg>
-  </div>
-</form>
+    <ng-container *ngIf="hasCurriculum; else submit">
+      <button class="btn btn-primary" type="button" (click)="onUpdate()">
+        Cursos e Competências<svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
+    </ng-container>
+    <ng-template #submit>
+      <button class="btn btn-primary" type="button" (click)="onSubmit()">
+        Cursos e Competências<svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
+    </ng-template>
+    <div class="progress">
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa1"></i>
+      <i class="bi bi-circle-fill"></i>
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa3"></i>
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa4"></i>
+    </div>
+  </form>
+</div>

@@ -6,261 +6,234 @@
   [iconClass]="alertIconClass"
 ></app-alert>
 
-<form
-  *ngIf="courseForm"
-  [formGroup]="courseForm"
-  (ngSubmit)="onSubmit()"
-  class="form"
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
 >
-  <h3>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="35"
-      height="35"
-      fill="currentColor"
-      class="bi bi-arrow-left-circle"
-      viewBox="0 0 16 16"
-      routerLink="/criar-curriculo/etapa2"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-      />
-    </svg>
-    Cursos e Competências
-  </h3>
-
-  <div class="check-input">
-    <input
-      type="checkbox"
-      class="form-check-input"
-      (change)="onCheckboxChange($event)"
-    />
-    <label for="dontHaveCourses">Não possuo cursos</label>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
   </div>
+</div>
 
-  <!-- Renderizando cada competência (instituição) -->
-  <div
-    formArrayName="courses"
-    *ngFor="let course of courses.controls; let i = index"
+<div *ngIf="!isLoading">
+  <form
+    *ngIf="courseForm"
+    [formGroup]="courseForm"
+    (ngSubmit)="onSubmit()"
+    class="form"
   >
-    <div [formGroupName]="i" class="competence-group">
-      <div class="close-form">
-        <button type="button" class="close-button" (click)="removeCourse(i)">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="currentColor"
-            class="bi bi-trash3-fill"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
-            />
-          </svg>
-        </button>
-      </div>
+    <h3>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="35"
+        height="35"
+        fill="currentColor"
+        class="bi bi-arrow-left-circle"
+        viewBox="0 0 16 16"
+        routerLink="/criar-curriculo/etapa2"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+        />
+      </svg>
+      Cursos e Competências
+    </h3>
 
-      <div class="row">
-        <div class="col-12">
-          <label for="nameCourse" class="form-label"
-            >Nome do curso complementar</label
-          >
-          <input
-            type="text"
-            formControlName="name"
-            placeholder="Insira o nome completo do curso"
-            class="form-control"
-          />
-        </div>
-      </div>
+    <div class="check-input">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        (change)="onCheckboxChange($event)"
+      />
+      <label for="dontHaveCourses">Não possuo cursos</label>
+    </div>
 
-      <div class="row">
-        <div class="col-12 col-md-4">
-          <label class="form-label">Modalidade</label>
-          <select
-            class="form-select"
-            formControlName="modality"
-            aria-label="Default select example"
-          >
-            <option value="">Selecione</option>
-            <option value="Presencial">Presencial</option>
-            <option value="Online">Online</option>
-            <option value="Semipresencial">Semipresencial</option>
-            <option value="Outros">Outros</option>
-          </select>
-        </div>
-
-        <div class="col-12 col-md-4">
-          <label for="duration" class="form-label">Duração (horas)</label>
-          <input
-            type="number"
-            formControlName="duration"
-            class="form-control"
-            placeholder="Duração"
-          />
+    <!-- Renderizando cada competência (instituição) -->
+    <div
+      formArrayName="courses"
+      *ngFor="let course of courses.controls; let i = index"
+    >
+      <div [formGroupName]="i" class="competence-group">
+        <div class="close-form">
+          <button type="button" class="close-button" (click)="removeCourse(i)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              class="bi bi-trash3-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+              />
+            </svg>
+          </button>
         </div>
 
-        <div class="col-12 col-md-4">
-          <label for="dateOfEnd" class="form-label">Conclusão</label>
-          <input
-            type="text"
-            formControlName="dateOfEnd"
-            class="form-control"
-            placeholder="mm/aaaa"
-            mask="00/0000"
-          />
-          <div class="check-input">
+        <div class="row">
+          <div class="col-12">
+            <label for="nameCourse" class="form-label"
+              >Nome do curso complementar</label
+            >
             <input
-              type="checkbox"
-              formControlName="isCurrentlyStudying"
-              class="form-check-input"
+              type="text"
+              formControlName="name"
+              placeholder="Insira o nome completo do curso"
+              class="form-control"
             />
-            <label>Estudando atualmente</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <label class="form-label">Modalidade</label>
+            <select
+              class="form-select"
+              formControlName="modality"
+              aria-label="Default select example"
+            >
+              <option value="">Selecione</option>
+              <option value="Presencial">Presencial</option>
+              <option value="Online">Online</option>
+              <option value="Semipresencial">Semipresencial</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label for="duration" class="form-label">Duração (horas)</label>
+            <input
+              type="number"
+              formControlName="duration"
+              class="form-control"
+              placeholder="Duração"
+            />
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label for="dateOfEnd" class="form-label">Conclusão</label>
+            <input
+              type="text"
+              formControlName="dateOfEnd"
+              class="form-control"
+              placeholder="mm/aaaa"
+              mask="00/0000"
+            />
+            <div class="check-input">
+              <input
+                type="checkbox"
+                formControlName="isCurrentlyStudying"
+                class="form-check-input"
+              />
+              <label>Estudando atualmente</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <label class="form-label">Instituição Concedente</label>
+            <input
+              type="text"
+              formControlName="institutionName"
+              class="form-control"
+              placeholder="Nome da plataforma ou empresa"
+            />
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="row">
-        <div class="col-12">
-          <label class="form-label">Instituição Concedente</label>
+    <!-- Botão para adicionar nova competência -->
+    <button type="button" class="btn btn-warning" (click)="addCourse()">
+      Adicionar novo curso
+    </button>
+
+    <div class="row" style="margin-top: 2rem">
+      <div class="col-12">
+        <label for="competenceInput" class="form-label"
+          >Insira suas competências</label
+        >
+
+        <!-- Input para inserir competência -->
+        <div class="input-group mb-3">
           <input
             type="text"
-            formControlName="institutionName"
+            formControlName="competenceInput"
+            placeholder="Insira palavras-chave ou o nome completo"
             class="form-control"
-            placeholder="Nome da plataforma ou empresa"
           />
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Botão para adicionar nova competência -->
-  <button type="button" class="btn btn-warning" (click)="addCourse()">
-    Adicionar Curso
-  </button>
-
-  <div class="row" style="margin-top: 2rem">
-    <div class="col-12">
-      <label for="competenceInput" class="form-label"
-        >Insira suas competências</label
-      >
-
-      <!-- Input para inserir competência -->
-      <div class="input-group mb-3">
-        <input
-          type="text"
-          formControlName="competenceInput"
-          placeholder="Insira palavras-chave ou o nome completo"
-          class="form-control"
-        />
-        <button
-          class="btn btn-outline-primary"
-          type="button"
-          (click)="addCompetence()"
-        >
-          Adicionar
-        </button>
-      </div>
-
-      <!-- Lista de competências adicionadas -->
-      <ul class="list-group">
-        <li
-          class="list-group-item"
-          *ngFor="let competence of competencies.controls; let i = index"
-        >
-          {{ competence.value.name }}
           <button
+            class="btn btn-outline-primary"
             type="button"
-            class="btn btn-sm float-end"
-            (click)="removeCompetence(i)"
+            (click)="addCompetence()"
           >
-            X
+            Adicionar
           </button>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <ng-container *ngIf="hasCoursesData; else submit">
-    <button type="button" class="btn btn-primary" (click)="onUpdate()">
-      Dados adicionais
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-arrow-right"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-        />
-      </svg>
-    </button>
-  </ng-container>
-  <ng-template #submit>
-    <button type="button" class="btn btn-primary" (click)="onSubmit()">
-      Dados adicionais
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-arrow-right"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-        />
-      </svg>
-    </button>
-  </ng-template>
+        </div>
 
-  <div class="progress">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle-fill"
-      viewBox="0 0 16 16"
-    >
-      <circle cx="8" cy="8" r="8" />
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle-fill"
-      viewBox="0 0 16 16"
-    >
-      <circle cx="8" cy="8" r="8" />
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle-fill"
-      viewBox="0 0 16 16"
-    >
-      <circle cx="8" cy="8" r="8" />
-    </svg>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-circle"
-      viewBox="0 0 16 16"
-    >
-      <path
-        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
-      />
-    </svg>
-  </div>
-</form>
+        <!-- Lista de competências adicionadas -->
+        <ul class="list-group">
+          <li
+            class="list-group-item"
+            *ngFor="let competence of competencies.controls; let i = index"
+          >
+            {{ competence.value.name }}
+            <button
+              type="button"
+              class="btn btn-sm float-end"
+              (click)="removeCompetence(i)"
+            >
+              X
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <ng-container *ngIf="hasCoursesData; else submit">
+      <button type="button" class="btn btn-primary" (click)="onUpdate()">
+        Dados adicionais
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
+    </ng-container>
+    <ng-template #submit>
+      <button type="button" class="btn btn-primary" (click)="onSubmit()">
+        Dados adicionais
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+          />
+        </svg>
+      </button>
+    </ng-template>
+
+    <div class="progress">
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa1"></i>
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa2"></i>
+      <i class="bi bi-circle-fill"></i>
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa4"></i>
+    </div>
+  </form>
+</div>

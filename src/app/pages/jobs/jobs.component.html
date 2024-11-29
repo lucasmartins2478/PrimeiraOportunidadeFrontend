@@ -1,15 +1,25 @@
-<app-navbar></app-navbar>
-<div class="search-wrapper">
-  <h2>Vagas</h2>
-  <app-search-form (searchEvent)="onSearch($event)"></app-search-form>
-</div>
-<div class="card-wrapper">
-  <div class="row">
-    <app-job-card
-      class="col-9 col-md-6 col-lg-4"
-      *ngFor="let job of filteredJobs"
-      [job]="job"
-    ></app-job-card>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
   </div>
 </div>
-<app-footer></app-footer>
+<div *ngIf="!isLoading">
+  <app-navbar></app-navbar>
+  <div class="search-wrapper">
+    <h2>Vagas</h2>
+    <app-search-form (searchEvent)="onSearch($event)"></app-search-form>
+  </div>
+  <div class="card-wrapper">
+    <div class="row">
+      <app-job-card
+        class="col-9 col-md-6 col-lg-4"
+        *ngFor="let job of filteredJobs"
+        [job]="job"
+      ></app-job-card>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -27,6 +27,7 @@ export class CurriculumForm4Component implements OnInit {
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
   attemptCount: number = 0;
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -36,22 +37,36 @@ export class CurriculumForm4Component implements OnInit {
     private userService: UserAuthService,
     private curriculumService: CurriculumService
   ) {}
+  private async loadData(): Promise<void> {
+    this.isLoading = true; // Define como true no início
+    try {
+      await this.getUserData();
+      await this.getCurriculumData();
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
+    }
+  }
 
-  getUserData() {
+  async getUserData(): Promise<void> {
     const id = this.userId;
-    this.userFormService.getUserData(id).subscribe(
-      (response: IUser) => {
-        this.user = response;
-      },
-      (error) => {
-        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
-      }
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.userFormService.getUserData(id).subscribe(
+        (response: IUser) => {
+          this.user = response;
+          resolve();
+        },
+        (error) => {
+          console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
+          reject(error);
+        }
+      );
+    });
   }
 
   ngOnInit(): void {
-    this.getUserData();
-    this.getCurriculumData();
+    this.loadData();
   }
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
@@ -93,17 +108,21 @@ export class CurriculumForm4Component implements OnInit {
     });
   }
 
-  getCurriculumData() {
+  async getCurriculumData(): Promise<void> {
     const id = this.userService.getUserData()?.id;
-    this.curriculumService.getCurriculumData(id).subscribe(
-      (response) => {
-        this.curriculumData = response;
-        this.createForm();
-      },
-      (error) => {
-        console.error(`Erro ao buscar curriculo ${error}`);
-      }
-    );
+    return new Promise<void>((resolve, reject) => {
+      this.curriculumService.getCurriculumData(id).subscribe(
+        (response) => {
+          this.curriculumData = response;
+          this.createForm();
+          resolve();
+        },
+        (error) => {
+          console.error(`Erro ao buscar curriculo ${error}`);
+          reject(error);
+        }
+      );
+    });
   }
   onSubmit() {
     if (this.adictionalDataForm.valid) {

@@ -34,6 +34,7 @@ import { companyFormService } from '../../services/company/company-form.service'
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
   @Input() applied!: boolean;
+  @Input() companyName!: string
 
   alertMessage: string = '';
   alertTitle: string = '';

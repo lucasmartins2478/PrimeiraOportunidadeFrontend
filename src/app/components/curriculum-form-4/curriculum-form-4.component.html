@@ -5,97 +5,110 @@
   [title]="alertTitle"
   [iconClass]="alertIconClass"
 ></app-alert>
-
-<form *ngIf="adictionalDataForm" [formGroup]="adictionalDataForm" class="form">
-  <h3>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="35"
-      height="35"
-      fill="currentColor"
-      class="bi bi-arrow-left-circle"
-      viewBox="0 0 16 16"
-      routerLink="/criar-curriculo/etapa3"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-      />
-    </svg>
-    Dados Adicionais
-  </h3>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-label"
-        >Possue seu currículo em arquivo? anexe-o aqui:</label
-      >
-      <input
-        type="file"
-        placeholder="Nome"
-        class="form-control"
-        formControlName="attached"
-      />
-    </div>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-label">Fale sobre você:</label>
-      <textarea
-        class="form-control"
-        placeholder="Opcional"
-        formControlName="description"
-      ></textarea>
-    </div>
-  </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value=""
-      id="termos_uso"
-    />
-    <label class="form-check-label" for="flexCheckDefault">
-      Termos de Uso
-    </label>
-  </div>
-  <div class="form-check">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      value=""
-      id="politica_privacidade"
-    />
-    <label class="form-check-label" for="flexCheckdefault">
-      Política de Privacidade
-    </label>
-  </div>
-
-  <button
-    class="btn btn-primary"
-    type="button"
-    (click)="openModalPassword(onSubmit)"
+</div>
+<div *ngIf="!isLoading">
+  <form
+    *ngIf="adictionalDataForm"
+    [formGroup]="adictionalDataForm"
+    class="form"
   >
-    Finalizar cadastro<svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      fill="currentColor"
-      class="bi bi-arrow-right"
-      viewBox="0 0 16 16"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+    <h3>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="35"
+        height="35"
+        fill="currentColor"
+        class="bi bi-arrow-left-circle"
+        viewBox="0 0 16 16"
+        routerLink="/criar-curriculo/etapa3"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+        />
+      </svg>
+      Dados Adicionais
+    </h3>
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label"
+          >Possue seu currículo em arquivo? anexe-o aqui:</label
+        >
+        <input
+          type="file"
+          placeholder="Nome"
+          class="form-control"
+          formControlName="attached"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label">Fale sobre você:</label>
+        <textarea
+          class="form-control"
+          placeholder="Opcional"
+          formControlName="description"
+        ></textarea>
+      </div>
+    </div>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="termos_uso"
       />
-    </svg>
-  </button>
-  <div class="progress">
-    <i class="bi bi-circle-fill"></i>
-    <i class="bi bi-circle-fill"></i>
-    <i class="bi bi-circle-fill"></i>
-    <i class="bi bi-circle-fill"></i>
-  </div>
-</form>
+      <label class="form-check-label" for="flexCheckDefault">
+        Termos de Uso
+      </label>
+    </div>
+    <div class="form-check">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="politica_privacidade"
+      />
+      <label class="form-check-label" for="flexCheckdefault">
+        Política de Privacidade
+      </label>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="openModalPassword(onSubmit)"
+    >
+      Finalizar cadastro<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-arrow-right"
+        viewBox="0 0 16 16"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+        />
+      </svg>
+    </button>
+    <div class="progress">
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa1"></i>
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa2"></i>
+      <i class="bi bi-circle-fill" routerLink="/criar-curriculo/etapa3"></i>
+      <i class="bi bi-circle-fill"></i>
+    </div>
+  </form>
+</div>
 
 <div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
 <div class="modal" tabindex="-1" *ngIf="isModalPasswordOpen">

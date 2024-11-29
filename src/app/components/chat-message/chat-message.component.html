@@ -1,33 +1,44 @@
-<div class="chat-container">
-  <div class="chat-window" #chatWindow>
-    <div *ngFor="let message of messages"
-         [ngClass]="{'chat-message-sent': message.sender_id === userId, 'chat-message-received': message.sender_id !== userId}">
-      <div class="user-name">
-        <i class="bi bi-person-circle"></i>
-        <b>{{ message.sender_name }}</b>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
+  </div>
+</div>
+<div *ngIf="!isLoading">
+  <div class="chat-container">
+    <div class="chat-window" #chatWindow>
+      <div *ngFor="let message of messages"
+           [ngClass]="{'chat-message-sent': message.sender_id === userId, 'chat-message-received': message.sender_id !== userId}">
+        <div class="user-name">
+          <i class="bi bi-person-circle"></i>
+          <b>{{ message.sender_name }}</b>
+        </div>
+        {{ message.content }}
       </div>
-      {{ message.content }}
+    </div>
+
+    <div class="chat-input">
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="newMessage"
+          placeholder="Digite sua mensagem..."
+          aria-label="Recipient's username"
+          aria-describedby="button-addon2"
+        />
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          id="button-addon2"
+          (click)="sendMessage()"
+        >
+          <i class="bi bi-send-fill"></i>
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="chat-input">
-    <div class="input-group mb-3">
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="newMessage"
-        placeholder="Digite sua mensagem..."
-        aria-label="Recipient's username"
-        aria-describedby="button-addon2"
-      />
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        id="button-addon2"
-        (click)="sendMessage()"
-      >
-        <i class="bi bi-send-fill"></i>
-      </button>
-    </div>
-  </div>
 </div>

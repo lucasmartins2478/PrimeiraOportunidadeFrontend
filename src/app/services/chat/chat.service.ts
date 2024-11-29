@@ -34,27 +34,4 @@ export class ChatService {
     return this.http.post(apiUrl, body);
   }
 
-  // Novo método para gerenciar SSE
-  listenMessages(): void {
-    const eventSource = new EventSource('http://localhost:3333/events');
-
-    eventSource.onmessage = (event) => {
-      try {
-        const newMessage: IMessage = JSON.parse(event.data);
-        if (newMessage && newMessage.sender_id && newMessage.content) {
-          this.messagesSource.next([...this.messagesSource.value, newMessage]);
-        } else {
-          console.error('Mensagem recebida com formato inválido:', newMessage);
-        }
-      } catch (error) {
-        console.error('Erro ao processar a mensagem:', error);
-      }
-    };
-
-    eventSource.onerror = (error) => {
-      console.error('Erro no SSE:', error);
-      eventSource.close(); // Fecha a conexão em caso de erro
-    };
-  }
-
 }

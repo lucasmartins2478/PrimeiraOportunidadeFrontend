@@ -27,6 +27,7 @@ export class UserAuthService {
       console.warn('Dados da empresa não encontrados no localStorage.');
     }
   }
+  
 
   login(user: IUser) {
     if (!user || !user.id) {

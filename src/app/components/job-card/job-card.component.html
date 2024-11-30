@@ -29,8 +29,12 @@
 </div>
 
 <!-- Modal controlado pelo Angular -->
-<div class="modal-backdrop" *ngIf="isModalOpen"></div>
-<div class="modal" tabindex="-1" *ngIf="isModalOpen">
+<div
+  class="modal"
+  tabindex="-1"
+  *ngIf="isModalOpen"
+  [ngClass]="{ 'modal-highlight': isModalOpen }"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -115,7 +119,6 @@
   </div>
 </div>
 
-<div class="modal-backdrop" *ngIf="isModalQuestionOpen"></div>
 <div class="modal" tabindex="-1" *ngIf="isModalQuestionOpen">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -287,7 +290,7 @@
   </div>
 </div>
 <!-- Vertically centered modal -->
-<div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
+
 <div class="modal" id="password" tabindex="-1" *ngIf="isModalPasswordOpen">
   <div class="modal-dialog">
     <div class="modal-content">

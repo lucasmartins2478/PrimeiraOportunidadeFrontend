@@ -36,7 +36,7 @@ h3 {
   justify-content: flex-end;
 }
 /* Estilo do modal */
-.modal {
+.modal-questions {
   display: block; /* Garantir que o modal seja exibido corretamente */
   position: fixed;
   top: 50%;
@@ -49,8 +49,19 @@ h3 {
   border-radius: 0.5rem;
   background-color: white;
 }
+.modal{
+  height: 95rem;
+}
+.modal textarea{
+  margin-bottom: 1rem;
+}
 
-.modal-dialog {
+.modal-dialog{
+  height: 40%;
+  width: 100%;
+}
+
+.modal-dialog-questions {
   margin: 0;
   max-width: none;
   width: 100%;

@@ -12,6 +12,12 @@ h5{
 h5 button{
   background-color: transparent;
 }
+label{
+  margin-bottom: 1rem;
+}
+input{
+  margin-bottom: 1rem;
+}
 .btn-warning{
   width: 100%;
   color: #fff;
@@ -43,6 +49,12 @@ h5 button{
   justify-content: flex-end;
 }
 /* Estilo do modal */
+.modal.modal-highlight {
+  background-color: #f8f9fa; /* Cinza claro */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #dee2e6;
+}
+
 .modal {
   display: block; /* Garantir que o modal seja exibido corretamente */
   position: fixed;
@@ -56,6 +68,11 @@ h5 button{
   border-radius: 0.5rem;
   background-color: white;
 
+}
+
+
+.modal {
+  z-index: 100000; /* Certifique-se de que o modal esteja acima do backdrop */
 }
 #password{
   height: 20rem;

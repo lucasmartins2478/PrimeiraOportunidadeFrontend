@@ -25,6 +25,7 @@ import {
 import { AnswersService } from '../../services/answers/answers.service';
 import { ICompany } from '../../models/company.interface';
 import { companyFormService } from '../../services/company/company-form.service';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-job-card',
@@ -34,7 +35,7 @@ import { companyFormService } from '../../services/company/company-form.service'
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
   @Input() applied!: boolean;
-  @Input() companyName!: string
+  @Input() companyName!: string;
 
   alertMessage: string = '';
   alertTitle: string = '';
@@ -68,6 +69,8 @@ export class JobCardComponent implements OnInit {
   user!: IUser;
   attemptCount: number = 0;
   answerWithQuestion: any = [];
+  modalStates: { [key: string]: boolean } = {};
+  modalParameters: { [key: string]: any } = {};
 
   constructor(
     private authService: UserAuthService,
@@ -79,7 +82,8 @@ export class JobCardComponent implements OnInit {
     private curriculumService: CurriculumService,
     private jobService: JobService,
     private questionService: QuestionsService,
-    private answerService: AnswersService
+    private answerService: AnswersService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +100,7 @@ export class JobCardComponent implements OnInit {
       }
     );
   }
+
   getCompanyData() {
     if (this.companyData?.id) {
       this.companyService.getUserData(this.companyData.id).subscribe(
@@ -127,6 +132,7 @@ export class JobCardComponent implements OnInit {
       return;
     }
     this.selectedJob = job;
+    this.modalService.openModal();
     this.isModalOpen = true;
   }
   confirmPassword() {
@@ -187,33 +193,41 @@ export class JobCardComponent implements OnInit {
     this.isModalPasswordOpen = true;
   }
   closeModalPassword() {
+    this.modalService.closeModal();
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }
 
   // Fecha o modal
   closeModal() {
+    this.modalService.closeModal();
     this.isModalOpen = false;
   }
   closeQuestionModal() {
+    this.modalService.closeModal();
     this.isModalQuestionOpen = false;
   }
   openQuestionModal() {
+    this.modalService.openModal();
     this.isModalQuestionOpen = true;
   }
   openCurriculumModal() {
+    this.modalService.openModal();
     this.isModalCurriculumOpen = true;
   }
   closeCurriculumModal() {
+    this.modalService.closeModal();
     this.isModalCurriculumOpen = false;
   }
   openApplicationModal(jobId: number) {
     this.getApplications(jobId.toString())
       .then((applications) => {})
       .catch((error) => {});
+    this.modalService.openModal();
     this.isModalApplicationOpen = true;
   }
   closeApplicationModal() {
+    this.modalService.closeModal();
     this.isModalApplicationOpen = false;
   }
   editJob(jobId: number) {
@@ -490,7 +504,7 @@ export class JobCardComponent implements OnInit {
     }
 
     const exist = await this.checkCurriculum();
-    console.log(exist)
+    console.log(exist);
 
     if (exist) {
       if (this.questionData !== undefined && this.questionData.length > 0) {
@@ -551,26 +565,26 @@ export class JobCardComponent implements OnInit {
           console.error(`Erro ao adicionar candidatura: ${error}`);
         }
       }
-    }else{
+    } else {
       this.alertMessage = 'Primeiro você precisa criar um currículo';
       this.alertClass = 'alert alert-warning';
       this.alertTitle = 'Erro';
       this.alertIconClass = 'bi bi-exclamation-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
-      return
+      return;
     }
   }
 
-    async checkCurriculum(): Promise<boolean> {
-      const user = this.authService.getUserData()
+  async checkCurriculum(): Promise<boolean> {
+    const user = this.authService.getUserData();
 
-      if(user?.curriculumId !== null){
-        return true
-      }else{
-        return false
-      }
+    if (user?.curriculumId !== null) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
   async verifyApplication(userId: number, jobId: number): Promise<boolean> {
     try {

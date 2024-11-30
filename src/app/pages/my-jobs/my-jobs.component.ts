@@ -16,7 +16,7 @@ export class MyJobsComponent implements OnInit {
   searchedJobs: IJob[] = [];
   companyData = this.authService.getCompanyData();
   targetId = this.authService.getCompanyData()?.id; // Substitua pelo ID desejado
-  isLoading: boolean = true
+  isLoading: boolean = true;
 
   constructor(
     private jobService: JobService,
@@ -31,7 +31,7 @@ export class MyJobsComponent implements OnInit {
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
     try {
-      await this.getJobs()
+      await this.getJobs();
     } catch (error) {
       console.error('Erro ao carregar os dados:', error);
     } finally {
@@ -42,9 +42,9 @@ export class MyJobsComponent implements OnInit {
   private removeAccents(text: string): string {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove acentos
   }
-  async getJobs(): Promise<void>{
+  async getJobs(): Promise<void> {
     const companyName = this.companyData?.name ?? '';
-    return new Promise<void>((resolve, reject)=>{
+    return new Promise<void>((resolve, reject) => {
       this.jobService.getVagas().subscribe(
         (data) => {
           // Adicionar o nome da empresa às vagas
@@ -70,21 +70,20 @@ export class MyJobsComponent implements OnInit {
               job.isFilled == false
           );
           this.searchedJobs = this.filteredJobs;
-          resolve()
+          resolve();
         },
         (error) => {
           console.error('Erro ao buscar as vagas:', error);
-          reject(error)
+          reject(error);
         }
       );
-    })
+    });
   }
 
   ngOnInit(): void {
     // Obter o nome da empresa armazenado em companyData, garantindo um valor padrão
 
-
+    this.loadData();
     // Buscar as vagas associadas
-
   }
 }

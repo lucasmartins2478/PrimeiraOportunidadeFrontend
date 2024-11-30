@@ -66,6 +66,9 @@ nav{
 .check-input label{
   margin-top: 4px;
 }
+.row{
+  margin-bottom: 1rem;
+}
 @media(max-width:1244px){
   h3{
     gap: 3px;

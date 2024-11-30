@@ -20,6 +20,9 @@ h3{
   justify-content: flex-end;
   margin-top: 1rem;
 }
+.row{
+  margin-bottom: 1rem;
+}
 .close-button{
   background-color: transparent;
 }

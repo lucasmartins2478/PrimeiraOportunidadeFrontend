@@ -265,8 +265,6 @@
                   <div class="col-12">
                     <label class="form-label">Adicione sua pergunta</label>
                     <textarea
-                      name=""
-                      id=""
                       class="form-control"
                       placeholder="Insira aqui a sua pergunta"
                       [formControlName]="i"
@@ -306,45 +304,47 @@
     </div>
   </div>
 </form>
-<div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
-<div class="modal" tabindex="-1" *ngIf="isModalPasswordOpen">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4>Confirme sua senha para prosseguir</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-12">
-            <label class="form-label"
-              >Informe sua senha para confirmar que é você</label
-            >
-            <input
-              type="password"
-              name="passwordUser"
-              id="passwordUser"
-              placeholder="Senha"
-              class="form-control"
-              [(ngModel)]="confirmedPassword"
-            />
+
+<div class="modal-backdrop" *ngIf="isModalPasswordOpen">
+  <div class="modal-questions" tabindex="-1" *ngIf="isModalPasswordOpen">
+    <div class="modal-dialog-questions">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Confirme sua senha para prosseguir</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <label class="form-label"
+                >Informe sua senha para confirmar que é você</label
+              >
+              <input
+                type="password"
+                name="passwordUser"
+                id="passwordUser"
+                placeholder="Senha"
+                class="form-control"
+                [(ngModel)]="confirmedPassword"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="closeModalPassword()"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="confirmPassword()"
-        >
-          Confirmar
-        </button>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModalPassword()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="confirmPassword()"
+          >
+            Confirmar
+          </button>
+        </div>
       </div>
     </div>
   </div>

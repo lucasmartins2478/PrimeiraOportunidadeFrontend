@@ -1,4 +1,8 @@
 <div *ngIf="loading$ | async" class="loading-overlay">
   <div class="spinner"></div>
 </div>
+<div
+  *ngIf="isModalOpen"
+  class="modal-backdrop-custom"
+></div>
 <router-outlet></router-outlet>

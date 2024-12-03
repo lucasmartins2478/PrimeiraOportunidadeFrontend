@@ -36,7 +36,8 @@
     <div class="row">
       <div class="col-12">
         <label for="institutionNameUser" class="form-label"
-          >Nome da Instituição de Ensino</label
+          ><span class="text-danger">*</span>Nome da Instituição de
+          Ensino</label
         >
         <input
           type="text"
@@ -48,7 +49,9 @@
     </div>
     <div class="row">
       <div class="col-12 col-md-4">
-        <label class="form-label">Ano/Semestre</label>
+        <label class="form-label"
+          ><span class="text-danger">*</span>Ano/Semestre</label
+        >
         <select
           class="form-select"
           formControlName="schoolYear"
@@ -61,7 +64,9 @@
         </select>
       </div>
       <div class="col-12 col-md-4">
-        <label for="dateOfBeginUser" class="form-label">Data de Início</label>
+        <label for="dateOfBeginUser" class="form-label"
+          ><span class="text-danger">*</span>Data de Início</label
+        >
         <input
           type="text"
           formControlName="schoolStartDate"
@@ -120,7 +125,8 @@
         <div class="row">
           <div class="col-12">
             <label for="institutionNameUser" class="form-label"
-              >Nome da Instituição de Ensino</label
+              ><span class="text-danger">*</span>Nome da Instituição de
+              Ensino</label
             >
             <input
               type="text"
@@ -132,7 +138,9 @@
         </div>
         <div class="row">
           <div class="col-12 col-md-4">
-            <label class="form-label">Semestre</label>
+            <label class="form-label"
+              ><span class="text-danger">*</span>Semestre</label
+            >
             <select
               class="form-select"
               formControlName="semester"
@@ -153,7 +161,7 @@
           </div>
           <div class="col-12 col-md-4">
             <label for="dateOfBeginUser" class="form-label"
-              >Data de Início</label
+              ><span class="text-danger">*</span>Data de Início</label
             >
             <input
               type="text"
@@ -187,7 +195,9 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <label for="nameCourseUser" class="form-label">Nome do Curso</label>
+            <label for="nameCourseUser" class="form-label"
+              ><span class="text-danger">*</span>Nome do Curso</label
+            >
             <input
               type="text"
               formControlName="name"
@@ -198,21 +208,25 @@
         </div>
         <div class="row">
           <div class="col-12 col-md-5">
-            <label class="form-label">Nível de Escolaridade</label>
+            <label class="form-label"
+              ><span class="text-danger">*</span>Nível de Escolaridade</label
+            >
             <select
               class="form-select"
               formControlName="degree"
               aria-label="Default select example"
             >
               <option value="">Selecione</option>
-              <option value="Fundamental">Ensino Fundamental</option>
-              <option value="Médio">Ensino Médio</option>
               <option value="Técnico">Ensino Técnico</option>
+              <option value="Licenciatura">Licenciatura</option>
+              <option value="Tecnólogo">Tecnólogo</option>
               <option value="Graduação">Graduação</option>
             </select>
           </div>
           <div class="col-12 col-md-7">
-            <label for="cityOfCourseUser" class="form-label">Cidade</label>
+            <label for="cityOfCourseUser" class="form-label"
+              ><span class="text-danger">*</span>Cidade</label
+            >
             <input
               type="text"
               formControlName="city"

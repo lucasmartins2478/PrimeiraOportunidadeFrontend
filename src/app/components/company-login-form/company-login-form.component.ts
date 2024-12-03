@@ -11,11 +11,16 @@ import { ICompany } from '../../models/company.interface';
   styleUrls: ['./company-login-form.component.css'],
 })
 export class CompanyLoginFormComponent implements OnInit {
+
+  // Atributos de exibição do alerta
+
   alertMessage: string = '';
   alertTitle: string = '';
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
+
+  // Atributo do formulário
 
   loginForm!: FormGroup;
 
@@ -26,12 +31,17 @@ export class CompanyLoginFormComponent implements OnInit {
     private authService: UserAuthService
   ) {}
 
+  // Inicializa o formulário de login vazio na tela
+
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       user: ['', [Validators.required]],
       password: ['', [Validators.required]],
     });
   }
+
+  // Função que valida se os dados fornecidos são
+  // válidos verificando as informações no banco de dados
 
   onSubmit() {
     if (this.loginForm.valid) {
@@ -79,12 +89,16 @@ export class CompanyLoginFormComponent implements OnInit {
     }
   }
 
+  // Função que remove o alerta da tela após 3 segundos
+
   resetAlertAfterDelay() {
     setTimeout(() => {
       this.showAlert = false;
     }, 3000);
   }
 
+  // Função que limpa os dados do alerta
+  
   clearAlert() {
     this.alertMessage = '';
     this.showAlert = false;

@@ -34,7 +34,7 @@ import { ModalService } from '../../services/modal/modal.service';
 })
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
-  @Input() applied!: boolean;
+  @Input() applied: boolean = false
   @Input() companyName!: string;
 
   alertMessage: string = '';
@@ -246,12 +246,34 @@ export class JobCardComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-          console.log('Candidatura removida com sucesso:', response);
+          this.closeModal();
+          this.alertMessage = 'Vaga cancelada com sucesso!.';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Sucesso';
+          this.alertIconClass = 'bi bi-check-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
         },
         (error) => {
           console.error('Erro ao remover a candidatura:', error);
         }
       );
+
+      const body = {
+        vacancyId: jobId,
+        userId: this.userId
+      }
+    this.http.post(`https://backend-production-ff1f.up.railway.app/cancelledApplication`, body).subscribe(
+      (response)=>{
+        console.log("candidatura adicionada com sucesso")
+      },
+      (error)=>[
+        console.error(`Erro ao adicionar candidatura cancelada`)
+      ]
+    )
+    setTimeout(()=>{
+      this.router.navigate(['/minhas-candidaturas'])
+    }, 3000)
   }
   finishJob(jobId: number) {
     const body = {
@@ -459,6 +481,9 @@ export class JobCardComponent implements OnInit {
       this.alertIconClass = 'bi bi-check-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
+      setTimeout(()=>{
+        this.router.navigate(["/vagas"])
+      }, 3000)
     } catch (error) {
       console.error(`Erro ao enviar respostas ou candidatura:`, error);
       this.alertMessage = 'Ocorreu um erro ao realizar a candidatura.';
@@ -539,6 +564,7 @@ export class JobCardComponent implements OnInit {
                 this.showAlert = true;
                 this.resetAlertAfterDelay();
                 return;
+
               },
               (error) => {}
             );

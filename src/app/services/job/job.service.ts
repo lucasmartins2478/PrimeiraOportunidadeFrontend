@@ -41,6 +41,11 @@ export class JobService {
       `https://backend-production-ff1f.up.railway.app/applications/vacancy/${id}`
     );
   }
+  getCancelledApplications(id: number | undefined){
+    return this.http.get<IApplication[]>(
+      `https://backend-production-ff1f.up.railway.app/cancelledApplication/${id}`
+    );
+  }
 
   addCanceledJob(job: IJob) {
     let canceledJobs = this.getCanceledJobs();

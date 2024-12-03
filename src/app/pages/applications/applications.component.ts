@@ -28,7 +28,7 @@ export class ApplicationsComponent implements OnInit {
     private jobService: JobService,
     private companyService: companyFormService
   ) {}
-  
+
 
   async getCompanies() {
     this.companyService.getCompanies().subscribe(
@@ -67,11 +67,22 @@ export class ApplicationsComponent implements OnInit {
 
       // Buscar os IDs das candidaturas do usuário
       const applicationsResponse = await this.jobService.getApplicationsByUserId(this.targetId).toPromise();
+      const canceledApplications = await this.jobService.getCancelledApplications(this.targetId).toPromise();
+
       const filteredIds = applicationsResponse?.map((application) => application.vacancyId) || [];
+      const canceledIds = canceledApplications?.map((application) => application.vacancyId) || [];
+
+      // Verificar se há candidaturas canceladas
+      if (canceledIds.length > 0) {
+        // Adicionar as vagas canceladas ao array canceledJobs
+        this.canceledJobs = enrichedJobs.filter((job) => canceledIds.includes(job.id));
+      } else {
+        // Nenhuma candidatura cancelada
+        this.canceledJobs = [];
+      }
 
       // Filtrar as vagas com base nos critérios
       this.filteredJobs = enrichedJobs.filter((job) => filteredIds.includes(job.id));
-      this.canceledJobs = enrichedJobs.filter((job) => !job.isActive && !job.isFilled);
       this.finishedJobs = this.filteredJobs.filter((job) => job.isFilled || !job.isActive);
 
       // Inicializar as vagas buscadas
@@ -89,6 +100,8 @@ export class ApplicationsComponent implements OnInit {
       this.isLoading = false; // Conclui o carregamento
     }
   }
+
+
 
   onSearch(value: string) {
     const searchValue = this.removeAccents(value.toLowerCase());

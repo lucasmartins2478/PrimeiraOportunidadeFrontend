@@ -6,6 +6,10 @@ import { Component, Input } from '@angular/core';
   styleUrl: './alert.component.css',
 })
 export class AlertComponent {
+
+  // Nesse componente eu defino variáveis que serão injetadas em outros componentes
+  // e controlarão a mensagem e o estilo do alerta que será mostrado na tela
+
   @Input() title: string = '';
   @Input() message: string = '';
   @Input() class: string = '';

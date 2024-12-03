@@ -51,7 +51,9 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <label for="nameUser" class="form-label">Nome Completo</label>
+        <label for="nameUser" class="form-label"
+          ><span class="text-danger">*</span>Nome Completo</label
+        >
         <input
           type="text"
           name="nameUser"
@@ -65,7 +67,7 @@
     <div class="row">
       <div class="col-12 col-md-5">
         <label for="dateOfBirthUser" class="form-label"
-          >Data de Nascimento</label
+          ><span class="text-danger">*</span>Data de Nascimento</label
         >
         <input
           type="text"
@@ -76,9 +78,22 @@
           mask="00/00/0000"
           formControlName="dateOfBirth"
         />
+        <div
+          *ngIf="dateOfBirthControl?.invalid && dateOfBirthControl?.touched"
+          class="text-danger"
+        >
+          <small *ngIf="dateOfBirthControl?.errors?.['required']"
+            >A data de nascimento é obrigatória.</small
+          >
+          <small *ngIf="dateOfBirthControl?.errors?.['invalidDate']"
+            >Insira uma data válida no formato dd/mm/aaaa.</small
+          >
+        </div>
       </div>
       <div class="col-12 col-md-2">
-        <label for="ageUser" class="form-label">Idade</label>
+        <label for="ageUser" class="form-label"
+          ><span class="text-danger">*</span>Idade</label
+        >
         <input
           type="number"
           name="ageUser"
@@ -89,7 +104,9 @@
         />
       </div>
       <div class="col-12 col-md-5">
-        <label class="form-label">Gênero</label>
+        <label class="form-label"
+          ><span class="text-danger">*</span>Gênero</label
+        >
         <select
           class="form-select"
           formControlName="gender"
@@ -106,7 +123,9 @@
     </div>
     <div class="row">
       <div class="col-12 col-md-6">
-        <label class="form-label">Telefone</label>
+        <label class="form-label"
+          ><span class="text-danger">*</span>Telefone</label
+        >
         <input
           type="text"
           class="form-control"
@@ -116,7 +135,7 @@
         />
       </div>
       <div class="col-12 col-md-6">
-        <label class="form-label">Raça</label>
+        <label class="form-label"><span class="text-danger">*</span>Raça</label>
         <select
           class="form-select"
           formControlName="race"
@@ -134,7 +153,9 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <label for="emailUser" class="form-label">Email</label>
+        <label for="emailUser" class="form-label"
+          ><span class="text-danger">*</span>Email</label
+        >
         <input
           type="email"
           name="emailUser"
@@ -147,7 +168,9 @@
     </div>
     <div class="row">
       <div class="col-12 col-md-8">
-        <label for="cityUser" class="form-label">Cidade</label>
+        <label for="cityUser" class="form-label"
+          ><span class="text-danger">*</span>Cidade</label
+        >
         <input
           type="text"
           name="cityUser"
@@ -158,7 +181,9 @@
         />
       </div>
       <div class="col-12 col-md-4">
-        <label class="form-label">Estado</label>
+        <label class="form-label"
+          ><span class="text-danger">*</span>Estado</label
+        >
         <select
           class="form-select"
           formControlName="uf"
@@ -197,7 +222,9 @@
     </div>
     <div class="row">
       <div class="col-12 col-md-6">
-        <label for="addressUser" class="form-label">Endereço</label>
+        <label for="addressUser" class="form-label"
+          ><span class="text-danger">*</span>Endereço</label
+        >
         <input
           type="text"
           name="addressUser"
@@ -208,7 +235,9 @@
         />
       </div>
       <div class="col-12 col-md-2">
-        <label for="addressNumberUser" class="form-label">Número</label>
+        <label for="addressNumberUser" class="form-label"
+          ><span class="text-danger">*</span>Número</label
+        >
         <input
           type="number"
           name="addressNumberUser"
@@ -219,7 +248,9 @@
         />
       </div>
       <div class="col-12 col-md-4">
-        <label for="cepUser" class="form-label">CEP</label>
+        <label for="cepUser" class="form-label"
+          ><span class="text-danger">*</span>CEP</label
+        >
         <input
           type="text"
           name="cepUser"

@@ -20,8 +20,8 @@
       <app-job-card
         class="col-9 col-md-4"
         *ngFor="let item of searchedJobs"
-        [applied]="true"
         [job]="item"
+        [applied]="true"
       ></app-job-card>
     </div>
   </div>
@@ -35,7 +35,6 @@
         class="col-9 col-md-4"
         *ngFor="let job of canceledJobs"
         [job]="job"
-        [applied]="true"
       ></app-job-card>
     </div>
   </div>

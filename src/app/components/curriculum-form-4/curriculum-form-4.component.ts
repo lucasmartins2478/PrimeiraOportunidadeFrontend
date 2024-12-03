@@ -101,10 +101,7 @@ export class CurriculumForm4Component implements OnInit {
   createForm() {
     this.adictionalDataForm = this.fb.group({
       attached: [''],
-      description: [
-        this.curriculumData.description || '',
-        [Validators.required],
-      ],
+      description: [this.curriculumData.description || ''],
     });
   }
 
@@ -137,7 +134,7 @@ export class CurriculumForm4Component implements OnInit {
       };
       this.http.put<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
-          this.alertMessage = 'Formulário válido!';
+          this.alertMessage = 'Currículo cadastrado com sucesso!';
           this.alertClass = 'alert alert-success';
           this.alertTitle = 'Sucesso';
           this.alertIconClass = 'bi bi-check-circle';

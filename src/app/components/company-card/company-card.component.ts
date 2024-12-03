@@ -9,10 +9,8 @@ import { UserAuthService } from '../../services/auth/auth.service';
 })
 export class CompanyCardComponent {
 
+  // Aqui o componente recebe os dados para
+  // exibir na tela referente a uma empresa específica
+  
   @Input() company!: ICompany
-
-  companyName: string | undefined = "Teste"
-
-
-
 }

@@ -43,7 +43,7 @@
   </div>
   <div class="row">
     <div class="col-12 col-md-12">
-      <label for="companyName" class="form-label">Nome da empresa</label>
+      <label for="companyName" class="form-label"><span class="text-danger">*</span>Nome da empresa</label>
       <input
         type="text"
         name="companyName"
@@ -56,7 +56,7 @@
   </div>
   <div class="row">
     <div class="col-12 col-md-4">
-      <label for="companyCnpj" class="form-label">CNPJ</label>
+      <label for="companyCnpj" class="form-label"><span class="text-danger">*</span>CNPJ</label>
       <input
         type="text"
         name="companyCnpj"
@@ -78,22 +78,46 @@
       />
     </div>
     <div class="col-12 col-md-4">
-      <label class="form-label">Segmento</label>
+      <label class="form-label"><span class="text-danger">*</span>Segmento</label>
       <select
         class="form-select"
         formControlName="segment"
         aria-label="Default select example"
       >
         <option value="">Selecione</option>
-        <option value="Tecnologia e Informação">Tecnologia e Informação</option>
-        <option value="Comércio e Varejo">Comércio e Varejo</option>
-        <option value="Produção Alimentícia">Produção Alimentícia</option>
+        <option value="agricultura">Agricultura</option>
+        <option value="alimentacao">Alimentação</option>
+        <option value="automotivo">Automotivo</option>
+        <option value="bancos">Bancos</option>
+        <option value="bebidas">Bebidas</option>
+        <option value="comercio">Comércio</option>
+        <option value="construcao-civil">Construção Civil</option>
+        <option value="consultoria">Consultoria</option>
+        <option value="educacao">Educação</option>
+        <option value="energia">Energia</option>
+        <option value="entretenimento">Entretenimento</option>
+        <option value="farmaceutico">Farmacêutico</option>
+        <option value="financas">Finanças</option>
+        <option value="imobiliario">Imobiliário</option>
+        <option value="industria">Indústria</option>
+        <option value="logistica">Logística</option>
+        <option value="marketing">Marketing</option>
+        <option value="meio-ambiente">Meio Ambiente</option>
+        <option value="moda">Moda</option>
+        <option value="pet">Pet</option>
+        <option value="publicidade">Publicidade</option>
+        <option value="saude">Saúde</option>
+        <option value="servicos">Serviços</option>
+        <option value="tecnologia">Tecnologia</option>
+        <option value="telecomunicacoes">Telecomunicações</option>
+        <option value="turismo">Turismo</option>
+        <option value="varejo">Varejo</option>
       </select>
     </div>
   </div>
   <div class="row">
     <div class="col-12 col-md-7">
-      <label for="companyEmail" class="form-label">Email</label>
+      <label for="companyEmail" class="form-label"><span class="text-danger">*</span>Email</label>
       <input
         type="email"
         name="companyEmail"
@@ -104,7 +128,7 @@
       />
     </div>
     <div class="col-12 col-md-5">
-      <label for="companyPhoneNumber" class="form-label">Telefone</label>
+      <label for="companyPhoneNumber" class="form-label"><span class="text-danger">*</span>Telefone</label>
       <input
         type="text"
         name="companyPhoneNumber"
@@ -120,7 +144,7 @@
   <ng-template #password>
     <div class="row">
       <div class="col-12 col-md-6">
-        <label for="companyPassword" class="form-label">Senha</label>
+        <label for="companyPassword" class="form-label"><span class="text-danger">*</span>Senha</label>
         <input
           type="password"
           name="companyPassword"
@@ -132,7 +156,7 @@
       </div>
       <div class="col-12 col-md-6">
         <label for="companyConfirmPassoword" class="form-label"
-          >Confirme sua senha</label
+          ><span class="text-danger">*</span>Confirme sua senha</label
         >
         <input
           type="password"
@@ -159,7 +183,7 @@
       />
     </div>
     <div class="col-12 col-md-6">
-      <label for="responsible" class="form-label">Responsável</label>
+      <label for="responsible" class="form-label"><span class="text-danger">*</span>Responsável</label>
       <input
         type="text"
         name="responsible"
@@ -172,7 +196,7 @@
   </div>
   <div class="row">
     <div class="col-12 col-md-7">
-      <label for="companyCity" class="form-label">Cidade</label>
+      <label for="companyCity" class="form-label"><span class="text-danger">*</span>Cidade</label>
       <input
         type="text"
         name="companyCity"
@@ -183,7 +207,7 @@
       />
     </div>
     <div class="col-12 col-md-5">
-      <label for="companyCep" class="form-label">CEP</label>
+      <label for="companyCep" class="form-label"><span class="text-danger">*</span>CEP</label>
       <input
         type="text"
         name="companyCep"
@@ -197,7 +221,7 @@
   </div>
   <div class="row">
     <div class="col-12 col-md-5">
-      <label for="companyAddress" class="form-label">Endereço</label>
+      <label for="companyAddress" class="form-label"><span class="text-danger">*</span>Endereço</label>
       <input
         type="text"
         name="companyAddress"
@@ -208,7 +232,7 @@
       />
     </div>
     <div class="col-12 col-md-3">
-      <label for="companyAddressNumber" class="form-label">Número</label>
+      <label for="companyAddressNumber" class="form-label"><span class="text-danger">*</span>Número</label>
       <input
         type="text"
         name="companyAddressNumber"
@@ -219,7 +243,7 @@
       />
     </div>
     <div class="col-12 col-md-4">
-      <label class="form-label">Estado</label>
+      <label class="form-label"><span class="text-danger">*</span>Estado</label>
       <select
         class="form-select"
         formControlName="uf"
@@ -257,7 +281,11 @@
     </div>
   </div>
   <ng-container *ngIf="isAuthenticated(); else submit">
-    <button class="btn btn-primary" type="button" (click)="openModalPassword(onUpdate)">
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="openModalPassword(onUpdate)"
+    >
       Atualizar
     </button>
   </ng-container>

@@ -172,7 +172,7 @@ export class CurriculumForm3Component implements OnInit {
       .subscribe(() => {
         this.courses.removeAt(index);
         this.showAlertMessage(
-          'Curso deletada com sucesso!',
+          'Curso deletado com sucesso!',
           'alert-success',
           'Sucesso',
           'bi bi-check-circle'
@@ -224,7 +224,7 @@ export class CurriculumForm3Component implements OnInit {
       .subscribe(() => {
         this.competencies.removeAt(index);
         this.showAlertMessage(
-          'Competencia deletada com sucesso!',
+          'Competência deletada com sucesso!',
           'alert-success',
           'Sucesso',
           'bi bi-check-circle'
@@ -256,12 +256,6 @@ export class CurriculumForm3Component implements OnInit {
 
           this.http.post<ICoursesData[]>(apiUrl, body).subscribe(
             (response) => {
-              this.alertMessage = 'Curso cadastrado com sucesso!';
-              this.alertClass = 'alert alert-success';
-              this.alertTitle = 'Sucesso';
-              this.alertIconClass = 'bi bi-check-circle';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
             },
             (error) => {
               window.alert(`Erro ao cadastrar curso: ${error}`);
@@ -283,12 +277,6 @@ export class CurriculumForm3Component implements OnInit {
 
           this.http.post<ICompetences[]>(apiUrl, body).subscribe(
             (response) => {
-              this.alertMessage = 'Competência cadastrada com sucesso!';
-              this.alertClass = 'alert alert-success';
-              this.alertTitle = 'Sucesso';
-              this.alertIconClass = 'bi bi-check-circle';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
             },
             (error) => {
               window.alert(`Erro ao cadastrar competência: ${error}`);

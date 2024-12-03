@@ -12,18 +12,25 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./curriculum-form-2.component.css'],
 })
 export class CurriculumForm2Component implements OnInit {
+  // Atributos de exibição dos alertas
+
   alertMessage: string = '';
   alertTitle: string = '';
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
+
+  // Atributos para operação de editar o currículo
+
   curriculumData!: ICurriculum;
   academicForm!: FormGroup;
   userData = this.userService.getUserData();
   hasCurriculum!: boolean;
   hasAcademicData!: boolean;
-  isLoading: boolean = true; // Inicializada como true
 
+  // Controla a exibição do loading na tela
+
+  isLoading: boolean = true; // Inicializada como true
 
   constructor(
     private fb: FormBuilder,
@@ -33,9 +40,15 @@ export class CurriculumForm2Component implements OnInit {
     private curriculumService: CurriculumService
   ) {}
 
+  // Inicia o array de dados academicos
+
   get institutions(): FormArray {
     return this.academicForm.get('institutions') as FormArray;
   }
+
+  // Função que exibe um loading na tela enquanto os dados
+  // são buscados no banco de dados e adicionados na tela
+
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
     try {
@@ -49,11 +62,16 @@ export class CurriculumForm2Component implements OnInit {
     }
   }
 
+  // Inicializa o componente criando o formulário vazio e chamando a função de loading
 
   ngOnInit(): void {
     this.createForm();
     this.loadData();
   }
+
+  // Verifica se o usuário já possui um currículo
+  // cadastrado para definir se é uma operação de
+  // criação de currículo ou de edição
 
   checkCurriculum() {
     const id = this.userData?.id;
@@ -72,6 +90,8 @@ export class CurriculumForm2Component implements OnInit {
     );
   }
 
+  // Função que cria os campos do formulário na tela
+
   createForm() {
     this.academicForm = this.fb.group({
       schoolName: ['', Validators.required],
@@ -82,6 +102,8 @@ export class CurriculumForm2Component implements OnInit {
       institutions: this.fb.array([]),
     });
   }
+
+  // Função que busca dos dados do currículo do usuário no banco de dados
 
   async getCurriculumData(): Promise<void> {
     const id = this.userData?.id;
@@ -104,18 +126,20 @@ export class CurriculumForm2Component implements OnInit {
     });
   }
 
+  // Função que busca os dados academicos do usuário no banco de dados
+
   async getAcademicData(): Promise<void> {
     const id = this.userData?.id;
     if (!id) {
       console.log('ID do usuário não encontrado.');
       return;
     }
-    return new Promise<void>((resolve, reject)=>{
+    return new Promise<void>((resolve, reject) => {
       this.curriculumService.getAcademicData(id).subscribe(
         (response: IAcademicData[]) => {
           this.hasAcademicData = Array.isArray(response) && response.length > 0;
           this.updateFormWithAcademicData(response);
-          resolve()
+          resolve();
         },
         (error) => {
           console.log(`Erro ao buscar dados acadêmicos: ${error}`);
@@ -125,12 +149,14 @@ export class CurriculumForm2Component implements OnInit {
             'Erro',
             'bi bi-x-circle'
           );
-          reject(error)
+          reject(error);
         }
       );
-    })
-
+    });
   }
+
+  // Função que atualiza os dados do formulário com os
+  // dados do banco de dados para a edição dos dados
 
   updateFormWithCurriculumData() {
     if (this.curriculumData) {
@@ -143,6 +169,9 @@ export class CurriculumForm2Component implements OnInit {
       });
     }
   }
+
+  // Função que atualiza os campos do formulário de dados academicos para que
+  // o usuário possa edita-los
 
   updateFormWithAcademicData(academicDataArray: IAcademicData[]) {
     if (academicDataArray && academicDataArray.length > 0) {
@@ -166,6 +195,9 @@ export class CurriculumForm2Component implements OnInit {
     }
   }
 
+  // Função que adiciona mais campos para adição
+  // de mais dados institucionais no banco de dados
+
   addInstitution() {
     const institutionForm = this.fb.group({
       institutionName: ['', Validators.required],
@@ -180,39 +212,48 @@ export class CurriculumForm2Component implements OnInit {
     this.institutions.push(institutionForm);
   }
 
+  // Função que remove os campos de uma instituição da tela e também
+  // do banco de dados se houver
+
   removeInstitution(index: number) {
-    const institutionId = this.institutions.at(index).get('id')?.value;
+    const institutionForm = this.institutions.at(index);
+    const institutionId = institutionForm.get('id')?.value;
 
-    if (!institutionId) {
-      console.error('ID da instituição não encontrado.');
-      return;
+    if (institutionId) {
+      // Realiza a exclusão no banco de dados
+      this.http
+        .delete(
+          `https://backend-production-ff1f.up.railway.app/academicData/${institutionId}`
+        )
+        .subscribe(
+          () => {
+            this.institutions.removeAt(index);
+            this.showAlertMessage(
+              'Instituição deletada com sucesso!',
+              'alert-success',
+              'Sucesso',
+              'bi bi-check-circle'
+            );
+          },
+          (error) => {
+            console.error('Erro ao deletar dados acadêmicos:', error);
+            this.showAlertMessage(
+              'Erro ao deletar dados acadêmicos.',
+              'alert-danger',
+              'Erro',
+              'bi bi-x-circle'
+            );
+          }
+        );
+    } else {
+      // Remove diretamente o formulário vazio
+      this.institutions.removeAt(index);
     }
-
-    this.http
-      .delete(
-        `https://backend-production-ff1f.up.railway.app/academicData/${institutionId}`
-      )
-      .subscribe(
-        () => {
-          this.institutions.removeAt(index);
-          this.showAlertMessage(
-            'Instituição deletada com sucesso!',
-            'alert-success',
-            'Sucesso',
-            'bi bi-check-circle'
-          );
-        },
-        (error) => {
-          console.error('Erro ao deletar dados acadêmicos:', error);
-          this.showAlertMessage(
-            'Erro ao deletar dados acadêmicos.',
-            'alert-danger',
-            'Erro',
-            'bi bi-x-circle'
-          );
-        }
-      );
   }
+
+
+  // Função que adiciona informações no currículo do usuário
+  // e também os dados academicos preenhidos na tela
 
   onSubmit() {
     // Lógica de envio do formulário
@@ -255,12 +296,7 @@ export class CurriculumForm2Component implements OnInit {
           };
           this.http.post<IAcademicData[]>(apiUrl, body).subscribe(
             () => {
-              this.showAlertMessage(
-                'Formulário válido!',
-                'alert-success',
-                'Sucesso',
-                'bi bi-check-circle'
-              );
+             
             },
             (error: any) => {
               window.alert(`Erro ao cadastrar currículo: ${error}`);
@@ -280,6 +316,9 @@ export class CurriculumForm2Component implements OnInit {
       );
     }
   }
+
+  // Função que atualiza os dados academicos do usuário no banco de dados
+
   onUpdate() {
     if (this.academicForm.valid) {
       const formData = this.academicForm.value;
@@ -375,6 +414,8 @@ export class CurriculumForm2Component implements OnInit {
       );
     }
   }
+
+  // Função que exibe o alerta na tela
 
   showAlertMessage(
     message: string,

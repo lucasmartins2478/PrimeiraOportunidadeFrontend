@@ -235,31 +235,31 @@ export class UserFormComponent implements OnInit {
       return false;
     }
   }
-   // Adicione esta propriedade na classe do componente.
+  // Adicione esta propriedade na classe do componente.
 
-confirmPassword() {
-  if (this.user.password === this.confirmedPassword) {
-    this.attemptCount = 0; // Redefine o contador em caso de sucesso.
-    this.actionToPerform();
-    this.closeModalPassword();
-  } else {
-    this.attemptCount++; // Incrementa o contador de tentativas.
-    this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
-    this.alertClass = 'alert alert-danger';
-    this.alertTitle = 'Senha incorreta!';
-    this.alertIconClass = 'bi bi-x-circle';
-    this.showAlert = true;
-    this.resetAlertAfterDelay();
-
-    if (this.attemptCount >= 3) {
-      // Fecha o modal e executa o logout após 3 tentativas falhas.
-      this.router.navigate(["/realize-login"])
+  confirmPassword() {
+    if (this.user.password === this.confirmedPassword) {
+      this.attemptCount = 0; // Redefine o contador em caso de sucesso.
+      this.actionToPerform();
       this.closeModalPassword();
-      this.authService.logout(); // Supondo que `logout` está no `authService`.
+    } else {
+      this.attemptCount++; // Incrementa o contador de tentativas.
+      this.alertMessage =
+        'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Senha incorreta!';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+
+      if (this.attemptCount >= 3) {
+        // Fecha o modal e executa o logout após 3 tentativas falhas.
+        this.router.navigate(['/realize-login']);
+        this.closeModalPassword();
+        this.authService.logout(); // Supondo que `logout` está no `authService`.
+      }
     }
   }
-}
-
 
   deleteUser() {
     const id = this.user.id;
@@ -267,7 +267,12 @@ confirmPassword() {
     const deleteUserCallback = () => {
       this.userFormService.deleteUserData(id).subscribe(
         () => {
-          this.showSuccessAlert('Dados excluídos com sucesso!');
+          this.alertMessage = 'Dados excluídos com sucesso!';
+          this.alertClass = 'alert alert-success';
+          this.alertTitle = 'Concluído';
+          this.alertIconClass = 'bi bi-check-circle';
+          this.showAlert = true;
+          this.resetAlertAfterDelay();
           setTimeout(() => {
             this.authService.logout();
             this.router.navigate(['/']);

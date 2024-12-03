@@ -27,8 +27,6 @@ export class UserAuthService {
       console.warn('Dados da empresa não encontrados no localStorage.');
     }
   }
-  
-
   login(user: IUser) {
     if (!user || !user.id) {
       console.error('Erro: Usuário inválido.');
@@ -39,7 +37,6 @@ export class UserAuthService {
     localStorage.setItem('userType', 'user');
     this.saveUserDataToStorage(user); // Salvar dados no localStorage ao logar
   }
-
 
   loginCompany(company: ICompany) {
     this.company = company;
@@ -88,8 +85,6 @@ export class UserAuthService {
       localStorage.setItem('phoneNumber', user.phoneNumber);
     }
   }
-
-
 
   private saveCompanyDataToStorage(company: ICompany): void {
     localStorage.setItem('responsible', company.responsible);

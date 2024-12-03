@@ -12,16 +12,30 @@ import { UserAuthService } from '../../services/auth/auth.service';
   styleUrls: ['./company-form.component.css'], // Corrigi a propriedade 'styleUrl' para 'styleUrls'
 })
 export class CompanyFormComponent implements OnInit {
+  // Atributos de exibição do alerta
+
   alertMessage: string = '';
   alertTitle: string = '';
   alertClass: string = '';
   alertIconClass: string = '';
   showAlert: boolean = false;
+
+  // Atributos usados nas validações de informações
+  // Para definir se a operação será de cadastrar ou atualizar
+
   company!: ICompany;
   companyForm!: FormGroup;
   companyData = this.authService.getCompanyData();
+
+  // Atributos usados para a validação da empresa caso
+  // esteja na operação de atualizar os dados
+
   confirmedPassword!: string;
   isModalPasswordOpen!: boolean;
+
+  // Atributos para chamar a função após a verificação de senha
+  // e a contagem de tentativas para caso digite a senha errada
+
   actionToPerform!: () => void;
   attemptCount: number = 0;
 
@@ -32,6 +46,8 @@ export class CompanyFormComponent implements OnInit {
     private companyFormService: companyFormService,
     private authService: UserAuthService
   ) {}
+
+  // Função que busca os dados da empresa no banco de dados se houver
 
   getCompanyData() {
     const id = this.companyData?.id;
@@ -45,6 +61,9 @@ export class CompanyFormComponent implements OnInit {
       }
     );
   }
+
+  // Função que gerencia a criação dos campos do formulário de cadastro
+  // ou atualização da empresa na tela
 
   createCompanyForm(company: ICompany) {
     this.companyForm = this.fb.group({
@@ -66,6 +85,10 @@ export class CompanyFormComponent implements OnInit {
     });
   }
 
+  // Função que executa no momento da inicialização do componente que
+  // verifica se é um usuário logado ou não para determinar se deve buscar
+  // os dados da empresa para exibir na tela ou se é uma operação de cadastro
+
   ngOnInit(): void {
     if (this.isAuthenticated()) {
       this.getCompanyData();
@@ -74,17 +97,33 @@ export class CompanyFormComponent implements OnInit {
     }
   }
 
+  // Verifica se o usuário esta logado ou não
+
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
+
+  // Função que exibe o modal de confirmação de
+  // senha na tela antes de fazer a atualização
+  // dos dados para garantir a segurança da operação
+
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
     this.isModalPasswordOpen = true;
   }
+
+  // Função que fecha o modal após a confirmação de senha
+
   closeModalPassword() {
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }
+
+  // Função que confirma a senha da empresa no momento de
+  // atualizar os dados e que possui um contador de 3 tentativas
+  // se o usuário errar as tentativas o sistema chama a função de
+  // logout e redireciona para a tela de fazer login
+
   confirmPassword() {
     if (this.company.password === this.confirmedPassword) {
       this.attemptCount = 0;
@@ -92,7 +131,8 @@ export class CompanyFormComponent implements OnInit {
       this.closeModalPassword();
     } else {
       this.attemptCount++; // Incrementa o contador de tentativas.
-      this.alertMessage = 'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
+      this.alertMessage =
+        'Cuidado, errar a senha mais de 3 vezes irá bloquear a tela!';
       this.alertClass = 'alert alert-danger';
       this.alertTitle = 'Senha incorreta!';
       this.alertIconClass = 'bi bi-x-circle';
@@ -101,12 +141,16 @@ export class CompanyFormComponent implements OnInit {
 
       if (this.attemptCount >= 3) {
         // Fecha o modal e executa o logout após 3 tentativas falhas.
-        this.router.navigate(["/realize-login"])
+        this.router.navigate(['/realize-login']);
         this.closeModalPassword();
         this.authService.logout(); // Supondo que `logout` está no `authService`.
       }
     }
   }
+
+  // Função que deleta os dados da empresa no banco de dados e
+  // retorna para a tela inicial do sistema
+
   deleteCompany() {
     const id = this.company.id;
     this.companyFormService.deleteCompanyData(id).subscribe(
@@ -117,6 +161,10 @@ export class CompanyFormComponent implements OnInit {
         this.alertIconClass = 'bi bi-check-circle';
         this.showAlert = true;
         this.resetAlertAfterDelay();
+        setTimeout(() => {
+          this.authService.logout();
+          this.router.navigate(['/']);
+        }, 2000);
       },
       (error) => {
         console.error(`Erro ao deletar empresa ${error}`);
@@ -124,7 +172,8 @@ export class CompanyFormComponent implements OnInit {
     );
   }
 
-  // Método chamado ao selecionar um arquivo de imagem
+  // Função que cadastra uma nova empresa no sistemaobtendo
+  // os dados do formulário e adicionando no banco de dados
 
   async onSubmit() {
     if (this.companyForm.valid) {
@@ -179,6 +228,8 @@ export class CompanyFormComponent implements OnInit {
     }
   }
 
+  // Função que atualiza os dados na empresa no banco de dados
+
   async onUpdate() {
     if (this.companyForm.valid) {
       const id = this.companyData?.id;
@@ -212,11 +263,24 @@ export class CompanyFormComponent implements OnInit {
     }
   }
 
+  // Função que verifica se o cnpj não está cadastrado
+  // em nenhuma outra empresa e se é um cnpj válido
+
   async verifyCnpj(cnpj: string): Promise<boolean> {
+    if (!this.validateCnpj(cnpj)) {
+      this.alertMessage = 'O CNPJ fornecido é inválido!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+      return false;
+    }
+
     try {
       const response = await this.http
         .get<ICompany[]>(
-          'https://backend-production-ff1f.up.railway.app/companies'
+          `https://backend-production-ff1f.up.railway.app/companies`
         )
         .toPromise();
 
@@ -231,11 +295,63 @@ export class CompanyFormComponent implements OnInit {
     }
   }
 
+  // Função que valida o cnpj fornecido pela empresa no momento do cadastro
+
+  validateCnpj(cnpj: string): boolean {
+    // Remove os caracteres não numéricos
+    cnpj = cnpj.replace(/[^\d]/g, '');
+
+    // CNPJ com 14 caracteres
+    if (cnpj.length !== 14) return false;
+
+    // Validação de CNPJ inválidos conhecidos
+    const invalidCnpjs = [
+      '00000000000000',
+      '11111111111111',
+      '22222222222222',
+      '33333333333333',
+      '44444444444444',
+      '55555555555555',
+      '66666666666666',
+      '77777777777777',
+      '88888888888888',
+      '99999999999999',
+    ];
+
+    if (invalidCnpjs.includes(cnpj)) return false;
+
+    // Valida o primeiro dígito verificador
+    let sum = 0;
+    let weights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    for (let i = 0; i < 12; i++) {
+      sum += parseInt(cnpj[i]) * weights[i];
+    }
+    let remainder = sum % 11;
+    let digit1 = remainder < 2 ? 0 : 11 - remainder;
+
+    if (digit1 !== parseInt(cnpj[12])) return false;
+
+    // Valida o segundo dígito verificador
+    sum = 0;
+    weights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    for (let i = 0; i < 13; i++) {
+      sum += parseInt(cnpj[i]) * weights[i];
+    }
+    remainder = sum % 11;
+    let digit2 = remainder < 2 ? 0 : 11 - remainder;
+
+    return digit2 === parseInt(cnpj[13]);
+  }
+
+  // Função que remove o alerta da tela após o timer de 3 segundos
+
   resetAlertAfterDelay() {
     setTimeout(() => {
       this.showAlert = false;
     }, 3000);
   }
+
+  // Função que limpa os dados do alerta
 
   clearAlert() {
     this.alertMessage = '';

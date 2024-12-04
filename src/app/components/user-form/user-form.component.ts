@@ -26,6 +26,14 @@ export class UserFormComponent implements OnInit {
   actionToPerform!: () => void;
   attemptCount: number = 0;
   isLoading: boolean = true;
+  showPasswordGuidelines = false;
+  passwordStrength = {
+    hasMinLength: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +54,20 @@ export class UserFormComponent implements OnInit {
     } finally {
       this.isLoading = false; // Conclui o carregamento
     }
+  }
+  validatePasswordStrength(): void {
+    const password = this.userForm.get('password')?.value || '';
+    this.passwordStrength = {
+      hasMinLength: password.length >= 6,
+      hasUppercase: /[A-Z]/.test(password),
+      hasLowercase: /[a-z]/.test(password),
+      hasNumber: /\d/.test(password),
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+  }
+  private showError(message: string): void {
+    // Adicione a lógica para exibir uma mensagem de erro, ex: alerta ou toast
+    console.error(message);
   }
 
   async getUserData(): Promise<void> {
@@ -99,11 +121,10 @@ export class UserFormComponent implements OnInit {
     if (this.isAuthenticated()) {
       this.loadData();
     } else {
-      this.isLoading = false
+      this.isLoading = false;
       this.createUserForm({} as IUser); // Inicialize com um objeto vazio
     }
   }
-
 
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
@@ -113,7 +134,6 @@ export class UserFormComponent implements OnInit {
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }
-
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
@@ -125,49 +145,59 @@ export class UserFormComponent implements OnInit {
 
       const formData = this.userForm.value;
 
-      if (formData.password === formData.confirmPassword) {
-        const exists = await this.verifyEmail(formData.email);
-        if (exists) {
-          this.alertMessage = 'Email já vinculado a uma conta existente!';
-          this.alertClass = 'alert alert-warning';
-          this.alertTitle = 'Ops!';
-          this.alertIconClass = 'bi bi-exclamation-circle';
+      if (
+        this.passwordStrength.hasMinLength &&
+        this.passwordStrength.hasUppercase &&
+        this.passwordStrength.hasLowercase &&
+        this.passwordStrength.hasNumber &&
+        this.passwordStrength.hasSpecialChar
+      ) {
+        if (formData.password === formData.confirmPassword) {
+          const exists = await this.verifyEmail(formData.email);
+          if (exists) {
+            this.alertMessage = 'Email já vinculado a uma conta existente!';
+            this.alertClass = 'alert alert-warning';
+            this.alertTitle = 'Ops!';
+            this.alertIconClass = 'bi bi-exclamation-circle';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+          } else {
+            const body = {
+              name: formData.name,
+              cpf: formData.cpf,
+              phoneNumber: formData.phoneNumber,
+              email: formData.email,
+              password: formData.password,
+            };
+            this.http.post<IUser>(apiUrl, body).subscribe(
+              (response) => {
+                this.userFormService.setFormData(this.userForm.value);
+                this.alertMessage = 'Usuário cadastrado com sucesso!';
+                this.alertClass = 'alert alert-success';
+                this.alertTitle = 'Sucesso';
+                this.alertIconClass = 'bi bi-check-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+
+                setTimeout(() => {
+                  this.router.navigate(['/login/candidato']);
+                }, 2000);
+              },
+              (error) => {
+                window.alert(`Erro ao cadastrar usuário ${error}`);
+              }
+            );
+          }
+        } else if (formData.password !== formData.confirmPassword) {
+          this.alertMessage = 'As senhas devem ser correspondentes!';
+          this.alertClass = 'alert alert-danger';
+          this.alertTitle = 'Erro';
+          this.alertIconClass = 'bi bi-x-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-        } else {
-          const body = {
-            name: formData.name,
-            cpf: formData.cpf,
-            phoneNumber: formData.phoneNumber,
-            email: formData.email,
-            password: formData.password,
-          };
-          this.http.post<IUser>(apiUrl, body).subscribe(
-            (response) => {
-              this.userFormService.setFormData(this.userForm.value);
-              this.alertMessage = 'Usuário cadastrado com sucesso!';
-              this.alertClass = 'alert alert-success';
-              this.alertTitle = 'Sucesso';
-              this.alertIconClass = 'bi bi-check-circle';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
-
-              setTimeout(() => {
-                this.router.navigate(['/login/candidato']);
-              }, 2000);
-            },
-            (error) => {
-              window.alert(`Erro ao cadastrar usuário ${error}`);
-            }
-          );
         }
-      } else if (formData.password !== formData.confirmPassword) {
-        this.alertMessage = 'As senhas devem ser correspondentes!';
-        this.alertClass = 'alert alert-danger';
-        this.alertTitle = 'Erro';
-        this.alertIconClass = 'bi bi-x-circle';
-        this.showAlert = true;
-        this.resetAlertAfterDelay();
+      } else {
+        this.showError('A senha não atende aos requisitos de segurança.');
       }
     } else {
       this.alertMessage = 'Preencha os dados corretamente!';

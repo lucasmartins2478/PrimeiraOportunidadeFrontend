@@ -115,7 +115,33 @@
             placeholder="Senha"
             class="form-control"
             formControlName="password"
+            (focus)="showPasswordGuidelines = true"
+            (blur)="showPasswordGuidelines = false"
+            (input)="validatePasswordStrength()"
           />
+          <div
+            *ngIf="showPasswordGuidelines"
+            class="password-guidelines alert alert-info mt-2"
+          >
+            <p><strong>Sua senha deve conter:</strong></p>
+            <ul>
+              <li [class.text-success]="passwordStrength.hasMinLength">
+                Mínimo de 6 caracteres
+              </li>
+              <li [class.text-success]="passwordStrength.hasUppercase">
+                Uma letra maiúscula
+              </li>
+              <li [class.text-success]="passwordStrength.hasLowercase">
+                Uma letra minúscula
+              </li>
+              <li [class.text-success]="passwordStrength.hasNumber">
+                Um número
+              </li>
+              <li [class.text-success]="passwordStrength.hasSpecialChar">
+                Um caractere especial (ex: &#64;, #, $, !)
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="row">

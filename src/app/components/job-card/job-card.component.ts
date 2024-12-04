@@ -302,15 +302,15 @@ export class JobCardComponent implements OnInit {
     };
     this.http
       .put<IJob>(
-        `https://backend-production-ff1f.up.railway.app/vacancyIsFilled/${jobId}`,
+        `https://backend-production-ff1f.up.railway.app/vacancyIsActive/${jobId}`,
         body
       )
       .subscribe(
         (response) => {
           this.closeModal();
-          this.alertMessage = 'Vaga cancelada com sucesso!.';
+          this.alertMessage = 'Vaga cancelada com sucesso!';
           this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Erro';
+          this.alertTitle = 'Concluído';
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();

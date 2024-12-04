@@ -40,6 +40,15 @@ export class CompanyFormComponent implements OnInit {
   attemptCount: number = 0;
   isLoading: boolean = true;
 
+  showPasswordGuidelines = false;
+  passwordStrength = {
+    hasMinLength: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+  };
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -58,6 +67,17 @@ export class CompanyFormComponent implements OnInit {
     } finally {
       this.isLoading = false; // Conclui o carregamento
     }
+  }
+
+  validatePasswordStrength(): void {
+    const password = this.companyForm.get('password')?.value || '';
+    this.passwordStrength = {
+      hasMinLength: password.length >= 6,
+      hasUppercase: /[A-Z]/.test(password),
+      hasLowercase: /[a-z]/.test(password),
+      hasNumber: /\d/.test(password),
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
   }
 
   // Função que busca os dados da empresa no banco de dados se houver
@@ -203,42 +223,52 @@ export class CompanyFormComponent implements OnInit {
 
       const formData = this.companyForm.value;
 
-      if (formData.password === formData.confirmPassword) {
-        const exists = await this.verifyCnpj(formData.cnpj);
-        if (exists) {
-          this.alertMessage =
-            'O CNPJ informado já está vinculado a uma conta existente!';
+      if (
+        this.passwordStrength.hasMinLength &&
+        this.passwordStrength.hasUppercase &&
+        this.passwordStrength.hasLowercase &&
+        this.passwordStrength.hasNumber &&
+        this.passwordStrength.hasSpecialChar
+      ) {
+        if (formData.password === formData.confirmPassword) {
+          const exists = await this.verifyCnpj(formData.cnpj);
+          if (exists) {
+            this.alertMessage =
+              'O CNPJ informado já está vinculado a uma conta existente!';
+            this.alertClass = 'alert alert-danger';
+            this.alertTitle = 'Erro';
+            this.alertIconClass = 'bi bi-x-circle';
+            this.showAlert = true;
+            this.resetAlertAfterDelay();
+          } else {
+            this.http.post<ICompany>(apiUrl, formData).subscribe(
+              (response) => {
+                this.companyFormService.setFormData(this.companyForm.value);
+                this.alertMessage = 'Empresa cadastrado com sucesso!';
+                this.alertClass = 'alert alert-success';
+                this.alertTitle = 'Sucesso';
+                this.alertIconClass = 'bi bi-check-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+                setTimeout(() => {
+                  this.router.navigate(['/login/empresa']);
+                }, 2000);
+              },
+              (error) => {
+                window.alert(`Erro ao cadastrar usuário ${error}`);
+              }
+            );
+          }
+        } else {
+          this.alertMessage = 'As senhas devem ser correspondentes!';
           this.alertClass = 'alert alert-danger';
           this.alertTitle = 'Erro';
           this.alertIconClass = 'bi bi-x-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
-        } else {
-          this.http.post<ICompany>(apiUrl, formData).subscribe(
-            (response) => {
-              this.companyFormService.setFormData(this.companyForm.value);
-              this.alertMessage = 'Empresa cadastrado com sucesso!';
-              this.alertClass = 'alert alert-success';
-              this.alertTitle = 'Sucesso';
-              this.alertIconClass = 'bi bi-check-circle';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
-              setTimeout(() => {
-                this.router.navigate(['/login/empresa']);
-              }, 2000);
-            },
-            (error) => {
-              window.alert(`Erro ao cadastrar usuário ${error}`);
-            }
-          );
         }
       } else {
-        this.alertMessage = 'As senhas devem ser correspondentes!';
-        this.alertClass = 'alert alert-danger';
-        this.alertTitle = 'Erro';
-        this.alertIconClass = 'bi bi-x-circle';
-        this.showAlert = true;
-        this.resetAlertAfterDelay();
+        this.showError('A senha não atende aos requisitos de segurança.');
       }
     } else {
       this.alertMessage = 'Preencha os dados corretamente!';
@@ -248,6 +278,11 @@ export class CompanyFormComponent implements OnInit {
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
+  }
+
+  private showError(message: string): void {
+    // Adicione a lógica para exibir uma mensagem de erro, ex: alerta ou toast
+    console.error(message);
   }
 
   // Função que atualiza os dados na empresa no banco de dados

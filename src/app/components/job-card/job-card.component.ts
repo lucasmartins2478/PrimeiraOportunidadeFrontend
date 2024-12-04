@@ -6,13 +6,7 @@ import { IApplication } from '../../models/application.interface';
 import { Router } from '@angular/router';
 import { JobService } from '../../services/job/job.service';
 import { QuestionsService } from '../../services/questions/questions.service';
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { UserFormService } from '../../services/user/user-form.service';
 import { CurriculumService } from '../../services/curriculum/curriculum.service';
 import { IUser } from '../../models/user.interface';
@@ -34,7 +28,7 @@ import { ModalService } from '../../services/modal/modal.service';
 })
 export class JobCardComponent implements OnInit {
   @Input() job!: IJob;
-  @Input() applied: boolean = false
+  @Input() applied: boolean = false;
   @Input() companyName!: string;
 
   alertMessage: string = '';
@@ -259,21 +253,24 @@ export class JobCardComponent implements OnInit {
         }
       );
 
-      const body = {
-        vacancyId: jobId,
-        userId: this.userId
-      }
-    this.http.post(`https://backend-production-ff1f.up.railway.app/cancelledApplication`, body).subscribe(
-      (response)=>{
-        console.log("candidatura adicionada com sucesso")
-      },
-      (error)=>[
-        console.error(`Erro ao adicionar candidatura cancelada`)
-      ]
-    )
-    setTimeout(()=>{
-      this.router.navigate(['/minhas-candidaturas'])
-    }, 3000)
+    const body = {
+      vacancyId: jobId,
+      userId: this.userId,
+    };
+    this.http
+      .post(
+        `https://backend-production-ff1f.up.railway.app/cancelledApplication`,
+        body
+      )
+      .subscribe(
+        (response) => {
+          console.log('candidatura adicionada com sucesso');
+        },
+        (error) => [console.error(`Erro ao adicionar candidatura cancelada`)]
+      );
+    setTimeout(() => {
+      this.router.navigate(['/minhas-candidaturas']);
+    }, 3000);
   }
   finishJob(jobId: number) {
     const body = {
@@ -287,7 +284,7 @@ export class JobCardComponent implements OnInit {
       .subscribe(
         (response) => {
           this.closeModal();
-          this.alertMessage = 'Vaga cancelada com sucesso!.';
+          this.alertMessage = 'Vaga finalizada com sucesso!.';
           this.alertClass = 'alert alert-success';
           this.alertTitle = 'Erro';
           this.alertIconClass = 'bi bi-check-circle';
@@ -463,6 +460,16 @@ export class JobCardComponent implements OnInit {
 
       // Após enviar todas as respostas, cria a candidatura
       const applicationBody = { userId: this.userId, vacancyId: jobId };
+      this.http
+        .delete(
+          `https://backend-production-ff1f.up.railway.app/cancelledApplication/${this.userId}/${jobId}`
+        )
+        .subscribe(
+          (response) => {
+            console.log('candidatura adicionada com sucesso');
+          },
+          (error) => [console.error(`Erro ao adicionar candidatura cancelada`)]
+        );
 
       await this.http
         .post<IApplication>(
@@ -481,9 +488,9 @@ export class JobCardComponent implements OnInit {
       this.alertIconClass = 'bi bi-check-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
-      setTimeout(()=>{
-        this.router.navigate(["/vagas"])
-      }, 3000)
+      setTimeout(() => {
+        this.router.navigate(['/vagas']);
+      }, 3000);
     } catch (error) {
       console.error(`Erro ao enviar respostas ou candidatura:`, error);
       this.alertMessage = 'Ocorreu um erro ao realizar a candidatura.';
@@ -547,6 +554,19 @@ export class JobCardComponent implements OnInit {
           const applicationBody = { userId, vacancyId };
 
           this.http
+            .delete(
+              `https://backend-production-ff1f.up.railway.app/cancelledApplication/${userId}/${vacancyId}`
+            )
+            .subscribe(
+              (response) => {
+                console.log('candidatura adicionada com sucesso');
+              },
+              (error) => [
+                console.error(`Erro ao adicionar candidatura cancelada`),
+              ]
+            );
+
+          this.http
             .post(
               'https://backend-production-ff1f.up.railway.app/application',
               applicationBody
@@ -564,7 +584,6 @@ export class JobCardComponent implements OnInit {
                 this.showAlert = true;
                 this.resetAlertAfterDelay();
                 return;
-
               },
               (error) => {}
             );

@@ -38,6 +38,7 @@ export class CompanyFormComponent implements OnInit {
 
   actionToPerform!: () => void;
   attemptCount: number = 0;
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -47,19 +48,39 @@ export class CompanyFormComponent implements OnInit {
     private authService: UserAuthService
   ) {}
 
+  private async loadData(): Promise<void> {
+    this.isLoading = true; // Define como true no início
+    try {
+      await this.getCompanyData();
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+      // Exiba uma mensagem de erro na UI se necessário
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
+    }
+  }
+
   // Função que busca os dados da empresa no banco de dados se houver
 
-  getCompanyData() {
+  async getCompanyData(): Promise<void> {
     const id = this.companyData?.id;
-    this.companyFormService.getUserData(id).subscribe(
-      (response: ICompany) => {
-        this.company = response;
-        this.createCompanyForm(this.company);
-      },
-      (error) => {
-        console.log(`Erro ao buscar a empresa com ID ${id}: ${error}`);
-      }
-    );
+    if (!id) {
+      console.error('ID do usuário não encontrado.');
+      return Promise.reject('ID do usuário não encontrado.');
+    }
+    return new Promise<void>((resolve, reject) => {
+      this.companyFormService.getUserData(id).subscribe(
+        (response: ICompany) => {
+          this.company = response;
+          this.createCompanyForm(this.company);
+          resolve();
+        },
+        (error) => {
+          console.log(`Erro ao buscar a empresa com ID ${id}: ${error}`);
+          reject(error);
+        }
+      );
+    });
   }
 
   // Função que gerencia a criação dos campos do formulário de cadastro
@@ -91,8 +112,9 @@ export class CompanyFormComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isAuthenticated()) {
-      this.getCompanyData();
+      this.loadData();
     } else {
+      this.isLoading = false;
       this.createCompanyForm(this.company);
     }
   }

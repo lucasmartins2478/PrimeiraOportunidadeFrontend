@@ -5,297 +5,331 @@
   [title]="alertTitle"
   [iconClass]="alertIconClass"
 ></app-alert>
-
-<form *ngIf="companyForm" class="form" [formGroup]="companyForm">
-  <h2>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="35"
-      height="35"
-      fill="currentColor"
-      class="bi bi-arrow-left-circle"
-      viewBox="0 0 16 16"
-      routerLink="/"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-      />
-    </svg>
-    Cadastre sua empresa
-  </h2>
-  <div class="close-form" *ngIf="isAuthenticated()">
-    <button type="button" class="close-button">
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
+  </div>
+</div>
+<div *ngIf="!isLoading">
+  <form *ngIf="companyForm" class="form" [formGroup]="companyForm">
+    <h2>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
+        width="35"
+        height="35"
         fill="currentColor"
-        class="bi bi-trash3-fill"
+        class="bi bi-arrow-left-circle"
         viewBox="0 0 16 16"
-        (click)="openModalPassword(deleteCompany)"
+        routerLink="/"
       >
         <path
-          d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+          fill-rule="evenodd"
+          d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
         />
       </svg>
-    </button>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-12">
-      <label for="companyName" class="form-label"><span class="text-danger">*</span>Nome da empresa</label>
-      <input
-        type="text"
-        name="companyName"
-        id="companyName"
-        placeholder="Nome da empresa"
-        class="form-control"
-        formControlName="name"
-      />
+      Cadastre sua empresa
+    </h2>
+    <div class="close-form" *ngIf="isAuthenticated()">
+      <button type="button" class="close-button">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          fill="currentColor"
+          class="bi bi-trash3-fill"
+          viewBox="0 0 16 16"
+          (click)="openModalPassword(deleteCompany)"
+        >
+          <path
+            d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+          />
+        </svg>
+      </button>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-4">
-      <label for="companyCnpj" class="form-label"><span class="text-danger">*</span>CNPJ</label>
-      <input
-        type="text"
-        name="companyCnpj"
-        id="companyCnpj"
-        placeholder="CNPJ"
-        class="form-control"
-        formControlName="cnpj"
-        mask="00.000.000/0000-00"
-      />
-    </div>
-    <div class="col-12 col-md-4">
-      <label for="companyLogo" class="form-label">Logo</label>
-      <input
-        type="file"
-        name="companyLogo"
-        id="companyLogo"
-        class="form-control"
-        formControlName="logo"
-      />
-    </div>
-    <div class="col-12 col-md-4">
-      <label class="form-label"><span class="text-danger">*</span>Segmento</label>
-      <select
-        class="form-select"
-        formControlName="segment"
-        aria-label="Default select example"
-      >
-        <option value="">Selecione</option>
-        <option value="agricultura">Agricultura</option>
-        <option value="alimentacao">Alimentação</option>
-        <option value="automotivo">Automotivo</option>
-        <option value="bancos">Bancos</option>
-        <option value="bebidas">Bebidas</option>
-        <option value="comercio">Comércio</option>
-        <option value="construcao-civil">Construção Civil</option>
-        <option value="consultoria">Consultoria</option>
-        <option value="educacao">Educação</option>
-        <option value="energia">Energia</option>
-        <option value="entretenimento">Entretenimento</option>
-        <option value="farmaceutico">Farmacêutico</option>
-        <option value="financas">Finanças</option>
-        <option value="imobiliario">Imobiliário</option>
-        <option value="industria">Indústria</option>
-        <option value="logistica">Logística</option>
-        <option value="marketing">Marketing</option>
-        <option value="meio-ambiente">Meio Ambiente</option>
-        <option value="moda">Moda</option>
-        <option value="pet">Pet</option>
-        <option value="publicidade">Publicidade</option>
-        <option value="saude">Saúde</option>
-        <option value="servicos">Serviços</option>
-        <option value="tecnologia">Tecnologia</option>
-        <option value="telecomunicacoes">Telecomunicações</option>
-        <option value="turismo">Turismo</option>
-        <option value="varejo">Varejo</option>
-      </select>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-7">
-      <label for="companyEmail" class="form-label"><span class="text-danger">*</span>Email</label>
-      <input
-        type="email"
-        name="companyEmail"
-        id="companyEmail"
-        placeholder="Email"
-        class="form-control"
-        formControlName="email"
-      />
-    </div>
-    <div class="col-12 col-md-5">
-      <label for="companyPhoneNumber" class="form-label"><span class="text-danger">*</span>Telefone</label>
-      <input
-        type="text"
-        name="companyPhoneNumber"
-        id="companyPhoneNumber"
-        placeholder="Telefone"
-        class="form-control"
-        formControlName="phoneNumber"
-        mask="(00) 00000-0000"
-      />
-    </div>
-  </div>
-  <ng-container *ngIf="isAuthenticated(); else password"> </ng-container>
-  <ng-template #password>
     <div class="row">
-      <div class="col-12 col-md-6">
-        <label for="companyPassword" class="form-label"><span class="text-danger">*</span>Senha</label>
-        <input
-          type="password"
-          name="companyPassword"
-          id="companyPassword"
-          placeholder="Senha"
-          class="form-control"
-          formControlName="password"
-        />
-      </div>
-      <div class="col-12 col-md-6">
-        <label for="companyConfirmPassoword" class="form-label"
-          ><span class="text-danger">*</span>Confirme sua senha</label
+      <div class="col-12 col-md-12">
+        <label for="companyName" class="form-label"
+          ><span class="text-danger">*</span>Nome da empresa</label
         >
         <input
-          type="password"
-          name="companyConfirmPassword"
-          id="companyConfirmPassword"
-          placeholder="Confirme sua senha"
+          type="text"
+          name="companyName"
+          id="companyName"
+          placeholder="Nome da empresa"
           class="form-control"
-          formControlName="confirmPassword"
+          formControlName="name"
         />
       </div>
     </div>
-  </ng-template>
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <label for="companyCnpj" class="form-label"
+          ><span class="text-danger">*</span>CNPJ</label
+        >
+        <input
+          type="text"
+          name="companyCnpj"
+          id="companyCnpj"
+          placeholder="CNPJ"
+          class="form-control"
+          formControlName="cnpj"
+          mask="00.000.000/0000-00"
+        />
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="companyLogo" class="form-label">Logo</label>
+        <input
+          type="file"
+          name="companyLogo"
+          id="companyLogo"
+          class="form-control"
+          formControlName="logo"
+        />
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Segmento</label
+        >
+        <select
+          class="form-select"
+          formControlName="segment"
+          aria-label="Default select example"
+        >
+          <option value="">Selecione</option>
+          <option value="agricultura">Agricultura</option>
+          <option value="alimentacao">Alimentação</option>
+          <option value="automotivo">Automotivo</option>
+          <option value="bancos">Bancos</option>
+          <option value="bebidas">Bebidas</option>
+          <option value="comercio">Comércio</option>
+          <option value="construcao-civil">Construção Civil</option>
+          <option value="consultoria">Consultoria</option>
+          <option value="educacao">Educação</option>
+          <option value="energia">Energia</option>
+          <option value="entretenimento">Entretenimento</option>
+          <option value="farmaceutico">Farmacêutico</option>
+          <option value="financas">Finanças</option>
+          <option value="imobiliario">Imobiliário</option>
+          <option value="industria">Indústria</option>
+          <option value="logistica">Logística</option>
+          <option value="marketing">Marketing</option>
+          <option value="meio-ambiente">Meio Ambiente</option>
+          <option value="moda">Moda</option>
+          <option value="pet">Pet</option>
+          <option value="publicidade">Publicidade</option>
+          <option value="saude">Saúde</option>
+          <option value="servicos">Serviços</option>
+          <option value="tecnologia">Tecnologia</option>
+          <option value="telecomunicacoes">Telecomunicações</option>
+          <option value="turismo">Turismo</option>
+          <option value="varejo">Varejo</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-7">
+        <label for="companyEmail" class="form-label"
+          ><span class="text-danger">*</span>Email</label
+        >
+        <input
+          type="email"
+          name="companyEmail"
+          id="companyEmail"
+          placeholder="Email"
+          class="form-control"
+          formControlName="email"
+        />
+      </div>
+      <div class="col-12 col-md-5">
+        <label for="companyPhoneNumber" class="form-label"
+          ><span class="text-danger">*</span>Telefone</label
+        >
+        <input
+          type="text"
+          name="companyPhoneNumber"
+          id="companyPhoneNumber"
+          placeholder="Telefone"
+          class="form-control"
+          formControlName="phoneNumber"
+          mask="(00) 00000-0000"
+        />
+      </div>
+    </div>
+    <ng-container *ngIf="isAuthenticated(); else password"> </ng-container>
+    <ng-template #password>
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <label for="companyPassword" class="form-label"
+            ><span class="text-danger">*</span>Senha</label
+          >
+          <input
+            type="password"
+            name="companyPassword"
+            id="companyPassword"
+            placeholder="Senha"
+            class="form-control"
+            formControlName="password"
+          />
+        </div>
+        <div class="col-12 col-md-6">
+          <label for="companyConfirmPassoword" class="form-label"
+            ><span class="text-danger">*</span>Confirme sua senha</label
+          >
+          <input
+            type="password"
+            name="companyConfirmPassword"
+            id="companyConfirmPassword"
+            placeholder="Confirme sua senha"
+            class="form-control"
+            formControlName="confirmPassword"
+          />
+        </div>
+      </div>
+    </ng-template>
 
-  <div class="row">
-    <div class="col-12 col-md-6">
-      <label for="companyUrl" class="form-label">Site</label>
-      <input
-        type="text"
-        name="companyUrl"
-        id="companyUrl"
-        placeholder="Url do site"
-        class="form-control"
-        formControlName="url"
-      />
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <label for="companyUrl" class="form-label">Site</label>
+        <input
+          type="text"
+          name="companyUrl"
+          id="companyUrl"
+          placeholder="Url do site"
+          class="form-control"
+          formControlName="url"
+        />
+      </div>
+      <div class="col-12 col-md-6">
+        <label for="responsible" class="form-label"
+          ><span class="text-danger">*</span>Responsável</label
+        >
+        <input
+          type="text"
+          name="responsible"
+          id="responsible"
+          placeholder="Insira o nome do responsável"
+          class="form-control"
+          formControlName="responsible"
+        />
+      </div>
     </div>
-    <div class="col-12 col-md-6">
-      <label for="responsible" class="form-label"><span class="text-danger">*</span>Responsável</label>
-      <input
-        type="text"
-        name="responsible"
-        id="responsible"
-        placeholder="Insira o nome do responsável"
-        class="form-control"
-        formControlName="responsible"
-      />
+    <div class="row">
+      <div class="col-12 col-md-7">
+        <label for="companyCity" class="form-label"
+          ><span class="text-danger">*</span>Cidade</label
+        >
+        <input
+          type="text"
+          name="companyCity"
+          id="companyCity"
+          placeholder="Cidade"
+          class="form-control"
+          formControlName="city"
+        />
+      </div>
+      <div class="col-12 col-md-5">
+        <label for="companyCep" class="form-label"
+          ><span class="text-danger">*</span>CEP</label
+        >
+        <input
+          type="text"
+          name="companyCep"
+          id="companyCep"
+          placeholder="CEP"
+          class="form-control"
+          formControlName="cep"
+          mask="00000-000"
+        />
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-7">
-      <label for="companyCity" class="form-label"><span class="text-danger">*</span>Cidade</label>
-      <input
-        type="text"
-        name="companyCity"
-        id="companyCity"
-        placeholder="Cidade"
-        class="form-control"
-        formControlName="city"
-      />
+    <div class="row">
+      <div class="col-12 col-md-5">
+        <label for="companyAddress" class="form-label"
+          ><span class="text-danger">*</span>Endereço</label
+        >
+        <input
+          type="text"
+          name="companyAddress"
+          id="companyAddress"
+          placeholder="Endereço"
+          class="form-control"
+          formControlName="address"
+        />
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="companyAddressNumber" class="form-label"
+          ><span class="text-danger">*</span>Número</label
+        >
+        <input
+          type="text"
+          name="companyAddressNumber"
+          id="companyAddressNumber"
+          placeholder="Número"
+          class="form-control"
+          formControlName="addressNumber"
+        />
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Estado</label
+        >
+        <select
+          class="form-select"
+          formControlName="uf"
+          aria-label="Default select example"
+        >
+          <option value="">Selecione</option>
+          <option value="AC">AC</option>
+          <option value="AL">AL</option>
+          <option value="AP">AP</option>
+          <option value="AM">AM</option>
+          <option value="BA">BA</option>
+          <option value="CE">CE</option>
+          <option value="DF">DF</option>
+          <option value="ES">ES</option>
+          <option value="GO">GO</option>
+          <option value="MA">MA</option>
+          <option value="MT">MT</option>
+          <option value="MS">MS</option>
+          <option value="MG">MG</option>
+          <option value="PA">PA</option>
+          <option value="PB">PB</option>
+          <option value="PR">PR</option>
+          <option value="PE">PE</option>
+          <option value="PI">PI</option>
+          <option value="RJ">RJ</option>
+          <option value="RN">RN</option>
+          <option value="RS">RS</option>
+          <option value="RO">RO</option>
+          <option value="RR">RR</option>
+          <option value="SC">SC</option>
+          <option value="SP">SP</option>
+          <option value="SE">SE</option>
+          <option value="TO">TO</option>
+        </select>
+      </div>
     </div>
-    <div class="col-12 col-md-5">
-      <label for="companyCep" class="form-label"><span class="text-danger">*</span>CEP</label>
-      <input
-        type="text"
-        name="companyCep"
-        id="companyCep"
-        placeholder="CEP"
-        class="form-control"
-        formControlName="cep"
-        mask="00000-000"
-      />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-5">
-      <label for="companyAddress" class="form-label"><span class="text-danger">*</span>Endereço</label>
-      <input
-        type="text"
-        name="companyAddress"
-        id="companyAddress"
-        placeholder="Endereço"
-        class="form-control"
-        formControlName="address"
-      />
-    </div>
-    <div class="col-12 col-md-3">
-      <label for="companyAddressNumber" class="form-label"><span class="text-danger">*</span>Número</label>
-      <input
-        type="text"
-        name="companyAddressNumber"
-        id="companyAddressNumber"
-        placeholder="Número"
-        class="form-control"
-        formControlName="addressNumber"
-      />
-    </div>
-    <div class="col-12 col-md-4">
-      <label class="form-label"><span class="text-danger">*</span>Estado</label>
-      <select
-        class="form-select"
-        formControlName="uf"
-        aria-label="Default select example"
+    <ng-container *ngIf="isAuthenticated(); else submit">
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="openModalPassword(onUpdate)"
       >
-        <option value="">Selecione</option>
-        <option value="AC">AC</option>
-        <option value="AL">AL</option>
-        <option value="AP">AP</option>
-        <option value="AM">AM</option>
-        <option value="BA">BA</option>
-        <option value="CE">CE</option>
-        <option value="DF">DF</option>
-        <option value="ES">ES</option>
-        <option value="GO">GO</option>
-        <option value="MA">MA</option>
-        <option value="MT">MT</option>
-        <option value="MS">MS</option>
-        <option value="MG">MG</option>
-        <option value="PA">PA</option>
-        <option value="PB">PB</option>
-        <option value="PR">PR</option>
-        <option value="PE">PE</option>
-        <option value="PI">PI</option>
-        <option value="RJ">RJ</option>
-        <option value="RN">RN</option>
-        <option value="RS">RS</option>
-        <option value="RO">RO</option>
-        <option value="RR">RR</option>
-        <option value="SC">SC</option>
-        <option value="SP">SP</option>
-        <option value="SE">SE</option>
-        <option value="TO">TO</option>
-      </select>
-    </div>
-  </div>
-  <ng-container *ngIf="isAuthenticated(); else submit">
-    <button
-      class="btn btn-primary"
-      type="button"
-      (click)="openModalPassword(onUpdate)"
-    >
-      Atualizar
-    </button>
-  </ng-container>
-  <ng-template #submit>
-    <button class="btn btn-primary" type="button" (click)="onSubmit()">
-      Cadastrar
-    </button>
-    <p>Já possui conta?<a routerLink="/login/empresa">Login</a></p>
-  </ng-template>
-</form>
+        Atualizar
+      </button>
+    </ng-container>
+    <ng-template #submit>
+      <button class="btn btn-primary" type="button" (click)="onSubmit()">
+        Cadastrar
+      </button>
+      <p>Já possui conta?<a routerLink="/login/empresa">Login</a></p>
+    </ng-template>
+  </form>
+</div>
+
 <div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
 <div class="modal" tabindex="-1" *ngIf="isModalPasswordOpen">
   <div class="modal-dialog">

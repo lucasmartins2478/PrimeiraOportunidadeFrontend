@@ -53,7 +53,6 @@ export class UserLoginFormComponent implements OnInit {
               setTimeout(() => {
                 // Armazena os dados do usuário no AuthService
                 this.authService.login(user);
-
                 // Navega para a próxima página após o tempo do alerta
                 this.router.navigate(['/vagas']);
               }, 2000);

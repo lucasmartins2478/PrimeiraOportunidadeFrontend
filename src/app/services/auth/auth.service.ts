@@ -67,10 +67,8 @@ export class UserAuthService {
       console.error('Erro: O ID do usuário está indefinido ou nulo.');
     }
 
-    if (user.curriculumId !== null && user.curriculumId !== undefined) {
+    if (user.curriculumId) {
       localStorage.setItem('curriculumId', user.curriculumId.toString());
-    } else {
-      localStorage.removeItem('curriculumId'); // Remove o valor antigo, se existir
     }
 
     if (user.name) {
@@ -84,6 +82,7 @@ export class UserAuthService {
     if (user.phoneNumber) {
       localStorage.setItem('phoneNumber', user.phoneNumber);
     }
+    console.log(user.curriculumId);
   }
 
   private saveCompanyDataToStorage(company: ICompany): void {
@@ -97,15 +96,17 @@ export class UserAuthService {
     const name = localStorage.getItem('name');
     const email = localStorage.getItem('email');
     const phoneNumber = localStorage.getItem('phoneNumber');
+    const curriculumId = Number(localStorage.getItem('curriculumId'));
     const id = Number(localStorage.getItem('id'));
 
-    if (name && email && phoneNumber && id > 0) {
+    if (name && email && phoneNumber && id > 0 && curriculumId) {
       // Verificando se o id é válido
       return {
         name,
         email,
         phoneNumber,
         id,
+        curriculumId,
       } as IUser;
     }
     return null;

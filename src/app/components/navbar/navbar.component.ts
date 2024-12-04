@@ -12,47 +12,26 @@ export class NavbarComponent implements OnInit {
   isProfileMenuOpen: boolean = false;
   userType: string | null = null;
   hasCurriculum: boolean = false;
-  userData!: IUser;
+  userData!: IUser | null;
 
   constructor(
     private authService: UserAuthService,
-    private userService: UserFormService
   ) {}
 
   ngOnInit(): void {
     this.userType = this.authService.getUserType(); // Obtém o tipo de usuário
 
     if (this.userType === 'user') {
-      const userId = this.authService.getUserData()?.id; // Obtém o ID do usuário logado
-
-      if (userId) {
-        this.loadUserData(userId);
-      }
+      this.loadUserData();
+      this.hasCurriculum =
+        this.authService.getUserData()?.curriculumId !== null;
     }
   }
 
   // Função que carrega os dados do usuário
-  loadUserData(userId: number): void {
-    this.userService.getUserData(userId).subscribe(
-      (userData) => {
-        // Se os dados do usuário forem encontrados
-        this.userData = userData;
-
-        // Verifica se o curriculumId é válido
-        if (this.userData && this.userData.curriculumId) {
-          this.hasCurriculum = true;
-        } else {
-          this.hasCurriculum = false;
-        }
-
-        console.log('User data loaded from database:', this.userData);
-      },
-      (error) => {
-        console.error('Erro ao carregar os dados do usuário:', error);
-      }
-    );
+  loadUserData() {
+    this.userData = this.authService.getUserData();
   }
-
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();

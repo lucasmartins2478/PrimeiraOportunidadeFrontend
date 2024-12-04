@@ -11,8 +11,7 @@ import { companyFormService } from '../../services/company/company-form.service'
 export class JobsComponent implements OnInit {
   jobs: IJob[] = [];
   filteredJobs: IJob[] = [];
-  isLoading: boolean = true
-
+  isLoading: boolean = true;
 
   constructor(
     private jobService: JobService,
@@ -21,7 +20,7 @@ export class JobsComponent implements OnInit {
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
     try {
-      await this.fetchJobs()
+      await this.fetchJobs();
     } catch (error) {
       console.error('Erro ao carregar os dados:', error);
     } finally {
@@ -36,13 +35,12 @@ export class JobsComponent implements OnInit {
     );
   }
 
-
   private removeAccents(text: string): string {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove acentos
   }
 
-  async fetchJobs(): Promise<void>{
-    return new Promise<void>((resolve, reject)=>{
+  async fetchJobs(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       this.companyService.getCompanies().subscribe(
         (companies) => {
           // Criar um dicionário com id da empresa como chave
@@ -54,8 +52,13 @@ export class JobsComponent implements OnInit {
           // Agora buscar as vagas
           this.jobService.getVagas().subscribe(
             (jobs) => {
+              // Filtrar vagas ativas e não preenchidas
+              const validJobs = jobs.filter(
+                (job) => job.isActive && !job.isFilled
+              );
+
               // Adicionar o nome da empresa em cada vaga
-              this.jobs = jobs.map((job) => ({
+              this.jobs = validJobs.map((job) => ({
                 ...job,
                 companyName:
                   companyMap.get(job.companyId) || 'Empresa não encontrada',
@@ -63,24 +66,24 @@ export class JobsComponent implements OnInit {
 
               // Inicializar filteredJobs com as vagas modificadas
               this.filteredJobs = this.jobs;
-              resolve()
+              resolve();
             },
             (error) => {
               console.error('Erro ao buscar as vagas:', error);
-              reject(error)
+              reject(error);
             }
           );
         },
         (error) => {
           console.error(`Erro ao buscar empresas: ${error}`);
-          reject(error)
+          reject(error);
         }
       );
-
-    })
+    });
   }
+
   ngOnInit(): void {
     // Primeiro, buscar as empresas
-    this.loadData()
+    this.loadData();
   }
 }

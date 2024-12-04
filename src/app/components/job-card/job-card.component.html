@@ -5,8 +5,8 @@
   [title]="alertTitle"
   [iconClass]="alertIconClass"
 ></app-alert>
-
-<div class="col-6">
+<!--[ngClass]="{ 'inactive-or-filled': job.isFilled || !job.isActive }"-->
+<div class="col-6 job-card">
   <h5>
     {{ job.title }}
 
@@ -23,9 +23,16 @@
   <h6>Empresa: {{ job.companyName }}</h6>
   <h6>Modalidade: {{ job.modality }}</h6>
   <h6>Salário: {{ job.salary }}</h6>
-  <button type="button" class="btn btn-warning" (click)="openModal(job)">
-    Ver informações da vaga
-  </button>
+  <ng-container *ngIf="!job.isFilled && job.isActive; else finished">
+    <button type="button" class="btn btn-warning" (click)="openModal(job)">
+      Ver informações da vaga
+    </button>
+  </ng-container>
+  <ng-template #finished>
+    <button type="button" class="btn btn-danger" disabled>
+      Vaga encerrada
+    </button>
+  </ng-template>
 </div>
 
 <!-- Modal controlado pelo Angular -->

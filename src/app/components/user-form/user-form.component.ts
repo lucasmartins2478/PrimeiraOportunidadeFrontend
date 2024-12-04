@@ -25,6 +25,7 @@ export class UserFormComponent implements OnInit {
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
   attemptCount: number = 0;
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -35,38 +36,74 @@ export class UserFormComponent implements OnInit {
     private authService: UserAuthService
   ) {}
 
-  getUserData() {
+  private async loadData(): Promise<void> {
+    this.isLoading = true; // Define como true no início
+    try {
+      await this.getUserData();
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+      // Exiba uma mensagem de erro na UI se necessário
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
+    }
+  }
+
+  async getUserData(): Promise<void> {
     const id = this.userData?.id;
-    this.userFormService.getUserData(id).subscribe(
-      (response: IUser) => {
-        this.user = response;
-        this.createUserForm(this.user);
-      },
-      (error) => {
-        console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
-      }
-    );
+    if (!id) {
+      console.error('ID do usuário não encontrado.');
+      return Promise.reject('ID do usuário não encontrado.');
+    }
+
+    return new Promise<void>((resolve, reject) => {
+      this.userFormService.getUserData(id).subscribe(
+        (response: IUser) => {
+          if (!response) {
+            console.error('Usuário não encontrado.');
+            reject('Usuário não encontrado.');
+            return;
+          }
+          this.user = response;
+          this.createUserForm(this.user);
+          resolve();
+        },
+        (error) => {
+          console.error(`Erro ao buscar o usuário com ID ${id}:`, error);
+          reject(error);
+        }
+      );
+    });
   }
 
   createUserForm(user: IUser) {
     this.userForm = this.fb.group({
-      name: [this.user?.name || '', [Validators.required]],
+      name: [user?.name || '', [Validators.required]],
       phoneNumber: [
-        this.user?.phoneNumber || '',
+        user?.phoneNumber || '',
         [Validators.required, Validators.minLength(9)],
       ],
-      cpf: [this.user?.cpf || '', [Validators.required]],
-      email: [this.user?.email || '', [Validators.required, Validators.email]],
+      cpf: [user?.cpf || '', [Validators.required]],
+      email: [user?.email || '', [Validators.required, Validators.email]],
       password: [
-        this.user?.password || '',
+        user?.password || '',
         [Validators.required, Validators.minLength(6)],
       ],
       confirmPassword: [
-        this.user?.password || '',
+        user?.password || '',
         [Validators.required, Validators.minLength(6)],
       ],
     });
   }
+
+  ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.loadData();
+    } else {
+      this.isLoading = false
+      this.createUserForm({} as IUser); // Inicialize com um objeto vazio
+    }
+  }
+
 
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
@@ -76,13 +113,7 @@ export class UserFormComponent implements OnInit {
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }
-  ngOnInit(): void {
-    if (this.isAuthenticated()) {
-      this.getUserData();
-    } else {
-      this.createUserForm(this.user);
-    }
-  }
+
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();

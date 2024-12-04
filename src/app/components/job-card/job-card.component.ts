@@ -269,7 +269,7 @@ export class JobCardComponent implements OnInit {
         (error) => [console.error(`Erro ao adicionar candidatura cancelada`)]
       );
     setTimeout(() => {
-      this.router.navigate(['/minhas-candidaturas']);
+      window.location.reload();
     }, 3000);
   }
   finishJob(jobId: number) {
@@ -286,7 +286,7 @@ export class JobCardComponent implements OnInit {
           this.closeModal();
           this.alertMessage = 'Vaga finalizada com sucesso!.';
           this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Erro';
+          this.alertTitle = 'Sucesso';
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
@@ -314,6 +314,9 @@ export class JobCardComponent implements OnInit {
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         },
         (error) => {
           console.error(`Erro ao finalizar vaga ${error}`);
@@ -489,7 +492,7 @@ export class JobCardComponent implements OnInit {
       this.showAlert = true;
       this.resetAlertAfterDelay();
       setTimeout(() => {
-        this.router.navigate(['/vagas']);
+        window.location.reload();
       }, 3000);
     } catch (error) {
       console.error(`Erro ao enviar respostas ou candidatura:`, error);
@@ -532,6 +535,9 @@ export class JobCardComponent implements OnInit {
       this.alertIconClass = 'bi bi-x-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
       return;
     }
 

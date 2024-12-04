@@ -5,6 +5,17 @@
   margin-bottom: 1rem;
   width: 20rem;
 }
+.job-card {
+  background-color: #E5E9FF; /* Cor padrão do card */
+  border:none;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+/* .job-card.inactive-or-filled {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+} */
 h5{
   text-align: center;
   color: #004AAD;
@@ -17,6 +28,9 @@ label{
 }
 input{
   margin-bottom: 1rem;
+}
+.btn-danger{
+  width: 100%;
 }
 .btn-warning{
   width: 100%;

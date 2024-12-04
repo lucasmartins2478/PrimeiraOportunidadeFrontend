@@ -1,17 +1,17 @@
-#carouselExampleAutoplaying{
-  margin: 0 50px ;
+#carouselExampleAutoplaying {
+  margin: 15px 50px;
   margin-bottom: 5rem;
 }
-.button-wrapper{
+.button-wrapper {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-img{
+img {
   width: 100%;
   max-height: 42rem;
 }
-.content{
+.content {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,14 +19,14 @@ img{
   height: 100%;
   margin: 0 auto;
 }
-.btn-primary{
+.btn-primary {
   border: none;
-  background-color: #004AAD;
+  background-color: #004aad;
   font-weight: 600;
 }
-.btn-warning{
+.btn-warning {
   color: #fff;
   font-weight: 600;
-  background-color: #FF7B2A;
+  background-color: #ff7b2a;
   border: none;
 }

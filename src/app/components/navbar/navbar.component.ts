@@ -13,6 +13,9 @@ export class NavbarComponent implements OnInit {
   userType: string | null = null;
   hasCurriculum: boolean = false;
   userData!: IUser | null;
+  isMenuOpen = false;
+
+
 
   constructor(
     private authService: UserAuthService,
@@ -26,6 +29,9 @@ export class NavbarComponent implements OnInit {
       this.hasCurriculum =
         this.authService.getUserData()?.curriculumId !== null;
     }
+  }
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 
   // Função que carrega os dados do usuário

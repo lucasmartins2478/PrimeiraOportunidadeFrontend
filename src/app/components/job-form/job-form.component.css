@@ -86,6 +86,10 @@ h3 {
   align-items: center;
   justify-content: center;
 }
+#question-label {
+  display: flex;
+  justify-content: space-between;
+}
 @media (max-width: 768px) {
   .modal {
     width: 100%;

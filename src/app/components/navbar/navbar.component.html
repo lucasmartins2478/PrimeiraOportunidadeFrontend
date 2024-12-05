@@ -4,37 +4,58 @@
       <img src="../../../assets/logotipo.png" alt="" />
     </a>
     <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
+    class="navbar-toggler"
+    type="button"
+    (click)="toggleMenu()"
+    [attr.aria-expanded]="isMenuOpen"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div
+      class="collapse navbar-collapse"
+      [class.show]="isMenuOpen"
+      id="navbarSupportedContent"
+    >
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <ng-container *ngIf="isAuthenticated(); else guestLinks">
           <li class="nav-item" *ngIf="userType === 'user'">
-            <a class="nav-link active" aria-current="page" routerLink="/vagas" style="color: #fff">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="/vagas"
+              style="color: #fff"
+            >
               Vagas
             </a>
           </li>
           <li class="nav-item" *ngIf="userType === 'user'">
-            <a class="nav-link active" aria-current="page" routerLink="/empresas" style="color: #fff">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="/empresas"
+              style="color: #fff"
+            >
               Empresas
             </a>
           </li>
           <li class="nav-item" *ngIf="userType === 'user'">
-            <a class="nav-link active" aria-current="page" routerLink="/comunidade" style="color: #fff">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="/comunidade"
+              style="color: #fff"
+            >
               Comunidade
             </a>
           </li>
           <li class="nav-item" *ngIf="userType === 'company'">
-            <a class="nav-link active" routerLink="/minhas-vagas" style="color: #fff">
+            <a
+              class="nav-link active"
+              routerLink="/minhas-vagas"
+              style="color: #fff"
+            >
               Minhas Vagas
             </a>
           </li>
@@ -42,12 +63,22 @@
 
         <ng-template #guestLinks>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/vagas" style="color: #fff">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="/vagas"
+              style="color: #fff"
+            >
               Vagas
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" routerLink="/empresas" style="color: #fff">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              routerLink="/empresas"
+              style="color: #fff"
+            >
               Empresas
             </a>
           </li>
@@ -69,7 +100,11 @@
 
             <!-- Caso o usuário não tenha currículo -->
             <ng-template #createCurriculumButton>
-              <button type="button" class="btn btn-warning" routerLink="/criar-curriculo/etapa1">
+              <button
+                type="button"
+                class="btn btn-warning"
+                routerLink="/criar-curriculo/etapa1"
+              >
                 Criar Currículo
               </button>
             </ng-template>
@@ -77,39 +112,72 @@
 
           <ng-template #companyActions>
             <!-- Botão Criar Vaga -->
-            <button type="button" class="btn btn-warning" routerLink="/criar-vaga">
+            <button
+              type="button"
+              class="btn btn-warning"
+              routerLink="/criar-vaga"
+            >
               Criar Vaga
             </button>
           </ng-template>
 
           <!-- Ícone e texto do usuário para acessar informações -->
-          <div class="nav-item" (click)="toggleProfileMenu()" style="cursor: pointer;">
-            <a class="nav-link active" id="profile" style="color: #fff" >Perfil</a>
-            <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+          <div
+            class="nav-item"
+            (click)="toggleProfileMenu()"
+            style="cursor: pointer"
+          >
+            <a class="nav-link active" id="profile" style="color: #fff"
+              >Perfil</a
+            >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="45"
+              height="45"
+              fill="currentColor"
+              class="bi bi-person-circle"
+              viewBox="0 0 16 16"
+            >
               <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-              <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+              <path
+                fill-rule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
+              />
             </svg>
           </div>
 
           <!-- Menu Dropdown para opções de perfil -->
           <div *ngIf="isProfileMenuOpen" class="dropdown-menu show">
             <ng-container *ngIf="userType === 'user'; else companyLink">
-              <a class="dropdown-item" routerLink="/minhas-candidaturas">Minhas candidaturas</a>
+              <a class="dropdown-item" routerLink="/minhas-candidaturas"
+                >Minhas candidaturas</a
+              >
               <a class="dropdown-item" routerLink="/criar-conta">Ver Perfil</a>
             </ng-container>
             <ng-template #companyLink>
-              <a class="dropdown-item" routerLink="/para-empresas">Ver Perfil</a>
+              <a class="dropdown-item" routerLink="/para-empresas"
+                >Ver Perfil</a
+              >
             </ng-template>
             <a class="dropdown-item" (click)="logout()" routerLink="/">Sair</a>
           </div>
         </ng-container>
 
         <ng-template #guestActions>
-          <a class="nav-link active" aria-current="page" routerLink="/para-empresas" style="color: #fff">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            routerLink="/para-empresas"
+            style="color: #fff"
+          >
             Para Empresas
             <i class="bi bi-box-arrow-up-right"></i>
           </a>
-          <button type="button" class="btn btn-warning" routerLink="/criar-conta">
+          <button
+            type="button"
+            class="btn btn-warning"
+            routerLink="/criar-conta"
+          >
             Criar Conta
           </button>
         </ng-template>

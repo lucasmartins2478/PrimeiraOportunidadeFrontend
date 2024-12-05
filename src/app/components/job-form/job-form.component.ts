@@ -63,6 +63,30 @@ export class JobFormComponent implements OnInit {
       this.isLoading = false; // Conclui o carregamento
     }
   }
+  removeQuestion(index: number) {
+    const questionControl = this.perguntas.at(index); // Obtém o controle específico
+    const questionId = questionControl?.value?.id; // Acessa o valor e pega a propriedade 'id'
+
+    console.log(questionId);
+
+    if (!questionId) { // Checa se o questionId não existe
+      this.perguntas.removeAt(index);
+      return;
+    }
+
+    this.http.delete(`https://backend-production-ff1f.up.railway.app/vacancy/${this.jobData.id}/questions/${questionId}`).subscribe(
+      (response) => {
+        console.log('Pergunta removida com sucesso do backend');
+      },
+      (error) => {
+        console.log(`Erro ao deletar pergunta: ${error}`);
+      }
+    );
+
+    // Apenas remove do array local se a exclusão for bem-sucedida
+    this.perguntas.removeAt(index);
+  }
+
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -148,9 +172,15 @@ export class JobFormComponent implements OnInit {
   createForm(): void {
     const perguntasArray = this.fb.array(
       this.questionData.length > 0
-        ? this.questionData.map((q) => this.fb.control(q.question || ''))
-        : [this.criarPergunta()] // Adiciona uma pergunta vazia se não houver perguntas
+        ? this.questionData.map((q) =>
+            this.fb.group({
+              id: this.fb.control(q.id || null),
+              question: this.fb.control(q.question || '', Validators.required)
+            })
+          )
+        : [this.criarPergunta()]
     );
+
 
     this.jobForm = this.fb.group({
       title: [this.jobData.title || '', [Validators.required]],
@@ -173,9 +203,13 @@ export class JobFormComponent implements OnInit {
   }
 
   // Método para criar um novo campo de pergunta
-  criarPergunta() {
-    return this.fb.control('');
+  criarPergunta(): FormGroup {
+    return this.fb.group({
+      id: this.fb.control(null), // Novo campo id com valor inicial nulo
+      question: this.fb.control('', Validators.required) // Campo question obrigatório
+    });
   }
+
 
   // Método para adicionar um novo campo de pergunta
   adicionarPergunta() {

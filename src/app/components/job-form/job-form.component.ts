@@ -94,6 +94,7 @@ export class JobFormComponent implements OnInit {
       this.loadData();
     } else {
       // Inicializa o formulário vazio para novo cadastro
+      this.isLoading = false
       this.createEmptyForm();
     }
   }

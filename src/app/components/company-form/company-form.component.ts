@@ -268,7 +268,13 @@ export class CompanyFormComponent implements OnInit {
           this.resetAlertAfterDelay();
         }
       } else {
-        this.showError('A senha não atende aos requisitos de segurança.');
+        this.alertMessage =
+          'A senha deve cumprir os requisitos de senha forte!';
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
       }
     } else {
       this.alertMessage = 'Preencha os dados corretamente!';
@@ -278,11 +284,6 @@ export class CompanyFormComponent implements OnInit {
       this.showAlert = true;
       this.resetAlertAfterDelay();
     }
-  }
-
-  private showError(message: string): void {
-    // Adicione a lógica para exibir uma mensagem de erro, ex: alerta ou toast
-    console.error(message);
   }
 
   // Função que atualiza os dados na empresa no banco de dados
@@ -324,16 +325,6 @@ export class CompanyFormComponent implements OnInit {
   // em nenhuma outra empresa e se é um cnpj válido
 
   async verifyCnpj(cnpj: string): Promise<boolean> {
-    if (!this.validateCnpj(cnpj)) {
-      this.alertMessage = 'O CNPJ fornecido é inválido!';
-      this.alertClass = 'alert alert-danger';
-      this.alertTitle = 'Erro';
-      this.alertIconClass = 'bi bi-x-circle';
-      this.showAlert = true;
-      this.resetAlertAfterDelay();
-      return false;
-    }
-
     try {
       const response = await this.http
         .get<ICompany[]>(
@@ -352,53 +343,6 @@ export class CompanyFormComponent implements OnInit {
     }
   }
 
-  // Função que valida o cnpj fornecido pela empresa no momento do cadastro
-
-  validateCnpj(cnpj: string): boolean {
-    // Remove os caracteres não numéricos
-    cnpj = cnpj.replace(/[^\d]/g, '');
-
-    // CNPJ com 14 caracteres
-    if (cnpj.length !== 14) return false;
-
-    // Validação de CNPJ inválidos conhecidos
-    const invalidCnpjs = [
-      '00000000000000',
-      '11111111111111',
-      '22222222222222',
-      '33333333333333',
-      '44444444444444',
-      '55555555555555',
-      '66666666666666',
-      '77777777777777',
-      '88888888888888',
-      '99999999999999',
-    ];
-
-    if (invalidCnpjs.includes(cnpj)) return false;
-
-    // Valida o primeiro dígito verificador
-    let sum = 0;
-    let weights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    for (let i = 0; i < 12; i++) {
-      sum += parseInt(cnpj[i]) * weights[i];
-    }
-    let remainder = sum % 11;
-    let digit1 = remainder < 2 ? 0 : 11 - remainder;
-
-    if (digit1 !== parseInt(cnpj[12])) return false;
-
-    // Valida o segundo dígito verificador
-    sum = 0;
-    weights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-    for (let i = 0; i < 13; i++) {
-      sum += parseInt(cnpj[i]) * weights[i];
-    }
-    remainder = sum % 11;
-    let digit2 = remainder < 2 ? 0 : 11 - remainder;
-
-    return digit2 === parseInt(cnpj[13]);
-  }
 
   // Função que remove o alerta da tela após o timer de 3 segundos
 

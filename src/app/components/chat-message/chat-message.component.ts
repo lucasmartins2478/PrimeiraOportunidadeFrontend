@@ -34,6 +34,7 @@ export class ChatMessageComponent implements AfterViewChecked {
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
     try {
+      this.userId = this.authService.getUserData()?.id
       await this.getMessages();
     } catch (error) {
       console.error('Erro ao carregar os dados:', error);

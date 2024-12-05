@@ -24,9 +24,15 @@ export class MyJobsComponent implements OnInit {
   ) {}
   onSearch(value: string) {
     const searchValue = this.removeAccents(value.toLowerCase());
-    this.searchedJobs = this.filteredJobs.filter(
-      (job) => this.removeAccents(job.title.toLowerCase()).includes(searchValue) // Compara sem acentos
-    );
+    this.searchedJobs = this.jobs.filter((job) => {
+      const titleMatch = this.removeAccents(job.title.toLowerCase()).includes(searchValue);
+      const descriptionMatch = this.removeAccents(job.modality.toLowerCase()).includes(searchValue);
+      const locationMatch = this.removeAccents(job.locality.toLowerCase()).includes(searchValue);
+      const companyNameMatch = this.removeAccents(job.companyName.toLowerCase()).includes(searchValue);
+
+      // Retorna true se qualquer condição for atendida
+      return titleMatch || descriptionMatch || locationMatch || companyNameMatch;
+    });
   }
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início

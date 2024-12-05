@@ -30,10 +30,17 @@ export class JobsComponent implements OnInit {
 
   onSearch(value: string) {
     const searchValue = this.removeAccents(value.toLowerCase());
-    this.filteredJobs = this.jobs.filter(
-      (job) => this.removeAccents(job.title.toLowerCase()).includes(searchValue) // Compara sem acentos
-    );
+    this.filteredJobs = this.jobs.filter((job) => {
+      const titleMatch = this.removeAccents(job.title.toLowerCase()).includes(searchValue);
+      const descriptionMatch = this.removeAccents(job.modality.toLowerCase()).includes(searchValue);
+      const locationMatch = this.removeAccents(job.locality.toLowerCase()).includes(searchValue);
+      const companyNameMatch = this.removeAccents(job.companyName.toLowerCase()).includes(searchValue);
+
+      // Retorna true se qualquer condição for atendida
+      return titleMatch || descriptionMatch || locationMatch || companyNameMatch;
+    });
   }
+
 
   private removeAccents(text: string): string {
     return text.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove acentos

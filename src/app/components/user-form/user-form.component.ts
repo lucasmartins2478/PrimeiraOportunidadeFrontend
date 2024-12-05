@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { IUser } from '../../models/user.interface';
 import { UserAuthService } from '../../services/auth/auth.service';
 import { CurriculumService } from '../../services/curriculum/curriculum.service';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-user-form',
@@ -41,7 +42,8 @@ export class UserFormComponent implements OnInit {
     private router: Router,
     private userFormService: UserFormService,
     private curriculumService: CurriculumService,
-    private authService: UserAuthService
+    private authService: UserAuthService,
+    private modalService: ModalService
   ) {}
 
   private async loadData(): Promise<void> {
@@ -128,9 +130,11 @@ export class UserFormComponent implements OnInit {
 
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
+    this.modalService.openModal();
     this.isModalPasswordOpen = true;
   }
   closeModalPassword() {
+    this.modalService.closeModal();
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }

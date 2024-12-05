@@ -8,6 +8,7 @@ import { JobService } from '../../services/job/job.service';
 import { QuestionsService } from '../../services/questions/questions.service';
 import { ICompany } from '../../models/company.interface';
 import { companyFormService } from '../../services/company/company-form.service';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-job-form',
@@ -31,6 +32,7 @@ export class JobFormComponent implements OnInit {
   isModalPasswordOpen!: boolean;
   actionToPerform!: () => void;
   attemptCount: number = 0;
+  isLoading: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -40,65 +42,89 @@ export class JobFormComponent implements OnInit {
     private route: ActivatedRoute,
     private companyService: companyFormService,
     private jobService: JobService,
-    private questionService: QuestionsService
+    private questionService: QuestionsService,
+    private modalService: ModalService
   ) {
     // Inicializando o jobForm
   }
+  private async loadData(): Promise<void> {
+    this.isLoading = true; // Define como true no início
+    try {
+      await this.getCompanyData();
+      const idParam = this.route.snapshot.paramMap.get('id');
+      if (idParam) {
+        this.jobId = +idParam; // Converte `string` para `number`
+        await this.loadJobDataAndQuestions(idParam);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar os dados:', error);
+      // Exiba uma mensagem de erro na UI se necessário
+    } finally {
+      this.isLoading = false; // Conclui o carregamento
+    }
+  }
 
   ngOnInit(): void {
-    this.getCompanyData();
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
-      this.jobId = +idParam; // Converte `string` para `number`
-      this.loadJobDataAndQuestions(idParam);
+      this.loadData();
     } else {
       // Inicializa o formulário vazio para novo cadastro
       this.createEmptyForm();
     }
   }
-  getCompanyData() {
+  async getCompanyData(): Promise<void> {
     if (this.companyData?.id) {
-      this.companyService.getUserData(this.companyData.id).subscribe(
-        (data) => {
-          this.company = data; // Atribui os dados retornados à propriedade
-          console.log(this.company);
-        },
-        (error) => {
-          console.error(`Erro ao buscar os dados da empresa: ${error}`);
-        }
-      );
+      return new Promise<void>((resolve, reject) => {
+        this.companyService.getUserData(this.companyData?.id).subscribe(
+          (data) => {
+            this.company = data; // Atribui os dados retornados à propriedade
+            console.log(this.company);
+            resolve();
+          },
+          (error) => {
+            console.error(`Erro ao buscar os dados da empresa: ${error}`);
+            reject(error);
+          }
+        );
+      });
     } else {
       console.error('ID da empresa não definido');
     }
   }
 
-  loadJobDataAndQuestions(id: string): void {
-    this.jobService.getJobById(id).subscribe(
-      (jobResponse) => {
-        this.jobData = jobResponse;
-        this.isEditing = !!this.jobData; // Atualiza a variável booleana com base nos dados de `jobData`
-        this.questionService.getQuestionsByJobId(id).subscribe(
-          (questionsResponse) => {
-            this.questionData = Array.isArray(questionsResponse)
-              ? questionsResponse
-              : questionsResponse
-              ? [questionsResponse]
-              : [];
+  async loadJobDataAndQuestions(id: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.jobService.getJobById(id).subscribe(
+        (jobResponse) => {
+          this.jobData = jobResponse;
+          this.isEditing = !!this.jobData; // Atualiza a variável booleana com base nos dados de `jobData`
+          this.questionService.getQuestionsByJobId(id).subscribe(
+            (questionsResponse) => {
+              this.questionData = Array.isArray(questionsResponse)
+                ? questionsResponse
+                : questionsResponse
+                ? [questionsResponse]
+                : [];
 
-            this.createForm(); // Cria o formulário com os dados de jobData e perguntas
-          },
-          (error) => {
-            console.error(`Erro ao buscar perguntas: ${error}`);
-            this.createForm(); // Cria o formulário mesmo que falhe ao buscar perguntas
-          }
-        );
-      },
-      (error) => {
-        console.error(`Erro ao buscar a vaga: ${error}`);
-        this.isEditing = false; // Se não houver dados, define como falso
-        this.createForm();
-      }
-    );
+              this.createForm(); // Cria o formulário com os dados de jobData e perguntas
+              resolve();
+            },
+            (error) => {
+              console.error(`Erro ao buscar perguntas: ${error}`);
+              this.createForm(); // Cria o formulário mesmo que falhe ao buscar perguntas
+              resolve();
+            }
+          );
+        },
+        (error) => {
+          console.error(`Erro ao buscar a vaga: ${error}`);
+          this.isEditing = false; // Se não houver dados, define como falso
+          this.createForm();
+          resolve();
+        }
+      );
+    });
   }
 
   createEmptyForm(): void {
@@ -162,9 +188,11 @@ export class JobFormComponent implements OnInit {
   }
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
+    this.modalService.openModal();
     this.isModalPasswordOpen = true;
   }
   closeModalPassword() {
+    this.modalService.closeModal();
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }
@@ -327,7 +355,10 @@ export class JobFormComponent implements OnInit {
               );
             },
             (error) => {
-              console.error(`Erro ao atualizar a pergunta ${index + 1}:`, error);
+              console.error(
+                `Erro ao atualizar a pergunta ${index + 1}:`,
+                error
+              );
             }
           );
       } else {
@@ -348,7 +379,6 @@ export class JobFormComponent implements OnInit {
       }
     });
   }
-
 
   // Método para exibir o alerta e fechá-lo automaticamente após 3 segundos
   resetAlertAfterDelay() {

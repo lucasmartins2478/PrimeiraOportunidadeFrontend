@@ -78,7 +78,9 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <label class="form-label"><span class="text-danger">*</span>Telefone</label>
+        <label class="form-label"
+          ><span class="text-danger">*</span>Telefone</label
+        >
         <input
           type="tel"
           name="phoneNumberUser"
@@ -92,7 +94,9 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <label class="form-label"><span class="text-danger">*</span>Email</label>
+        <label class="form-label"
+          ><span class="text-danger">*</span>Email</label
+        >
         <input
           type="email"
           name="emailUser"
@@ -107,7 +111,9 @@
     <ng-template #password>
       <div class="row">
         <div class="col-12">
-          <label class="form-label"><span class="text-danger">*</span>Senha</label>
+          <label class="form-label"
+            ><span class="text-danger">*</span>Senha</label
+          >
           <input
             type="password"
             name="passwordUser"
@@ -146,7 +152,9 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <label class="form-label"><span class="text-danger">*</span>Confirme sua senha</label>
+          <label class="form-label"
+            ><span class="text-danger">*</span>Confirme sua senha</label
+          >
           <input
             type="password"
             name="confirmPasswordUser"
@@ -177,7 +185,6 @@
   </form>
 </div>
 
-
 <div class="modal-backdrop" *ngIf="isModalPasswordOpen"></div>
 <div class="modal" tabindex="-1" *ngIf="isModalPasswordOpen">
   <div class="modal-dialog">
@@ -195,7 +202,7 @@
               type="password"
               name="passwordUser"
               id="passwordUser"
-              placeholder="Senha"
+              placeholder="Digite sua senha para prosseguir"
               class="form-control"
               [(ngModel)]="confirmedPassword"
             />

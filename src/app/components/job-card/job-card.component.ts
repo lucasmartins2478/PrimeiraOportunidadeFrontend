@@ -174,18 +174,25 @@ export class JobCardComponent implements OnInit {
       }
     }
   }
-  openModalPassword(action: () => void) {
+  openModalPassword(action: () => void): void {
+    // Verificar o tipo de usuário e carregar os dados necessários
     if (this.userType === 'user') {
-      this.getUser();
+      this.getUser(); // Certifique-se de que `getUser` está atualizando os dados corretamente
     } else if (this.userType === 'company') {
       this.getCompanyData();
     }
+
+    // Fechar outros modais antes de abrir o novo
     this.closeApplicationModal();
     this.closeCurriculumModal();
     this.closeModal();
+
+    // Configurar a ação e abrir o modal de senha
     this.actionToPerform = action;
+    this.modalService.openModal(); // Garantir que o fundo do modal seja configurado
     this.isModalPasswordOpen = true;
   }
+
   closeModalPassword() {
     this.modalService.closeModal();
     this.isModalPasswordOpen = false;
@@ -225,6 +232,7 @@ export class JobCardComponent implements OnInit {
     this.isModalApplicationOpen = false;
   }
   editJob(jobId: number) {
+    this.modalService.closeModal()
     this.router.navigate(['/criar-vaga', jobId.toString()]);
   }
   cancelApplication(jobId: number) {

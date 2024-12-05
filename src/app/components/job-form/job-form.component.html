@@ -5,401 +5,414 @@
   [title]="alertTitle"
   [iconClass]="alertIconClass"
 ></app-alert>
-
-<form *ngIf="jobForm" [formGroup]="jobForm" class="form">
-  <h3>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="35"
-      height="35"
-      fill="currentColor"
-      class="bi bi-arrow-left-circle"
-      viewBox="0 0 16 16"
-      routerLink="/"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
-      />
-    </svg>
-    Dados da Vaga
-  </h3>
-  <div class="row">
-    <div class="col-12 col-md-4">
-      <label class="form-label"
-        ><span class="text-danger">*</span>Nome do cargo</label
-      >
-      <select
-        class="form-select"
-        formControlName="title"
-        aria-label="Default select example"
-      >
-        <option value="">Selecione um cargo</option>
-        <option value="administrador">Administrador</option>
-        <option value="advogado">Advogado</option>
-        <option value="agente de viagens">Agente de Viagens</option>
-        <option value="analista de dados">Analista de Dados</option>
-        <option value="analista de marketing">Analista de Marketing</option>
-        <option value="analista de recursos humanos">
-          Analista de Recursos Humanos
-        </option>
-        <option value="analista financeiro">Analista Financeiro</option>
-        <option value="arquiteto">Arquiteto</option>
-        <option value="assistente administrativo">
-          Assistente Administrativo
-        </option>
-        <option value="assistente de atendimento">
-          Assistente de Atendimento
-        </option>
-        <option value="assistente de vendas">Assistente de Vendas</option>
-        <option value="atendente">Atendente</option>
-        <option value="auditor">Auditor</option>
-        <option value="bibliotecário">Bibliotecário</option>
-        <option value="biólogo">Biólogo</option>
-        <option value="contador">Contador</option>
-        <option value="coordenador de projetos">Coordenador de Projetos</option>
-        <option value="cozinheiro">Cozinheiro</option>
-        <option value="desenvolvedor de software">
-          Desenvolvedor de Software
-        </option>
-        <option value="designer gráfico">Designer Gráfico</option>
-        <option value="designer de interiores">Designer de Interiores</option>
-        <option value="diretor de arte">Diretor de Arte</option>
-        <option value="diretor financeiro">Diretor Financeiro</option>
-        <option value="economista">Economista</option>
-        <option value="editor de vídeo">Editor de Vídeo</option>
-        <option value="enfermeiro">Enfermeiro</option>
-        <option value="engenheiro civil">Engenheiro Civil</option>
-        <option value="engenheiro de produção">Engenheiro de Produção</option>
-        <option value="engenheiro mecânico">Engenheiro Mecânico</option>
-        <option value="especialista em logística">
-          Especialista em Logística
-        </option>
-        <option value="esteticista">Esteticista</option>
-        <option value="farmacêutico">Farmacêutico</option>
-        <option value="fisioterapeuta">Fisioterapeuta</option>
-        <option value="gerente comercial">Gerente Comercial</option>
-        <option value="gerente de operações">Gerente de Operações</option>
-        <option value="gerente financeiro">Gerente Financeiro</option>
-        <option value="gerente de TI">Gerente de TI</option>
-        <option value="jornalista">Jornalista</option>
-        <option value="maquinista">Maquinista</option>
-        <option value="médico">Médico</option>
-        <option value="motorista">Motorista</option>
-        <option value="nutricionista">Nutricionista</option>
-        <option value="operador de máquinas">Operador de Máquinas</option>
-        <option value="pedagogo">Pedagogo</option>
-        <option value="psicólogo">Psicólogo</option>
-        <option value="publicitário">Publicitário</option>
-        <option value="redator">Redator</option>
-        <option value="recrutador">Recrutador</option>
-        <option value="secretário executivo">Secretário Executivo</option>
-        <option value="supervisor de vendas">Supervisor de Vendas</option>
-        <option value="técnico em informática">Técnico em Informática</option>
-        <option value="técnico em segurança do trabalho">
-          Técnico em Segurança do Trabalho
-        </option>
-        <option value="terapeuta ocupacional">Terapeuta Ocupacional</option>
-        <option value="tradutor">Tradutor</option>
-        <option value="vendedor">Vendedor</option>
-        <option value="web designer">Web Designer</option>
-        <option value="ux/ui designer">UX/UI Designer</option>
-        <option value="social media">Social Media</option>
-        <option value="analista de qualidade">Analista de Qualidade</option>
-        <option value="técnico de laboratório">Técnico de Laboratório</option>
-        <option value="agente de segurança">Agente de Segurança</option>
-        <option value="assistente social">Assistente Social</option>
-        <option value="fisiologista">Fisiologista</option>
-        <option value="gerente de projetos">Gerente de Projetos</option>
-        <option value="analista de sistemas">Analista de Sistemas</option>
-        <option value="biotecnologista">Biotecnologista</option>
-        <option value="consultor de vendas">Consultor de Vendas</option>
-        <option value="gerente de recursos humanos">
-          Gerente de Recursos Humanos
-        </option>
-        <option value="operador de caixa">Operador de Caixa</option>
-      </select>
-    </div>
-    <div class="col-12 col-md-5">
-      <label for="ageUser" class="form-label"
-        ><span class="text-danger">*</span>Contato</label
-      >
-      <input
-        type="text"
-        name="contact"
-        class="form-control"
-        placeholder="Email ou telefone"
-        formControlName="contact"
-      />
-    </div>
-    <div class="col-12 col-md-3">
-      <label class="form-label"
-        ><span class="text-danger">*</span>Nível da vaga</label
-      >
-      <select
-        class="form-select"
-        formControlName="level"
-        aria-label="Default select example"
-      >
-        <option value="">Selecione</option>
-        <option value="Estágio">Estágio</option>
-        <option value="Jovem Aprendiz">Jovem Aprendiz</option>
-        <option value="Efetivo">Efetivo</option>
-      </select>
-    </div>
+<div
+  *ngIf="isLoading"
+  class="d-flex justify-content-center align-items-center vh-100"
+>
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
   </div>
-  <div class="row">
-    <div class="col-12 col-md-3">
-      <label class="form-label"
-        ><span class="text-danger">*</span>Modalidade</label
+</div>
+<div *ngIf="!isLoading">
+  <form *ngIf="jobForm" [formGroup]="jobForm" class="form">
+    <h3>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="35"
+        height="35"
+        fill="currentColor"
+        class="bi bi-arrow-left-circle"
+        viewBox="0 0 16 16"
+        routerLink="/"
       >
-      <select
-        class="form-select"
-        formControlName="modality"
-        aria-label="Default select example"
-      >
-        <option value="">Selecione</option>
-        <option value="Presencial">Presencial</option>
-        <option value="Remoto">Remoto</option>
-        <option value="Híbrido">Híbrido</option>
-      </select>
-    </div>
-    <div class="col-12 col-md-3">
-      <label class="form-label"><span class="text-danger">*</span>Estado</label>
-      <select
-        class="form-select"
-        formControlName="uf"
-        aria-label="Default select example"
-      >
-        <option value="">Selecione</option>
-        <option value="AC">AC</option>
-        <option value="AL">AL</option>
-        <option value="AP">AP</option>
-        <option value="AM">AM</option>
-        <option value="BA">BA</option>
-        <option value="CE">CE</option>
-        <option value="DF">DF</option>
-        <option value="ES">ES</option>
-        <option value="GO">GO</option>
-        <option value="MA">MA</option>
-        <option value="MT">MT</option>
-        <option value="MS">MS</option>
-        <option value="MG">MG</option>
-        <option value="PA">PA</option>
-        <option value="PB">PB</option>
-        <option value="PR">PR</option>
-        <option value="PE">PE</option>
-        <option value="PI">PI</option>
-        <option value="RJ">RJ</option>
-        <option value="RN">RN</option>
-        <option value="RS">RS</option>
-        <option value="RO">RO</option>
-        <option value="RR">RR</option>
-        <option value="SC">SC</option>
-        <option value="SP">SP</option>
-        <option value="SE">SE</option>
-        <option value="TO">TO</option>
-      </select>
-    </div>
-    <div class="col-12 col-md-3">
-      <label for="ageUser" class="form-label"
-        ><span class="text-danger">*</span>Cidade</label
-      >
-      <input
-        type="text"
-        name="city"
-        class="form-control"
-        placeholder="Insira uma cidade"
-        formControlName="locality"
-      />
-    </div>
-    <div class="col-12 col-md-3">
-      <label for="ageUser" class="form-label"
-        ><span class="text-danger">*</span>Salário</label
-      >
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Insira um valor"
-        formControlName="salary"
-        mask="separator.2"
-        thousandSeparator="."
-        decimalMarker=","
-        prefix="R$ "
-      />
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <label class="form-label"
-        ><span class="text-danger">*</span>Sobre a Empresa</label
-      >
-      <textarea
-        name="aboutCompany"
-        class="form-control"
-        placeholder="Descrição sobre a empresa e seus valores "
-        formControlName="aboutCompany"
-      ></textarea>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <label for="requirements" class="form-label"
-        ><span class="text-danger">*</span>Requisitos</label
-      >
-      <textarea
-        name="requirements"
-        class="form-control"
-        placeholder="Descrição das requisitos para a vaga"
-        formControlName="requirements"
-      ></textarea>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <label for="benefits" class="form-label"
-        ><span class="text-danger">*</span>Benefícios</label
-      >
-      <textarea
-        name="benefits"
-        class="form-control"
-        placeholder="Citar os benefícios que serão oferecidos"
-        formControlName="benefits"
-      ></textarea>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <label class="form-label"
-        ><span class="text-danger">*</span>Descrição da vaga</label
-      >
-      <textarea
-        name="description"
-        class="form-control"
-        placeholder="Faça uma breve descrição sobre a vaga"
-        formControlName="description"
-      ></textarea>
-    </div>
-  </div>
-  <div class="d-grid gap-2 d-md-flex" id="button-wrapper">
-    <button
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#exampleModal"
-      type="button"
-    >
-      Incluir Perguntas Adicionais
-    </button>
-    <ng-container *ngIf="isEditing; else submit">
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="openModalPassword(onUpdate)"
-      >
-        Atualizar dados da vaga<svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-arrow-right"
-          viewBox="0 0 16 16"
+        <path
+          fill-rule="evenodd"
+          d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+        />
+      </svg>
+      Dados da Vaga
+    </h3>
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Nome do cargo</label
         >
-          <path
-            fill-rule="evenodd"
-            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-          />
-        </svg>
-      </button>
-    </ng-container>
-    <ng-template #submit>
-      <button
-        type="button"
-        class="btn btn-primary"
-        (click)="openModalPassword(onSubmit)"
-      >
-        Finalizar cadastro de vaga<svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-arrow-right"
-          viewBox="0 0 16 16"
+        <select
+          class="form-select"
+          formControlName="title"
+          aria-label="Default select example"
         >
-          <path
-            fill-rule="evenodd"
-            d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
-          />
-        </svg>
-      </button>
-    </ng-template>
+          <option value="">Selecione um cargo</option>
+          <option value="administrador">Administrador</option>
+          <option value="advogado">Advogado</option>
+          <option value="agente de viagens">Agente de Viagens</option>
+          <option value="analista de dados">Analista de Dados</option>
+          <option value="analista de marketing">Analista de Marketing</option>
+          <option value="analista de recursos humanos">
+            Analista de Recursos Humanos
+          </option>
+          <option value="analista financeiro">Analista Financeiro</option>
+          <option value="arquiteto">Arquiteto</option>
+          <option value="assistente administrativo">
+            Assistente Administrativo
+          </option>
+          <option value="assistente de atendimento">
+            Assistente de Atendimento
+          </option>
+          <option value="assistente de vendas">Assistente de Vendas</option>
+          <option value="atendente">Atendente</option>
+          <option value="auditor">Auditor</option>
+          <option value="bibliotecário">Bibliotecário</option>
+          <option value="biólogo">Biólogo</option>
+          <option value="contador">Contador</option>
+          <option value="coordenador de projetos">
+            Coordenador de Projetos
+          </option>
+          <option value="cozinheiro">Cozinheiro</option>
+          <option value="desenvolvedor de software">
+            Desenvolvedor de Software
+          </option>
+          <option value="designer gráfico">Designer Gráfico</option>
+          <option value="designer de interiores">Designer de Interiores</option>
+          <option value="diretor de arte">Diretor de Arte</option>
+          <option value="diretor financeiro">Diretor Financeiro</option>
+          <option value="economista">Economista</option>
+          <option value="editor de vídeo">Editor de Vídeo</option>
+          <option value="enfermeiro">Enfermeiro</option>
+          <option value="engenheiro civil">Engenheiro Civil</option>
+          <option value="engenheiro de produção">Engenheiro de Produção</option>
+          <option value="engenheiro mecânico">Engenheiro Mecânico</option>
+          <option value="especialista em logística">
+            Especialista em Logística
+          </option>
+          <option value="esteticista">Esteticista</option>
+          <option value="farmacêutico">Farmacêutico</option>
+          <option value="fisioterapeuta">Fisioterapeuta</option>
+          <option value="gerente comercial">Gerente Comercial</option>
+          <option value="gerente de operações">Gerente de Operações</option>
+          <option value="gerente financeiro">Gerente Financeiro</option>
+          <option value="gerente de TI">Gerente de TI</option>
+          <option value="jornalista">Jornalista</option>
+          <option value="maquinista">Maquinista</option>
+          <option value="médico">Médico</option>
+          <option value="motorista">Motorista</option>
+          <option value="nutricionista">Nutricionista</option>
+          <option value="operador de máquinas">Operador de Máquinas</option>
+          <option value="pedagogo">Pedagogo</option>
+          <option value="psicólogo">Psicólogo</option>
+          <option value="publicitário">Publicitário</option>
+          <option value="redator">Redator</option>
+          <option value="recrutador">Recrutador</option>
+          <option value="secretário executivo">Secretário Executivo</option>
+          <option value="supervisor de vendas">Supervisor de Vendas</option>
+          <option value="técnico em informática">Técnico em Informática</option>
+          <option value="técnico em segurança do trabalho">
+            Técnico em Segurança do Trabalho
+          </option>
+          <option value="terapeuta ocupacional">Terapeuta Ocupacional</option>
+          <option value="tradutor">Tradutor</option>
+          <option value="vendedor">Vendedor</option>
+          <option value="web designer">Web Designer</option>
+          <option value="ux/ui designer">UX/UI Designer</option>
+          <option value="social media">Social Media</option>
+          <option value="analista de qualidade">Analista de Qualidade</option>
+          <option value="técnico de laboratório">Técnico de Laboratório</option>
+          <option value="agente de segurança">Agente de Segurança</option>
+          <option value="assistente social">Assistente Social</option>
+          <option value="fisiologista">Fisiologista</option>
+          <option value="gerente de projetos">Gerente de Projetos</option>
+          <option value="analista de sistemas">Analista de Sistemas</option>
+          <option value="biotecnologista">Biotecnologista</option>
+          <option value="consultor de vendas">Consultor de Vendas</option>
+          <option value="gerente de recursos humanos">
+            Gerente de Recursos Humanos
+          </option>
+          <option value="operador de caixa">Operador de Caixa</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-5">
+        <label for="ageUser" class="form-label"
+          ><span class="text-danger">*</span>Contato</label
+        >
+        <input
+          type="text"
+          name="contact"
+          class="form-control"
+          placeholder="Email ou telefone"
+          formControlName="contact"
+        />
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Nível da vaga</label
+        >
+        <select
+          class="form-select"
+          formControlName="level"
+          aria-label="Default select example"
+        >
+          <option value="">Selecione</option>
+          <option value="Estágio">Estágio</option>
+          <option value="Jovem Aprendiz">Jovem Aprendiz</option>
+          <option value="Efetivo">Efetivo</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-3">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Modalidade</label
+        >
+        <select
+          class="form-select"
+          formControlName="modality"
+          aria-label="Default select example"
+        >
+          <option value="">Selecione</option>
+          <option value="Presencial">Presencial</option>
+          <option value="Remoto">Remoto</option>
+          <option value="Híbrido">Híbrido</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Estado</label
+        >
+        <select
+          class="form-select"
+          formControlName="uf"
+          aria-label="Default select example"
+        >
+          <option value="">Selecione</option>
+          <option value="AC">AC</option>
+          <option value="AL">AL</option>
+          <option value="AP">AP</option>
+          <option value="AM">AM</option>
+          <option value="BA">BA</option>
+          <option value="CE">CE</option>
+          <option value="DF">DF</option>
+          <option value="ES">ES</option>
+          <option value="GO">GO</option>
+          <option value="MA">MA</option>
+          <option value="MT">MT</option>
+          <option value="MS">MS</option>
+          <option value="MG">MG</option>
+          <option value="PA">PA</option>
+          <option value="PB">PB</option>
+          <option value="PR">PR</option>
+          <option value="PE">PE</option>
+          <option value="PI">PI</option>
+          <option value="RJ">RJ</option>
+          <option value="RN">RN</option>
+          <option value="RS">RS</option>
+          <option value="RO">RO</option>
+          <option value="RR">RR</option>
+          <option value="SC">SC</option>
+          <option value="SP">SP</option>
+          <option value="SE">SE</option>
+          <option value="TO">TO</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="ageUser" class="form-label"
+          ><span class="text-danger">*</span>Cidade</label
+        >
+        <input
+          type="text"
+          name="city"
+          class="form-control"
+          placeholder="Insira uma cidade"
+          formControlName="locality"
+        />
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="ageUser" class="form-label"
+          ><span class="text-danger">*</span>Salário</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Insira um valor"
+          formControlName="salary"
+          mask="separator.2"
+          thousandSeparator="."
+          decimalMarker=","
+          prefix="R$ "
+        />
+      </div>
+    </div>
 
-    <div
-      class="modal fade"
-      id="exampleModal"
-      tabindex="-1"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">
-              Adicionar Perguntas
-            </h1>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <div formArrayName="perguntas">
-              <div *ngFor="let pergunta of perguntas.controls; let i = index">
-                <div class="row">
-                  <div class="col-12">
-                    <label class="form-label">Adicione sua pergunta</label>
-                    <textarea
-                      class="form-control"
-                      placeholder="Insira aqui a sua pergunta"
-                      [formControlName]="i"
-                    ></textarea>
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Sobre a Empresa</label
+        >
+        <textarea
+          name="aboutCompany"
+          class="form-control"
+          placeholder="Descrição sobre a empresa e seus valores "
+          formControlName="aboutCompany"
+        ></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label for="requirements" class="form-label"
+          ><span class="text-danger">*</span>Requisitos</label
+        >
+        <textarea
+          name="requirements"
+          class="form-control"
+          placeholder="Descrição das requisitos para a vaga"
+          formControlName="requirements"
+        ></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label for="benefits" class="form-label"
+          ><span class="text-danger">*</span>Benefícios</label
+        >
+        <textarea
+          name="benefits"
+          class="form-control"
+          placeholder="Citar os benefícios que serão oferecidos"
+          formControlName="benefits"
+        ></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label"
+          ><span class="text-danger">*</span>Descrição da vaga</label
+        >
+        <textarea
+          name="description"
+          class="form-control"
+          placeholder="Faça uma breve descrição sobre a vaga"
+          formControlName="description"
+        ></textarea>
+      </div>
+    </div>
+    <div class="d-grid gap-2 d-md-flex" id="button-wrapper">
+      <button
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+        type="button"
+      >
+        Incluir Perguntas Adicionais
+      </button>
+      <ng-container *ngIf="isEditing; else submit">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="openModalPassword(onUpdate)"
+        >
+          Atualizar dados da vaga<svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-right"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+            />
+          </svg>
+        </button>
+      </ng-container>
+      <ng-template #submit>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="openModalPassword(onSubmit)"
+        >
+          Finalizar cadastro de vaga<svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-right"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"
+            />
+          </svg>
+        </button>
+      </ng-template>
+
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Adicionar Perguntas
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div formArrayName="perguntas">
+                <div *ngFor="let pergunta of perguntas.controls; let i = index">
+                  <div class="row">
+                    <div class="col-12">
+                      <label class="form-label">Adicione sua pergunta</label>
+                      <textarea
+                        class="form-control"
+                        placeholder="Insira aqui a sua pergunta"
+                        [formControlName]="i"
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="d-grid" style="margin-top: 1rem">
+                <button
+                  class="btn btn-warning"
+                  (click)="adicionarPergunta()"
+                  type="button"
+                >
+                  Adicionar pergunta
+                </button>
+              </div>
             </div>
-            <div class="d-grid" style="margin-top: 1rem">
+            <div class="modal-footer">
               <button
-                class="btn btn-warning"
-                (click)="adicionarPergunta()"
                 type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
               >
-                Adicionar pergunta
+                Sair
+              </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                data-bs-dismiss="modal"
+              >
+                Confirmar
               </button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Sair
-            </button>
-            <button
-              type="button"
-              class="btn btn-warning"
-              data-bs-dismiss="modal"
-            >
-              Confirmar
-            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+</div>
 
 <div class="modal-backdrop" *ngIf="isModalPasswordOpen">
   <div class="modal-questions" tabindex="-1" *ngIf="isModalPasswordOpen">
@@ -418,7 +431,7 @@
                 type="password"
                 name="passwordUser"
                 id="passwordUser"
-                placeholder="Senha"
+                placeholder="Digite sua senha para prosseguir"
                 class="form-control"
                 [(ngModel)]="confirmedPassword"
               />

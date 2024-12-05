@@ -7,6 +7,7 @@ import { ICurriculum } from '../../models/curriculum.interface';
 import { CurriculumService } from '../../services/curriculum/curriculum.service';
 import { IUser } from '../../models/user.interface';
 import { UserFormService } from '../../services/user/user-form.service';
+import { ModalService } from '../../services/modal/modal.service';
 
 @Component({
   selector: 'app-curriculum-form-4',
@@ -35,7 +36,8 @@ export class CurriculumForm4Component implements OnInit {
     private router: Router,
     private userFormService: UserFormService,
     private userService: UserAuthService,
-    private curriculumService: CurriculumService
+    private curriculumService: CurriculumService,
+    private modalService: ModalService
   ) {}
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
@@ -69,10 +71,12 @@ export class CurriculumForm4Component implements OnInit {
     this.loadData();
   }
   openModalPassword(action: () => void) {
+    this.modalService.openModal();
     this.actionToPerform = action;
     this.isModalPasswordOpen = true;
   }
   closeModalPassword() {
+    this.modalService.closeModal();
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }

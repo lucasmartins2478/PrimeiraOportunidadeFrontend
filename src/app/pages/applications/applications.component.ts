@@ -72,20 +72,14 @@ export class ApplicationsComponent implements OnInit {
       const filteredIds = applicationsResponse?.map((application) => application.vacancyId) || [];
       const canceledIds = canceledApplications?.map((application) => application.vacancyId) || [];
 
-      // Verificar se há candidaturas canceladas
-      if (canceledIds.length > 0) {
-        // Adicionar as vagas canceladas ao array canceledJobs
-        this.canceledJobs = enrichedJobs.filter((job) => canceledIds.includes(job.id));
-      } else {
-        // Nenhuma candidatura cancelada
-        this.canceledJobs = [];
-      }
+      // Separar vagas em grupos
+      this.canceledJobs = enrichedJobs.filter((job) => canceledIds.includes(job.id)); // Vagas canceladas
+      this.finishedJobs = enrichedJobs.filter((job) => !canceledIds.includes(job.id) && (job.isFilled || !job.isActive)); // Vagas finalizadas
+      this.filteredJobs = enrichedJobs.filter(
+        (job) => filteredIds.includes(job.id) && !canceledIds.includes(job.id) && job.isActive && !job.isFilled
+      ); // Vagas ativas e não canceladas
 
-      // Filtrar as vagas com base nos critérios
-      this.filteredJobs = enrichedJobs.filter((job) => filteredIds.includes(job.id));
-      this.finishedJobs = this.filteredJobs.filter((job) => job.isFilled || !job.isActive);
-
-      // Inicializar as vagas buscadas
+      // Inicializar as vagas buscadas (apenas as ativas)
       this.searchedJobs = [...this.filteredJobs];
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
@@ -103,16 +97,33 @@ export class ApplicationsComponent implements OnInit {
 
 
 
+
   onSearch(value: string) {
     const searchValue = this.removeAccents(value.toLowerCase());
     this.searchedJobs = this.jobs.filter((job) => {
-      const titleMatch = this.removeAccents(job.title.toLowerCase()).includes(searchValue);
-      const descriptionMatch = this.removeAccents(job.modality.toLowerCase()).includes(searchValue);
-      const locationMatch = this.removeAccents(job.locality.toLowerCase()).includes(searchValue);
-      const companyNameMatch = this.removeAccents(job.companyName.toLowerCase()).includes(searchValue);
-
+      const titleMatch = this.removeAccents(job.title.toLowerCase()).includes(
+        searchValue
+      );
+      const descriptionMatch = this.removeAccents(
+        job.modality.toLowerCase()
+      ).includes(searchValue);
+      const locationMatch = this.removeAccents(
+        job.locality.toLowerCase()
+      ).includes(searchValue);
+      const companyNameMatch = this.removeAccents(
+        job.companyName.toLowerCase()
+      ).includes(searchValue);
+      const jobLevelMatch = this.removeAccents(
+        job.level.toLowerCase()
+      ).includes(searchValue);
       // Retorna true se qualquer condição for atendida
-      return titleMatch || descriptionMatch || locationMatch || companyNameMatch;
+      return (
+        titleMatch ||
+        descriptionMatch ||
+        locationMatch ||
+        companyNameMatch ||
+        jobLevelMatch
+      );
     });
   }
 

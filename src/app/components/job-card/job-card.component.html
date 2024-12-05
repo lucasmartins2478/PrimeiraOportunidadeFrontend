@@ -22,7 +22,7 @@
 
   <h6>Empresa: {{ job.companyName }}</h6>
   <h6>Modalidade: {{ job.modality }}</h6>
-  <h6>Salário: {{ job.salary }}</h6>
+  <h6>Tipo de contratação: {{ job.level }}</h6>
   <ng-container *ngIf="!job.isFilled && job.isActive; else finished">
     <button type="button" class="btn btn-warning" (click)="openModal(job)">
       Ver informações da vaga
@@ -45,9 +45,9 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5">
+        <h5 class="modal-title fs-5">
           {{ selectedJob?.title }}
-        </h1>
+        </h5>
         <div
           class="button-wrapper"
           *ngIf="job.isActive == true && job.isFilled == false"
@@ -71,8 +71,6 @@
         </div>
       </div>
       <div class="modal-body">
-        <h6><b>Preenchida:</b>{{job.isFilled}}</h6>
-        <h6><b>Ativa:</b>{{job.isActive}}</h6>
         <h6><b>Empresa:</b> {{ job?.companyName }}</h6>
         <h6><b>Modalidade:</b> {{ job?.modality }}</h6>
         <h6><b>Localidade:</b> {{ job?.locality }}</h6>

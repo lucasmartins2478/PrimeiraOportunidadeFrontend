@@ -11,7 +11,6 @@ import { ICompany } from '../../models/company.interface';
   styleUrls: ['./company-login-form.component.css'],
 })
 export class CompanyLoginFormComponent implements OnInit {
-
   // Atributos de exibição do alerta
 
   alertMessage: string = '';
@@ -48,10 +47,32 @@ export class CompanyLoginFormComponent implements OnInit {
       const formData = this.loginForm.value;
       const apiUrl = 'https://backend-production-ff1f.up.railway.app/companies';
 
+      // Recupera tentativas falhas e bloqueio do localStorage
+      const failedAttempts = Number(
+        localStorage.getItem('failedAttempts') || 0
+      );
+      const lockUntil = localStorage.getItem('lockUntil');
+      const now = Date.now();
+
+      // Verifica se o usuário está bloqueado
+      if (lockUntil && now < Number(lockUntil)) {
+        const remainingTime = Math.ceil((Number(lockUntil) - now) / 1000);
+        this.alertMessage = `Conta bloqueada. Tente novamente em ${remainingTime} segundos.`;
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+        return;
+      }
+
       this.http.get<ICompany[]>(apiUrl).subscribe(
         (response) => {
           const company = response.find((comp) => comp.email === formData.user);
           if (company && company.password === formData.password) {
+            localStorage.removeItem('failedAttempts');
+            localStorage.removeItem('lockUntil');
+
             this.alertMessage = `Seja bem-vindo(a) ${company.responsible}`;
             this.alertClass = 'alert alert-success';
             this.alertTitle = 'Sucesso';
@@ -67,12 +88,32 @@ export class CompanyLoginFormComponent implements OnInit {
             }, 2000);
             // Armazena os dados da empresa no AuthService
           } else {
-            this.alertMessage = 'Usuário ou senha incorretos!';
-            this.alertClass = 'alert alert-danger';
-            this.alertTitle = 'Erro';
-            this.alertIconClass = 'bi bi-x-circle';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
+            const newFailedAttempts = failedAttempts + 1;
+            localStorage.setItem('failedAttempts', String(newFailedAttempts));
+
+            if (newFailedAttempts >= 3) {
+              const lockTime = 15 * 60 * 1000; // 15 minutos em milissegundos
+              const unlockTime = now + lockTime;
+              localStorage.setItem('lockUntil', String(unlockTime));
+              localStorage.setItem('failedAttempts', '0'); // Reseta as tentativas após bloqueio
+
+              this.alertMessage =
+                'Muitas tentativas falhas. Conta bloqueada por 15 minutos.';
+              this.alertClass = 'alert alert-danger';
+              this.alertTitle = 'Erro';
+              this.alertIconClass = 'bi bi-x-circle';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+            } else {
+              this.alertMessage = `Senha incorreta. Você tem mais ${
+                3 - newFailedAttempts
+              } tentativa(s).`;
+              this.alertClass = 'alert alert-danger';
+              this.alertTitle = 'Erro';
+              this.alertIconClass = 'bi bi-x-circle';
+              this.showAlert = true;
+              this.resetAlertAfterDelay();
+            }
           }
         },
         (error) => {
@@ -98,7 +139,7 @@ export class CompanyLoginFormComponent implements OnInit {
   }
 
   // Função que limpa os dados do alerta
-  
+
   clearAlert() {
     this.alertMessage = '';
     this.showAlert = false;

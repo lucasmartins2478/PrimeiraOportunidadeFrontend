@@ -38,11 +38,32 @@ export class UserLoginFormComponent implements OnInit {
       const formData = this.loginForm.value;
       const apiUrl = 'https://backend-production-ff1f.up.railway.app/users';
 
+      // Recupera tentativas falhas e bloqueio do localStorage
+      const failedAttempts = Number(localStorage.getItem('failedAttempts') || 0);
+      const lockUntil = localStorage.getItem('lockUntil');
+      const now = Date.now();
+
+      // Verifica se o usuário está bloqueado
+      if (lockUntil && now < Number(lockUntil)) {
+        const remainingTime = Math.ceil((Number(lockUntil) - now) / 1000);
+        this.alertMessage = `Conta bloqueada. Tente novamente em ${remainingTime} segundos.`;
+        this.alertClass = 'alert alert-danger';
+        this.alertTitle = 'Erro';
+        this.alertIconClass = 'bi bi-x-circle';
+        this.showAlert = true;
+        this.resetAlertAfterDelay();
+        return;
+      }
+
       this.http.get<IUser[]>(apiUrl).subscribe(
         (response) => {
           const user = response.find((user) => user.email === formData.email);
-          if (user && user.email === formData.email) {
-            if (user && user.password === formData.password) {
+          if (user) {
+            if (user.password === formData.password) {
+              // Reset no sucesso
+              localStorage.removeItem('failedAttempts');
+              localStorage.removeItem('lockUntil');
+
               this.alertMessage = `Seja bem-vindo(a) ${user.name}`;
               this.alertClass = 'alert alert-success';
               this.alertTitle = 'Sucesso';
@@ -57,24 +78,42 @@ export class UserLoginFormComponent implements OnInit {
                 this.router.navigate(['/vagas']);
               }, 2000);
             } else {
-              this.alertMessage = 'A senha informada está incorreta!';
-              this.alertTitle = 'Erro';
-              this.alertIconClass = 'bi bi-x-circle';
-              this.alertClass = 'alert alert-danger';
-              this.showAlert = true;
-              this.resetAlertAfterDelay();
+              // Incrementa tentativas falhas
+              const newFailedAttempts = failedAttempts + 1;
+              localStorage.setItem('failedAttempts', String(newFailedAttempts));
+
+              if (newFailedAttempts >= 3) {
+                const lockTime = 15 * 60 * 1000; // 15 minutos em milissegundos
+                const unlockTime = now + lockTime;
+                localStorage.setItem('lockUntil', String(unlockTime));
+                localStorage.setItem('failedAttempts', '0'); // Reseta as tentativas após bloqueio
+
+                this.alertMessage = 'Muitas tentativas falhas. Conta bloqueada por 15 minutos.';
+                this.alertClass = 'alert alert-danger';
+                this.alertTitle = 'Erro';
+                this.alertIconClass = 'bi bi-x-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+              } else {
+                this.alertMessage = `Senha incorreta. Você tem mais ${3 - newFailedAttempts} tentativa(s).`;
+                this.alertClass = 'alert alert-danger';
+                this.alertTitle = 'Erro';
+                this.alertIconClass = 'bi bi-x-circle';
+                this.showAlert = true;
+                this.resetAlertAfterDelay();
+              }
             }
           } else {
             this.alertMessage = 'O email informado está incorreto!';
+            this.alertClass = 'alert alert-danger';
             this.alertTitle = 'Erro';
             this.alertIconClass = 'bi bi-x-circle';
-            this.alertClass = 'alert alert-danger';
             this.showAlert = true;
             this.resetAlertAfterDelay();
           }
         },
         (error) => {
-          window.alert(`Erro ao buscar dados, ${error}`);
+          window.alert(`Erro ao buscar dados: ${error}`);
         }
       );
     } else {
@@ -86,6 +125,7 @@ export class UserLoginFormComponent implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
+
 
   resetAlertAfterDelay() {
     setTimeout(() => {

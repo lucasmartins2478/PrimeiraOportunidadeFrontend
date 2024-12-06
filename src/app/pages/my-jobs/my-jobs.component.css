@@ -37,4 +37,7 @@ h2{
   .row {
     justify-content: space-around;
   }
+  .row h3{
+    margin-left: 0rem;
+  }
 }

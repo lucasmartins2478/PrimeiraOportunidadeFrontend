@@ -27,6 +27,7 @@ export class CurriculumForm3Component implements OnInit {
   userData = this.userService.getUserData();
   hasCoursesData!: boolean;
   isLoading: boolean = true;
+  originalCompetencies: ICompetences[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +40,7 @@ export class CurriculumForm3Component implements OnInit {
   }
   private async loadData(): Promise<void> {
     try {
+      this.loadOriginalCompetencies();
       await this.getCousesData();
     } catch (error) {
       console.error('Erro ao carregar os dados:', error);
@@ -75,6 +77,23 @@ export class CurriculumForm3Component implements OnInit {
         }
       );
     });
+  }
+  loadOriginalCompetencies() {
+    const apiUrl = 'https://backend-production-ff1f.up.railway.app/competences';
+    const userId = this.userService.getUserData()?.id;
+
+    if (userId) {
+      this.http
+        .get<ICompetences[]>(`${apiUrl}?curriculumId=${userId}`)
+        .subscribe(
+          (response) => {
+            this.originalCompetencies = response;
+          },
+          (error) => {
+            console.error('Erro ao carregar competências originais:', error);
+          }
+        );
+    }
   }
 
   async getCompetencesData(): Promise<void> {
@@ -255,8 +274,7 @@ export class CurriculumForm3Component implements OnInit {
           };
 
           this.http.post<ICoursesData[]>(apiUrl, body).subscribe(
-            (response) => {
-            },
+            (response) => {},
             (error) => {
               window.alert(`Erro ao cadastrar curso: ${error}`);
             }
@@ -276,8 +294,7 @@ export class CurriculumForm3Component implements OnInit {
           };
 
           this.http.post<ICompetences[]>(apiUrl, body).subscribe(
-            (response) => {
-            },
+            (response) => {},
             (error) => {
               window.alert(`Erro ao cadastrar competência: ${error}`);
             }
@@ -320,38 +337,20 @@ export class CurriculumForm3Component implements OnInit {
           if (course.id) {
             this.http
               .put<ICoursesData[]>(`${apiUrl}/${course.id}`, body)
-              .subscribe(
-                (response) => {
-                  this.alertMessage = 'Curso atualizado com sucesso!';
-                  this.alertClass = 'alert alert-success';
-                  this.alertTitle = 'Sucesso';
-                  this.alertIconClass = 'bi bi-check-circle';
-                  this.showAlert = true;
-                  this.resetAlertAfterDelay();
-                },
-                (error) => {
-                  window.alert(`Erro ao atualizar curso: ${error}`);
-                }
+              .subscribe((error) =>
+                window.alert(`Erro ao atualizar curso: ${error}`)
               );
           } else {
-            this.http.post<ICoursesData[]>(apiUrl, body).subscribe(
-              (response) => {
-                this.alertMessage = 'Curso cadastrado com sucesso!';
-                this.alertClass = 'alert alert-success';
-                this.alertTitle = 'Sucesso';
-                this.alertIconClass = 'bi bi-check-circle';
-                this.showAlert = true;
-                this.resetAlertAfterDelay();
-              },
-              (error) => {
-                window.alert(`Erro ao cadastrar curso: ${error}`);
-              }
-            );
+            this.http
+              .post<ICoursesData[]>(apiUrl, body)
+              .subscribe((error) =>
+                window.alert(`Erro ao cadastrar curso: ${error}`)
+              );
           }
         });
       }
 
-      // Enviar dados das competências
+      // Enviar dados das competências somente se houver mudanças
       if (competenciesData && competenciesData.length > 0) {
         competenciesData.forEach((competence: ICompetences) => {
           const apiUrl =
@@ -360,36 +359,20 @@ export class CurriculumForm3Component implements OnInit {
             name: competence.name,
             curriculumId: this.userService.getUserData()?.id,
           };
-          if (competence.id) {
+
+          // Evitar requisições desnecessárias (comparar dados antigos e novos)
+          if (competence.id && this.isCompetenceModified(competence)) {
             this.http
               .put<ICompetences[]>(`${apiUrl}/${competence.id}`, body)
-              .subscribe(
-                (response) => {
-                  this.alertMessage = 'Competência atualizada com sucesso!';
-                  this.alertClass = 'alert alert-success';
-                  this.alertTitle = 'Sucesso';
-                  this.alertIconClass = 'bi bi-check-circle';
-                  this.showAlert = true;
-                  this.resetAlertAfterDelay();
-                },
-                (error) => {
-                  window.alert(`Erro ao atualizar competência: ${error}`);
-                }
+              .subscribe((error) =>
+                window.alert(`Erro ao atualizar competência: ${error}`)
               );
-          } else {
-            this.http.post<ICompetences[]>(apiUrl, body).subscribe(
-              (response) => {
-                this.alertMessage = 'Competência cadastrada com sucesso!';
-                this.alertClass = 'alert alert-success';
-                this.alertTitle = 'Sucesso';
-                this.alertIconClass = 'bi bi-check-circle';
-                this.showAlert = true;
-                this.resetAlertAfterDelay();
-              },
-              (error) => {
-                window.alert(`Erro ao cadastrar competência: ${error}`);
-              }
-            );
+          } else if (!competence.id) {
+            this.http
+              .post<ICompetences[]>(apiUrl, body)
+              .subscribe((error) =>
+                window.alert(`Erro ao cadastrar competência: ${error}`)
+              );
           }
         });
       }
@@ -406,6 +389,19 @@ export class CurriculumForm3Component implements OnInit {
       this.resetAlertAfterDelay();
     }
   }
+
+  // Função auxiliar para verificar se houve mudanças na competência
+  private isCompetenceModified(competence: ICompetences): boolean | undefined {
+    const originalCompetence = this.getOriginalCompetenceById(competence.id);
+    return originalCompetence && originalCompetence.name !== competence.name;
+  }
+
+  // Exemplo de função para obter a competência original pelo ID (implementação depende do seu projeto)
+  private getOriginalCompetenceById(id: number): ICompetences | undefined {
+    // Retornar os dados originais da competência (você pode buscar isso de um serviço ou armazenar no componente)
+    return this.originalCompetencies.find((comp) => comp.id === id);
+  }
+
   showAlertMessage(
     message: string,
     alertClass: string,

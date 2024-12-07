@@ -158,7 +158,7 @@ export class CurriculumForm1Component implements OnInit {
       name: [this.user?.name || '', [Validators.required]],
       dateOfBirth: [
         this.curriculumData?.dateOfBirth || '',
-        [Validators.required],
+        [Validators.required, this.validateDate.bind(this)], // Validador síncrono
       ],
       age: [this.curriculumData?.age || '', [Validators.required]],
       phoneNumber: [this.user?.phoneNumber || '', [Validators.required]],
@@ -181,6 +181,7 @@ export class CurriculumForm1Component implements OnInit {
   // pegando os dados fornecidos no formulário
 
   onSubmit() {
+    this.curriculumForm.value;
     if (this.curriculumForm.valid) {
       const formData = this.curriculumForm.value;
 
@@ -224,6 +225,7 @@ export class CurriculumForm1Component implements OnInit {
   // Função que atualiza o currículo do usuário no banco de dados
 
   onUpdate() {
+    console.log(this.curriculumForm.value);
     if (this.curriculumForm.valid) {
       const formData = this.curriculumForm.value;
       const id = this.userData?.id; // Aqui você deve garantir que o ID do currículo correto está sendo utilizado
@@ -346,20 +348,23 @@ export class CurriculumForm1Component implements OnInit {
   get dateOfBirthControl() {
     return this.curriculumForm.get('dateOfBirth');
   }
+
   validateDate(control: AbstractControl): ValidationErrors | null {
-    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/; // Valida o formato dd/mm/aaaa
+    
 
-    if (!control.value) {
-      return null; // Campo vazio é tratado pelo Validators.required
+    const rawValue = control.value?.trim();
+    const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    if (!rawValue) {
+      return null;
     }
 
-    if (!dateRegex.test(control.value)) {
-      return { invalidDate: true }; // Formato inválido
+    if (!dateRegex.test(rawValue)) {
+      return { invalidDate: true };
     }
 
-    const [day, month, year] = control.value.split('/').map(Number);
+    const [day, month, year] = rawValue.split('/').map(Number);
 
-    // Verifica se a data é válida
     const date = new Date(year, month - 1, day);
     const isValidDate =
       date.getFullYear() === year &&
@@ -370,7 +375,23 @@ export class CurriculumForm1Component implements OnInit {
       return { invalidDate: true };
     }
 
-    return null; // Data válida
+    const today = new Date();
+    let age = today.getFullYear() - year;
+
+    const birthdayThisYear = new Date(today.getFullYear(), month - 1, day);
+    if (today < birthdayThisYear) {
+      age--;
+    }
+
+    const parent = control.parent;
+    if (parent) {
+      const ageControl = parent.get('age');
+      if (ageControl) {
+        ageControl.setValue(age, { emitEvent: false });
+      }
+    }
+
+    return null;
   }
 
   // Função que remove o alerta da tela após 3 segundos

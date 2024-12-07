@@ -70,14 +70,16 @@
           ><span class="text-danger">*</span>Data de Nascimento</label
         >
         <input
-          type="text"
-          name="dateOfBirthUser"
-          id="dateOfBirthUser"
-          placeholder="dd/mm/aaaa"
-          class="form-control"
-          mask="00/00/0000"
-          formControlName="dateOfBirth"
-        />
+  type="text"
+  name="dateOfBirthUser"
+  id="dateOfBirthUser"
+  placeholder="dd/mm/aaaa"
+  class="form-control"
+  [mask]="'00/00/0000'"
+  [dropSpecialCharacters]="false"
+  formControlName="dateOfBirth"
+/>
+
         <div
           *ngIf="dateOfBirthControl?.invalid && dateOfBirthControl?.touched"
           class="text-danger"

@@ -74,10 +74,18 @@ export class ApplicationsComponent implements OnInit {
 
       // Separar vagas em grupos
       this.canceledJobs = enrichedJobs.filter((job) => canceledIds.includes(job.id)); // Vagas canceladas
-      this.finishedJobs = enrichedJobs.filter((job) => !canceledIds.includes(job.id) && (job.isFilled || !job.isActive)); // Vagas finalizadas
+      this.finishedJobs = enrichedJobs.filter(
+        (job) =>
+          filteredIds.includes(job.id) && // Somente vagas que o usuário se candidatou
+          !canceledIds.includes(job.id) && // Excluir vagas canceladas
+          (job.isFilled || !job.isActive) // Vagas finalizadas
+      );
       this.filteredJobs = enrichedJobs.filter(
-        (job) => filteredIds.includes(job.id) && !canceledIds.includes(job.id) && job.isActive && !job.isFilled
-      ); // Vagas ativas e não canceladas
+        (job) =>
+          filteredIds.includes(job.id) && // Somente vagas que o usuário se candidatou
+          !canceledIds.includes(job.id) && // Excluir vagas canceladas
+          job.isActive && !job.isFilled // Vagas ativas e não preenchidas
+      );
 
       // Inicializar as vagas buscadas (apenas as ativas)
       this.searchedJobs = [...this.filteredJobs];
@@ -94,6 +102,7 @@ export class ApplicationsComponent implements OnInit {
       this.isLoading = false; // Conclui o carregamento
     }
   }
+
 
 
 

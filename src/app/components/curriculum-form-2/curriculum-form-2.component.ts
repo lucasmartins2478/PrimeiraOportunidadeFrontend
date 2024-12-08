@@ -251,6 +251,7 @@ export class CurriculumForm2Component implements OnInit {
     }
   }
 
+
   // Função que adiciona informações no currículo do usuário
   // e também os dados academicos preenhidos na tela
 
@@ -294,7 +295,9 @@ export class CurriculumForm2Component implements OnInit {
             curriculumId: id,
           };
           this.http.post<IAcademicData[]>(apiUrl, body).subscribe(
-            () => {},
+            () => {
+
+            },
             (error: any) => {
               window.alert(`Erro ao cadastrar currículo: ${error}`);
             }
@@ -363,7 +366,9 @@ export class CurriculumForm2Component implements OnInit {
                 institutionBody
               )
               .subscribe(
-                () => {},
+                () => {
+
+                },
                 (error: any) => {
                   window.alert(`Erro ao atualizar dados acadêmicos: ${error}`);
                 }
@@ -371,7 +376,9 @@ export class CurriculumForm2Component implements OnInit {
           } else {
             // Cria uma nova instituição se o ID não estiver presente
             this.http.post<IAcademicData>(apiUrl, institutionBody).subscribe(
-              () => {},
+              () => {
+
+              },
               (error: any) => {
                 window.alert(`Erro ao adicionar nova instituição: ${error}`);
               }
@@ -392,6 +399,8 @@ export class CurriculumForm2Component implements OnInit {
     }
   }
 
+
+  
   // Função que exibe o alerta na tela
 
   showAlertMessage(

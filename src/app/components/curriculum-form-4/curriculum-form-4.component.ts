@@ -29,6 +29,8 @@ export class CurriculumForm4Component implements OnInit {
   actionToPerform!: () => void;
   attemptCount: number = 0;
   isLoading: boolean = true;
+  isModalTermsOfUseOpen!: boolean;
+  isModalPrivacyPolicyOpen!: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -79,6 +81,22 @@ export class CurriculumForm4Component implements OnInit {
     this.modalService.closeModal();
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
+  }
+  openModalTermsOfUse() {
+    this.modalService.openModal()
+    this.isModalTermsOfUseOpen = true
+  }
+  openModalPrivacyPolicy() {
+    this.modalService.openModal()
+    this.isModalPrivacyPolicyOpen = true
+  }
+  closeModalTermsOfUse() {
+    this.modalService.closeModal()
+    this.isModalTermsOfUseOpen = false
+  }
+  closeModalPrivacyPolicy() {
+    this.modalService.closeModal()
+    this.isModalPrivacyPolicyOpen = false
   }
   confirmPassword() {
     if (this.user.password === this.confirmedPassword) {
@@ -138,7 +156,7 @@ export class CurriculumForm4Component implements OnInit {
       };
       this.http.put<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
-          this.alertMessage = 'Currículo cadastrado com sucesso!';
+          this.alertMessage = 'Cadastro de currículo finalizado!';
           this.alertClass = 'alert alert-success';
           this.alertTitle = 'Sucesso';
           this.alertIconClass = 'bi bi-check-circle';

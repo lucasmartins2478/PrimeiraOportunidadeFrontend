@@ -319,7 +319,6 @@ export class CurriculumForm1Component implements OnInit {
     try {
       const response = await this.http.put<IUser>(apiUrl, body).toPromise();
     } catch (error) {
-      window.alert(`Erro ao fazer busca do currículo: ${error}`);
     }
   }
 
@@ -350,7 +349,7 @@ export class CurriculumForm1Component implements OnInit {
   }
 
   validateDate(control: AbstractControl): ValidationErrors | null {
-    
+
 
     const rawValue = control.value?.trim();
     const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;

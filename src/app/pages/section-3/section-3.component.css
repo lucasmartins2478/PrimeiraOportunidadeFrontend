@@ -18,11 +18,58 @@ p{
   font-size: 18px;
 }
 .row{
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
-ul{
-  margin-top: 2rem;
+.card{
+  width: 15rem;
+  height: 11rem;
+  overflow: hidden; /* Esconde o conteúdo que ultrapassa os limites */
+  position: relative; /* Garante que o posicionamento seja relativo à div */
+  border: 1px solid #ccc; /* Opcional: borda para visualizar os limites */
 }
-img{
-  width: 250px;
+.card img{
+  width: 100%; /* Ajusta a largura da imagem para caber na div */
+  height: auto; /* Mantém a proporção da imagem */
+  object-fit: cover; /* Ajusta como a imagem é cortada */
 }
+.col-3{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.col-8{
+  margin-top: 4rem;
+}
+.col-9{
+  margin-top: 4rem;
+}
+/* .container{
+  width: 70%;
+} */
+
+@media(max-width:1200px){
+  .row{
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  .col-3, .col-4{
+    width: 100%;
+  }
+  .card{
+    width: 100%;
+    margin: 2rem auto;
+  }
+}
+@media(max-width:450px){
+  .container{
+    width: 100%;
+  }
+  ul{
+    width: 100%;
+  }
+  h2{
+    margin: 0 auto;
+  }
+}
+

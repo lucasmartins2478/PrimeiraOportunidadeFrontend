@@ -50,7 +50,6 @@ export class JobFormComponent implements OnInit {
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
     try {
-      await this.getCompanyData();
       const idParam = this.route.snapshot.paramMap.get('id');
       if (idParam) {
         this.jobId = +idParam; // Converte `string` para `number`
@@ -69,32 +68,37 @@ export class JobFormComponent implements OnInit {
 
     console.log(questionId);
 
-    if (!questionId) { // Checa se o questionId não existe
+    if (!questionId) {
+      // Checa se o questionId não existe
       this.perguntas.removeAt(index);
       return;
     }
 
-    this.http.delete(`https://backend-production-ff1f.up.railway.app/vacancy/${this.jobData.id}/questions/${questionId}`).subscribe(
-      (response) => {
-        console.log('Pergunta removida com sucesso do backend');
-      },
-      (error) => {
-        console.log(`Erro ao deletar pergunta: ${error}`);
-      }
-    );
+    this.http
+      .delete(
+        `https://backend-production-ff1f.up.railway.app/vacancy/${this.jobData.id}/questions/${questionId}`
+      )
+      .subscribe(
+        (response) => {
+          console.log('Pergunta removida com sucesso do backend');
+        },
+        (error) => {
+          console.log(`Erro ao deletar pergunta: ${error}`);
+        }
+      );
 
     // Apenas remove do array local se a exclusão for bem-sucedida
     this.perguntas.removeAt(index);
   }
 
-
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.loadData();
     } else {
       // Inicializa o formulário vazio para novo cadastro
-      this.isLoading = false
+      await this.getCompanyData();
+      this.isLoading = false;
       this.createEmptyForm();
     }
   }
@@ -166,7 +170,7 @@ export class JobFormComponent implements OnInit {
       requirements: ['', [Validators.required]],
       aboutCompany: ['', [Validators.required]],
       benefits: ['', [Validators.required]],
-      perguntas: this.fb.array([this.criarPergunta()]), // Formulário em branco inicia com uma pergunta vazia
+      perguntas: this.fb.array([]), // Formulário em branco inicia com uma pergunta vazia
     });
   }
 
@@ -176,12 +180,11 @@ export class JobFormComponent implements OnInit {
         ? this.questionData.map((q) =>
             this.fb.group({
               id: this.fb.control(q.id || null),
-              question: this.fb.control(q.question || '', Validators.required)
+              question: this.fb.control(q.question || '', Validators.required),
             })
           )
         : [this.criarPergunta()]
     );
-
 
     this.jobForm = this.fb.group({
       title: [this.jobData.title || '', [Validators.required]],
@@ -207,10 +210,9 @@ export class JobFormComponent implements OnInit {
   criarPergunta(): FormGroup {
     return this.fb.group({
       id: this.fb.control(null), // Novo campo id com valor inicial nulo
-      question: this.fb.control('', Validators.required) // Campo question obrigatório
+      question: this.fb.control('', Validators.required), // Campo question obrigatório
     });
   }
-
 
   // Método para adicionar um novo campo de pergunta
   adicionarPergunta() {
@@ -227,7 +229,6 @@ export class JobFormComponent implements OnInit {
     this.isModalPasswordOpen = true;
   }
   closeModalPassword() {
-    this.modalService.closeModal();
     this.isModalPasswordOpen = false;
     this.confirmedPassword = '';
   }

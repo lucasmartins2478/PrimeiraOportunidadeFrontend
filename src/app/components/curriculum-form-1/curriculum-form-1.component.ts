@@ -225,7 +225,6 @@ export class CurriculumForm1Component implements OnInit {
   // Função que atualiza o currículo do usuário no banco de dados
 
   onUpdate() {
-    console.log(this.curriculumForm.value);
     if (this.curriculumForm.valid) {
       const formData = this.curriculumForm.value;
       const id = this.userData?.id; // Aqui você deve garantir que o ID do currículo correto está sendo utilizado

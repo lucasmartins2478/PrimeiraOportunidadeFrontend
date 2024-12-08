@@ -27,7 +27,7 @@ h3 {
   margin-top: 1rem;
 }
 .modal {
-  z-index: 10000000;
+  z-index: 100000000000;
 }
 .button-wrapper {
   margin-left: auto;

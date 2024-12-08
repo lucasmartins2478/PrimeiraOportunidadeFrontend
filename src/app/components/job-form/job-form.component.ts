@@ -223,7 +223,7 @@ export class JobFormComponent implements OnInit {
   }
   openModalPassword(action: () => void) {
     this.actionToPerform = action;
-    this.modalService.openModal();
+
     this.isModalPasswordOpen = true;
   }
   closeModalPassword() {

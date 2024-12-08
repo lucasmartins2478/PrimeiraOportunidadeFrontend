@@ -1,0 +1,6 @@
+.article{
+  display: flex;
+}
+.col-8{
+  padding: 4rem;
+}

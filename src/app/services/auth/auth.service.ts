@@ -82,7 +82,6 @@ export class UserAuthService {
     if (user.phoneNumber) {
       localStorage.setItem('phoneNumber', user.phoneNumber);
     }
-    console.log(user.curriculumId);
   }
 
   private saveCompanyDataToStorage(company: ICompany): void {

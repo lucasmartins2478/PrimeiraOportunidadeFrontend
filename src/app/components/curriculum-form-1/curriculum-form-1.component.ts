@@ -203,7 +203,7 @@ export class CurriculumForm1Component implements OnInit {
       };
       this.http.post<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
-          this.addCurriculum(this.userData?.id);
+
           setTimeout(() => {
             this.router.navigate(['/criar-curriculo/etapa2']);
           }, 2000);

@@ -65,6 +65,8 @@ export class JobCardComponent implements OnInit {
   answerWithQuestion: any = [];
   modalStates: { [key: string]: boolean } = {};
   modalParameters: { [key: string]: any } = {};
+  private unsubscribeCallback: (() => void) | null = null;
+  hasCurriculum: boolean = false;
 
   constructor(
     private authService: UserAuthService,
@@ -88,11 +90,25 @@ export class JobCardComponent implements OnInit {
     this.userService.getUserData(id).subscribe(
       (response: IUser) => {
         this.user = response;
+        if(this.user.curriculumId !== undefined && this.user.curriculumId !== null){
+          this.hasCurriculum = this.user?.curriculumId !== null;
+
+    // Inscreve-se para mudanças no curriculumId
+    this.unsubscribeCallback = this.authService.subscribeToCurriculumIdChange((curriculumId) => {
+      this.hasCurriculum = curriculumId !== null;
+    });
+        }
       },
       (error) => {
         console.log(`Erro ao buscar o usuário com ID ${id}: ${error}`);
       }
     );
+  }
+  ngOnDestroy(): void {
+    // Remove a inscrição ao destruir o componente
+    if (this.unsubscribeCallback) {
+      this.unsubscribeCallback();
+    }
   }
 
   getCompanyData() {

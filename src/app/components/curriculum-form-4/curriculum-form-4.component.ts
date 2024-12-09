@@ -83,20 +83,20 @@ export class CurriculumForm4Component implements OnInit {
     this.confirmedPassword = '';
   }
   openModalTermsOfUse() {
-    this.modalService.openModal()
-    this.isModalTermsOfUseOpen = true
+    this.modalService.openModal();
+    this.isModalTermsOfUseOpen = true;
   }
   openModalPrivacyPolicy() {
-    this.modalService.openModal()
-    this.isModalPrivacyPolicyOpen = true
+    this.modalService.openModal();
+    this.isModalPrivacyPolicyOpen = true;
   }
   closeModalTermsOfUse() {
-    this.modalService.closeModal()
-    this.isModalTermsOfUseOpen = false
+    this.modalService.closeModal();
+    this.isModalTermsOfUseOpen = false;
   }
   closeModalPrivacyPolicy() {
-    this.modalService.closeModal()
-    this.isModalPrivacyPolicyOpen = false
+    this.modalService.closeModal();
+    this.isModalPrivacyPolicyOpen = false;
   }
   confirmPassword() {
     if (this.user.password === this.confirmedPassword) {
@@ -156,6 +156,19 @@ export class CurriculumForm4Component implements OnInit {
       };
       this.http.put<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
+          if (id !== undefined && this.curriculumData.id !== undefined) {
+            this.userService.updateCurriculumUser(id)
+            this.userService
+              .saveCurriculum(id)
+              .then(() => {
+                console.log('Currículo salvo e atualizado no localStorage.');
+                // Outras ações, como redirecionamento
+              })
+              .catch((error) => {
+                console.error('Erro ao salvar o currículo:', error);
+              });
+          }
+
           this.alertMessage = 'Cadastro de currículo finalizado!';
           this.alertClass = 'alert alert-success';
           this.alertTitle = 'Sucesso';

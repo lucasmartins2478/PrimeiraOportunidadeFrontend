@@ -25,11 +25,23 @@ export class NavbarComponent implements OnInit {
     this.userType = this.authService.getUserType(); // Obtém o tipo de usuário
 
     if (this.userType === 'user') {
-      this.loadUserData();
-      this.hasCurriculum =
-        this.authService.getUserData()?.curriculumId !== null;
+      this.updateNavbar();
+
+      // Escuta alterações no curriculumId
+      this.authService.subscribeToCurriculumIdChange((curriculumId) => {
+        this.hasCurriculum = curriculumId !== null;
+      });
     }
   }
+
+  updateNavbar(): void {
+    const user = this.authService.getUserData();
+    if (user) {
+      this.hasCurriculum = user.curriculumId !== null;
+    }
+  }
+
+
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }

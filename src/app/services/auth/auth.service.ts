@@ -83,6 +83,38 @@ export class UserAuthService {
       localStorage.setItem('phoneNumber', user.phoneNumber);
     }
   }
+  // Dentro do UserAuthService
+  // Dentro do UserAuthService
+private curriculumIdChangeCallbacks: ((curriculumId: number | null) => void)[] = [];
+
+// Adiciona um callback para escutar alterações no curriculumId
+subscribeToCurriculumIdChange(callback: (curriculumId: number | null) => void): () => void {
+  this.curriculumIdChangeCallbacks.push(callback);
+
+  // Retorna uma função para desinscrição
+  return () => {
+    this.curriculumIdChangeCallbacks = this.curriculumIdChangeCallbacks.filter(
+      (cb) => cb !== callback
+    );
+  };
+}
+
+
+// Atualiza o curriculumId e notifica os inscritos
+updateCurriculumUser(curriculumId: number ): void {
+  if (this.user) {
+    this.user.curriculumId = curriculumId;
+    this.saveUserDataToStorage(this.user); // Atualiza o LocalStorage
+  }
+
+  // Notifica todos os callbacks
+  this.curriculumIdChangeCallbacks.forEach((callback) => callback(curriculumId));
+}
+
+refreshUserData(): void {
+  this.user = this.getUserDataFromStorage();
+}
+
 
   private saveCompanyDataToStorage(company: ICompany): void {
     localStorage.setItem('responsible', company.responsible);
@@ -148,6 +180,18 @@ export class UserAuthService {
   // Função pública para obter dados da empresa (pode ser chamada a partir de um componente)
   getCompanyData(): ICompany | null {
     return this.company;
+  }
+
+  async saveCurriculum(userId: number): Promise<void> {
+    const apiUrl = `https://backend-production-ff1f.up.railway.app/users/${userId}/curriculum`;
+
+    const body = {
+      curriculumId: userId,
+    };
+
+    try {
+      const response = await this.http.put<IUser>(apiUrl, body).toPromise();
+    } catch (error) {}
   }
 
   async hasCurriculum(userId: number | undefined): Promise<boolean> {

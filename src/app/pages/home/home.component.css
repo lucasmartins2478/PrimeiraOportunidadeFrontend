@@ -19,6 +19,8 @@
 }
 .about-us{
   padding: 4rem;
+  width: 86vw;
+  margin: 0 auto;
   background-color: #F3F2F0;
 }
 .about-us h4{

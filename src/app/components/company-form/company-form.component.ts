@@ -244,7 +244,7 @@ export class CompanyFormComponent implements OnInit {
             this.http.post<ICompany>(apiUrl, formData).subscribe(
               (response) => {
                 this.companyFormService.setFormData(this.companyForm.value);
-                this.alertMessage = 'Empresa cadastrado com sucesso!';
+                this.alertMessage = 'Sua empresa foi cadastrada, faça o login!';
                 this.alertClass = 'alert alert-success';
                 this.alertTitle = 'Sucesso';
                 this.alertIconClass = 'bi bi-check-circle';
@@ -299,7 +299,7 @@ export class CompanyFormComponent implements OnInit {
           this.companyFormService.setFormData(this.companyForm.value);
           this.alertMessage = 'Empresa atualizada com sucesso!';
           this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Sucesso';
+          this.alertTitle = 'Concluído';
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();

@@ -283,7 +283,7 @@ export class JobFormComponent implements OnInit {
         (response) => {
           this.alertMessage = 'Vaga criada com sucesso!';
           this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Sucesso';
+          this.alertTitle = 'Concluído';
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();
@@ -331,7 +331,7 @@ export class JobFormComponent implements OnInit {
         (response) => {
           this.alertMessage = 'Vaga atualizada com sucesso!';
           this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Sucesso';
+          this.alertTitle = 'Concluído';
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();

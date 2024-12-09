@@ -178,7 +178,7 @@ export class UserFormComponent implements OnInit {
                 this.userFormService.setFormData(this.userForm.value);
                 this.alertMessage = 'Usuário cadastrado com sucesso!';
                 this.alertClass = 'alert alert-success';
-                this.alertTitle = 'Sucesso';
+                this.alertTitle = 'Concluído';
                 this.alertIconClass = 'bi bi-check-circle';
                 this.showAlert = true;
                 this.resetAlertAfterDelay();
@@ -235,7 +235,7 @@ export class UserFormComponent implements OnInit {
             this.userFormService.setFormData(this.userForm.value);
             this.alertMessage = 'Usuário atualizado com sucesso!';
             this.alertClass = 'alert alert-success';
-            this.alertTitle = 'Sucesso';
+            this.alertTitle = 'Concluído';
             this.alertIconClass = 'bi bi-check-circle';
             this.showAlert = true;
             this.resetAlertAfterDelay();
@@ -261,7 +261,7 @@ export class UserFormComponent implements OnInit {
             this.userFormService.setFormData(this.userForm.value);
             this.alertMessage = 'Usuário atualizado com sucesso!';
             this.alertClass = 'alert alert-success';
-            this.alertTitle = 'Sucesso';
+            this.alertTitle = 'Concluído';
             this.alertIconClass = 'bi bi-check-circle';
             this.showAlert = true;
             this.resetAlertAfterDelay();

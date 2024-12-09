@@ -511,7 +511,7 @@ export class JobCardComponent implements OnInit {
       this.jobService.removeCanceledJob(this.job.id);
       this.alertMessage = 'Parabéns, candidatura realizada com sucesso!';
       this.alertClass = 'alert alert-success';
-      this.alertTitle = 'Sucesso';
+      this.alertTitle = 'Concluído';
       this.alertIconClass = 'bi bi-check-circle';
       this.showAlert = true;
       this.resetAlertAfterDelay();
@@ -543,9 +543,9 @@ export class JobCardComponent implements OnInit {
         this.closeModal();
         this.closeQuestionModal();
         this.alertMessage = 'Você já se candidatou a essa vaga.';
-        this.alertClass = 'alert alert-danger';
+        this.alertClass = 'alert alert-warning';
         this.alertTitle = 'Erro';
-        this.alertIconClass = 'bi bi-x-circle';
+        this.alertIconClass = 'bi bi-exclamation-circle';
         this.showAlert = true;
         this.resetAlertAfterDelay();
         return; // Retorna para cancelar a operação
@@ -723,19 +723,7 @@ export class JobCardComponent implements OnInit {
       return undefined;
     }
   }
-  private showAlertMessage(
-    message: string,
-    title: string,
-    cssClass: string,
-    iconClass: string
-  ) {
-    this.alertMessage = message;
-    this.alertClass = cssClass;
-    this.alertTitle = title;
-    this.alertIconClass = iconClass;
-    this.showAlert = true;
-    this.resetAlertAfterDelay();
-  }
+
 
   resetAlertAfterDelay() {
     setTimeout(() => (this.showAlert = false), 3000);

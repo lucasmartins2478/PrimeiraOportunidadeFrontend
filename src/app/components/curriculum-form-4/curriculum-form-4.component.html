@@ -63,12 +63,12 @@
       <input
         class="form-check-input"
         type="checkbox"
-        value=""
+        formControlName="termsOfUse"
         id="termos_uso"
       />
       <label
         class="form-check-label"
-        for="flexCheckDefault"
+        for="termos_uso"
         (click)="openModalTermsOfUse()"
         style="cursor: pointer; color: #004aad; text-decoration: underline"
       >
@@ -79,18 +79,20 @@
       <input
         class="form-check-input"
         type="checkbox"
-        value=""
+        formControlName="privacyPolicy"
         id="politica_privacidade"
       />
       <label
         class="form-check-label"
-        for="flexCheckdefault"
+        for="politica_privacidade"
         (click)="openModalPrivacyPolicy()"
         style="cursor: pointer; color: #004aad; text-decoration: underline"
       >
         Política de Privacidade
       </label>
     </div>
+
+
 
     <button
       class="btn btn-primary"

@@ -124,6 +124,8 @@ export class CurriculumForm4Component implements OnInit {
     this.adictionalDataForm = this.fb.group({
       attached: [''],
       description: [this.curriculumData.description || ''],
+      termsOfUse: [false, Validators.requiredTrue],
+      privacyPolicy: [false, Validators.requiredTrue],
     });
   }
 
@@ -144,6 +146,17 @@ export class CurriculumForm4Component implements OnInit {
     });
   }
   onSubmit() {
+    if (!this.adictionalDataForm.valid) {
+      this.alertMessage =
+        'Você deve aceitar os Termos de Uso e a Política de Privacidade!';
+      this.alertClass = 'alert alert-danger';
+      this.alertTitle = 'Erro';
+      this.alertIconClass = 'bi bi-x-circle';
+      this.showAlert = true;
+      this.resetAlertAfterDelay();
+      return;
+    }
+
     if (this.adictionalDataForm.valid) {
       const id = this.userService.getUserData()?.id;
       const formData = this.adictionalDataForm.value;
@@ -157,7 +170,7 @@ export class CurriculumForm4Component implements OnInit {
       this.http.put<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
           if (id !== undefined && this.curriculumData.id !== undefined) {
-            this.userService.updateCurriculumUser(id)
+            this.userService.updateCurriculumUser(id);
             this.userService
               .saveCurriculum(id)
               .then(() => {

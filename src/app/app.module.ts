@@ -52,6 +52,7 @@ import { ChatComponent } from './pages/chat/chat.component';
 import { ChatMessageComponent } from './components/chat-message/chat-message.component';
 import { RouterModule } from '@angular/router';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,7 @@ import { AboutUsComponent } from './pages/about-us/about-us.component';
     ChatComponent,
     ChatMessageComponent,
     AboutUsComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

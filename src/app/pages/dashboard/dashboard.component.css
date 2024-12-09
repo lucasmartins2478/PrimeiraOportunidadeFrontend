@@ -1,0 +1,16 @@
+img{
+  width: 80%;
+}
+.col-12{
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+h2{
+  margin-top: 4rem;
+  text-align: center;
+  color: #ff7b2a;
+  font-size: 32px;
+  font-weight: 600;
+}

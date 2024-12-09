@@ -23,6 +23,7 @@ import { Section2Component } from './pages/section-2/section-2.component';
 import { Section3Component } from './pages/section-3/section-3.component';
 import { Section4Component } from './pages/section-4/section-4.component';
 import { ChatComponent } from './pages/chat/chat.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -84,6 +85,7 @@ export const routes: Routes = [
     component: ChatComponent,
     canActivate: [AuthGuard, UserGuard],
   },
+  {path: 'dashboard', component: DashboardComponent}
 ];
 
 @NgModule({

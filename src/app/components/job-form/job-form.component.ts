@@ -49,6 +49,7 @@ export class JobFormComponent implements OnInit {
   }
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
+    await this.getCompanyData()
     try {
       const idParam = this.route.snapshot.paramMap.get('id');
       if (idParam) {
@@ -108,7 +109,7 @@ export class JobFormComponent implements OnInit {
         this.companyService.getUserData(this.companyData?.id).subscribe(
           (data) => {
             this.company = data; // Atribui os dados retornados à propriedade
-            console.log(this.company);
+            
             resolve();
           },
           (error) => {

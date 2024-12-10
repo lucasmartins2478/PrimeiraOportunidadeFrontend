@@ -3,7 +3,7 @@
   background-color: #E5E9FF;
   border-radius: 8px;
   margin-bottom: 1rem;
-  width: 21rem;
+  width: 23rem;
 }
 .job-card {
   background-color: #E5E9FF; /* Cor padrão do card */
@@ -17,6 +17,7 @@
   border-color: #f5c6cb;
 } */
 h5{
+  font-size: 19px;
   text-align: center;
   color: #004AAD;
 }

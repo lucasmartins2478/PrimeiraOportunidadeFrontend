@@ -190,7 +190,7 @@ export class CurriculumForm3Component implements OnInit {
       )
       .subscribe(() => {
         this.courses.removeAt(index);
-
+        
       });
   }
 

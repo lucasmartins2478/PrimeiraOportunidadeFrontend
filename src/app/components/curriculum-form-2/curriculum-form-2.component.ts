@@ -228,12 +228,7 @@ export class CurriculumForm2Component implements OnInit {
         .subscribe(
           () => {
             this.institutions.removeAt(index);
-            this.showAlertMessage(
-              'Instituição deletada com sucesso!',
-              'alert-success',
-              'Sucesso',
-              'bi bi-check-circle'
-            );
+            
           },
           (error) => {
             console.error('Erro ao deletar dados acadêmicos:', error);
@@ -400,7 +395,7 @@ export class CurriculumForm2Component implements OnInit {
   }
 
 
-  
+
   // Função que exibe o alerta na tela
 
   showAlertMessage(

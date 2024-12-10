@@ -190,12 +190,7 @@ export class CurriculumForm3Component implements OnInit {
       )
       .subscribe(() => {
         this.courses.removeAt(index);
-        this.showAlertMessage(
-          'Curso deletado com sucesso!',
-          'alert-success',
-          'Sucesso',
-          'bi bi-check-circle'
-        );
+
       });
   }
 
@@ -242,12 +237,7 @@ export class CurriculumForm3Component implements OnInit {
       )
       .subscribe(() => {
         this.competencies.removeAt(index);
-        this.showAlertMessage(
-          'Competência deletada com sucesso!',
-          'alert-success',
-          'Sucesso',
-          'bi bi-check-circle'
-        );
+
       });
   }
 
@@ -337,15 +327,9 @@ export class CurriculumForm3Component implements OnInit {
           if (course.id) {
             this.http
               .put<ICoursesData[]>(`${apiUrl}/${course.id}`, body)
-              .subscribe((error) =>
-                window.alert(`Erro ao atualizar curso: ${error}`)
-              );
+              .subscribe();
           } else {
-            this.http
-              .post<ICoursesData[]>(apiUrl, body)
-              .subscribe((error) =>
-                window.alert(`Erro ao cadastrar curso: ${error}`)
-              );
+            this.http.post<ICoursesData[]>(apiUrl, body).subscribe();
           }
         });
       }

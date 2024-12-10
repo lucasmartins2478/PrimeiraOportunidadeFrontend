@@ -92,7 +92,7 @@ export class CurriculumForm1Component implements OnInit {
           resolve();
         },
         (error) => {
-          console.log('Erro ao fazer busca do usuário:', error);
+          
           reject(error);
         }
       );
@@ -188,6 +188,26 @@ export class CurriculumForm1Component implements OnInit {
       const apiUrl =
         'https://backend-production-ff1f.up.railway.app/curriculum';
 
+      const userBody = {
+        name: formData.name,
+        cpf: this.user.cpf,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        password: this.user.password,
+        curriculumId: this.user.curriculumId,
+      };
+      this.http
+        .put(
+          `https://backend-production-ff1f.up.railway.app/users/${this.user.id}`,
+          userBody
+        )
+        .subscribe(
+          (response) => {},
+          (error) => {
+            console.error(`Erro ao atualizar o usuáario ${error}`);
+          }
+        );
+
       const body = {
         id: this.userData?.id,
         dateOfBirth: formData.dateOfBirth,
@@ -203,7 +223,6 @@ export class CurriculumForm1Component implements OnInit {
       };
       this.http.post<ICurriculum>(apiUrl, body).subscribe(
         (response) => {
-
           setTimeout(() => {
             this.router.navigate(['/criar-curriculo/etapa2']);
           }, 2000);
@@ -263,6 +282,7 @@ export class CurriculumForm1Component implements OnInit {
           addressNumber: formData.addressNumber,
           cep: formData.cep,
           uf: formData.uf,
+          userId: this.user.id
         };
         this.http
           .put(
@@ -277,15 +297,7 @@ export class CurriculumForm1Component implements OnInit {
           );
         this.http.put<ICurriculum>(apiUrl, body).subscribe(
           (response) => {
-            this.alertMessage = 'Curriculo Atualizado com sucesso!';
-            this.alertClass = 'alert alert-success';
-            this.alertTitle = 'Sucesso';
-            this.alertIconClass = 'bi bi-check-circle';
-            this.showAlert = true;
-            this.resetAlertAfterDelay();
-            setTimeout(() => {
-              this.router.navigate(['/criar-curriculo/etapa2']);
-            }, 2000);
+            this.router.navigate(['/criar-curriculo/etapa2']);
           },
           (error) => {
             window.alert(`Erro ao atualizar currículo: ${error}`);
@@ -317,8 +329,7 @@ export class CurriculumForm1Component implements OnInit {
 
     try {
       const response = await this.http.put<IUser>(apiUrl, body).toPromise();
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Função que deleta os dados completos do currículo do banco de dados
@@ -348,8 +359,6 @@ export class CurriculumForm1Component implements OnInit {
   }
 
   validateDate(control: AbstractControl): ValidationErrors | null {
-
-
     const rawValue = control.value?.trim();
     const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 

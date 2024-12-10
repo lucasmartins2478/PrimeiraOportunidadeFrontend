@@ -267,7 +267,7 @@ export class JobCardComponent implements OnInit {
           this.closeModal();
           this.alertMessage = 'Vaga cancelada com sucesso!.';
           this.alertClass = 'alert alert-success';
-          this.alertTitle = 'Sucesso';
+          this.alertTitle = 'Concluído';
           this.alertIconClass = 'bi bi-check-circle';
           this.showAlert = true;
           this.resetAlertAfterDelay();

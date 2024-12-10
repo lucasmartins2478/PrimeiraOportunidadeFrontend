@@ -203,7 +203,7 @@ export class JobFormComponent implements OnInit {
       requirements: [this.jobData.requirements || '', [Validators.required]],
       aboutCompany: [this.jobData.aboutCompany || '', [Validators.required]],
       benefits: [this.jobData.benefits || '', [Validators.required]],
-      perguntas: perguntasArray, // Array de perguntas preenchido dinamicamente
+      perguntas: this.fb.array([this.adicionarPergunta()]), // Array de perguntas preenchido dinamicamente
     });
   }
 
@@ -217,6 +217,7 @@ export class JobFormComponent implements OnInit {
 
   // Método para adicionar um novo campo de pergunta
   adicionarPergunta() {
+    console.log('adicionou')
     this.perguntas.push(this.criarPergunta());
   }
 
@@ -365,55 +366,57 @@ export class JobFormComponent implements OnInit {
   }
   enviarPerguntas(vacancyId: number) {
     const questions = this.perguntas.value; // Obtém o array de perguntas do formulário
-    const apiUrl =
-      'https://backend-production-ff1f.up.railway.app/vacancy/questions'; // Altere conforme sua API
+    const baseUrl = 'https://backend-production-ff1f.up.railway.app/vacancy'; // Base da URL
 
-    // Atualiza ou adiciona perguntas existentes
+    if (!Array.isArray(questions) || questions.length === 0) {
+      console.error('Nenhuma pergunta para enviar.');
+      return;
+    }
+
     questions.forEach((pergunta: any, index: number) => {
-      if (typeof pergunta !== 'string' || !pergunta.trim()) {
-        return; // Pula para a próxima iteração
+      // Validação: verificar se a pergunta possui um formato válido
+      if (
+        !pergunta ||
+        typeof pergunta.question !== 'string' ||
+        !pergunta.question.trim()
+      ) {
+        console.warn(`Pergunta inválida no índice ${index}:`, pergunta);
+        return;
       }
 
-      if (this.questionData[index]) {
+      if (pergunta.id) {
         // Atualiza pergunta existente
-        const questionId = this.questionData[index].id;
-        this.http
-          .put(
-            `https://backend-production-ff1f.up.railway.app/vacancy/${this.jobData.id}/questions/${questionId}`,
-            { question: pergunta, vacancyId }
-          )
-          .subscribe(
-            (response) => {
-              console.log(
-                `Pergunta ${index + 1} atualizada com sucesso:`,
-                response
-              );
-            },
-            (error) => {
-              console.error(
-                `Erro ao atualizar a pergunta ${index + 1}:`,
-                error
-              );
-            }
-          );
+        const updateUrl = `${baseUrl}/${this.jobData.id}/questions/${pergunta.id}`;
+
+        this.http.put(updateUrl, { question: pergunta.question, vacancyId }).subscribe({
+          next: (response) => {
+            console.log(`Pergunta ${index + 1} atualizada com sucesso:`, response);
+          },
+          error: (error) => {
+            console.error(`Erro ao atualizar a pergunta ${index + 1}:`, error);
+          },
+        });
       } else {
         // Adiciona nova pergunta
+        const addUrl = `${baseUrl}/questions`;
         const body = {
-          question: pergunta,
+          question: pergunta.question,
           vacancyId,
         };
 
-        this.http.post(apiUrl, body).subscribe(
-          (response) => {
+        this.http.post(addUrl, body).subscribe({
+          next: (response) => {
             console.log('Pergunta enviada com sucesso:', response);
           },
-          (error) => {
+          error: (error) => {
             console.error('Erro ao enviar pergunta:', error);
-          }
-        );
+          },
+        });
       }
     });
   }
+
+
 
   // Método para exibir o alerta e fechá-lo automaticamente após 3 segundos
   resetAlertAfterDelay() {

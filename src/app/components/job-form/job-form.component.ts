@@ -49,7 +49,7 @@ export class JobFormComponent implements OnInit {
   }
   private async loadData(): Promise<void> {
     this.isLoading = true; // Define como true no início
-    await this.getCompanyData()
+    await this.getCompanyData();
     try {
       const idParam = this.route.snapshot.paramMap.get('id');
       if (idParam) {
@@ -109,7 +109,7 @@ export class JobFormComponent implements OnInit {
         this.companyService.getUserData(this.companyData?.id).subscribe(
           (data) => {
             this.company = data; // Atribui os dados retornados à propriedade
-            
+
             resolve();
           },
           (error) => {
@@ -369,10 +369,8 @@ export class JobFormComponent implements OnInit {
       'https://backend-production-ff1f.up.railway.app/vacancy/questions'; // Altere conforme sua API
 
     // Atualiza ou adiciona perguntas existentes
-    questions.forEach((pergunta: string, index: number) => {
-      // Ignorar perguntas que são strings vazias
-      if (!pergunta || pergunta.trim() === '') {
-        console.warn(`Pergunta no índice ${index} está vazia e será ignorada.`);
+    questions.forEach((pergunta: any, index: number) => {
+      if (typeof pergunta !== 'string' || !pergunta.trim()) {
         return; // Pula para a próxima iteração
       }
 

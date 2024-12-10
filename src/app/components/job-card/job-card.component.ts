@@ -229,6 +229,7 @@ export class JobCardComponent implements OnInit {
     this.isModalQuestionOpen = true;
   }
   openCurriculumModal() {
+    console.log('chamou a função de abrir o modal')
     this.modalService.openModal();
     this.isModalCurriculumOpen = true;
   }
@@ -237,6 +238,7 @@ export class JobCardComponent implements OnInit {
     this.isModalCurriculumOpen = false;
   }
   openApplicationModal(jobId: number) {
+
     this.getApplications(jobId.toString())
       .then((applications) => {})
       .catch((error) => {});
@@ -372,84 +374,102 @@ export class JobCardComponent implements OnInit {
   }
 
   async createUserCurriculum(userId: number) {
-    this.selectedUserId = userId; // Armazena o ID do candidato selecionado
-    this.closeApplicationModal();
-    this.curriculumService.getCurriculumData(userId).subscribe(
-      (response) => {
-        this.selectedUserCurriculum = response;
-      },
-      (error) => {
-        console.error(
-          `Erro ao buscar currículo do usuário ${userId}: ${error}`
-        );
-      }
-    );
+    try {
+      this.selectedUserId = userId; // Armazena o ID do candidato selecionado
+      this.closeApplicationModal();
 
-    // Carrega os dados acadêmicos
-    this.curriculumService.getAcademicData(userId).subscribe(
-      (response) => {
-        this.selectedAcademicData = response || [];
-      },
-      (error) => {
-        console.error(
-          `Erro ao buscar dados acadêmicos do usuário ${userId}: ${error}`
-        );
-      }
-    );
-
-    // Carrega os cursos
-    this.curriculumService.getCoursesData(userId).subscribe(
-      (response) => {
-        this.selectedCoursesData = response || [];
-      },
-      (error) => {
-        console.error(`Erro ao buscar cursos do usuário ${userId}: ${error}`);
-      }
-    );
-
-    // Carrega as competências
-    this.curriculumService.getCompetences(userId).subscribe(
-      (response) => {
-        this.selectedCompetences = response || [];
-      },
-      (error) => {
-        console.error(
-          `Erro ao buscar competências do usuário ${userId}: ${error}`
-        );
-      }
-    );
-
-    await this.getQuestions(this.job.id.toString());
-    this.answerWithQuestion = []; // Certifique-se de inicializar o array
-
-    this.questionData.forEach((question) => {
-      this.answerService.getAnswerOfQuestion(question.id).subscribe(
-        (responses) => {
-          responses.forEach((answer) => {
-            if (
-              userId === answer.userId &&
-              question.id === answer.questionId &&
-              question.vacancyId == this.job.id
-            ) {
-              this.answerWithQuestion.push({
-                question: question.question,
-                answer: answer.answer,
-              });
-            }
-          });
+      // Busca os dados do currículo
+      this.curriculumService.getCurriculumData(userId).subscribe(
+        (response) => {
+          this.selectedUserCurriculum = response || null;
         },
         (error) => {
           console.error(
-            `Erro ao buscar resposta para a pergunta ${question.id}:`,
-            error
+            `Erro ao buscar currículo do usuário ${userId}: ${error}`
           );
+          this.selectedUserCurriculum = null; // Define um valor padrão
         }
       );
-    });
 
-    // Exibe o modal do currículo
-    this.openCurriculumModal();
+      // Carrega os dados acadêmicos
+      this.curriculumService.getAcademicData(userId).subscribe(
+        (response) => {
+          this.selectedAcademicData = response || [];
+        },
+        (error) => {
+          console.error(
+            `Erro ao buscar dados acadêmicos do usuário ${userId}: ${error}`
+          );
+          this.selectedAcademicData = []; // Define um valor padrão
+        }
+      );
+
+      // Carrega os cursos
+      this.curriculumService.getCoursesData(userId).subscribe(
+        (response) => {
+          this.selectedCoursesData = response || [];
+        },
+        (error) => {
+          console.error(`Erro ao buscar cursos do usuário ${userId}: ${error}`);
+          this.selectedCoursesData = []; // Define um valor padrão
+        }
+      );
+
+      // Carrega as competências
+      this.curriculumService.getCompetences(userId).subscribe(
+        (response) => {
+          this.selectedCompetences = response || [];
+        },
+        (error) => {
+          console.error(
+            `Erro ao buscar competências do usuário ${userId}: ${error}`
+          );
+          this.selectedCompetences = []; // Define um valor padrão
+        }
+      );
+
+      // Busca perguntas associadas à vaga
+      await this.getQuestions(this.job.id.toString());
+      this.answerWithQuestion = []; // Inicializa o array
+
+      // Verifica se existem perguntas antes de iterar
+      if (this.questionData && this.questionData.length > 0) {
+        this.questionData.forEach((question) => {
+          this.answerService.getAnswerOfQuestion(question.id).subscribe(
+            (responses) => {
+              responses.forEach((answer) => {
+                if (
+                  userId === answer.userId &&
+                  question.id === answer.questionId &&
+                  question.vacancyId == this.job.id
+                ) {
+                  this.answerWithQuestion.push({
+                    question: question.question,
+                    answer: answer.answer,
+                  });
+                }
+              });
+            },
+            (error) => {
+              console.error(
+                `Erro ao buscar resposta para a pergunta ${question.id}:`,
+                error
+              );
+            }
+          );
+        });
+      } else {
+        console.log("Nenhuma pergunta relacionada encontrada para esta vaga.");
+      }
+
+      // Exibe o modal do currículo
+      this.openCurriculumModal();
+    } catch (error) {
+      console.error(`Erro ao criar currículo do usuário ${userId}:`, error);
+    }
   }
+
+
 
   async submitAnswers(jobId: number) {
     try {
@@ -682,25 +702,26 @@ export class JobCardComponent implements OnInit {
     }
   }
 
-  async getQuestions(jobId: string): Promise<IQuestion[] | undefined> {
+  async getQuestions(jobId: string): Promise<void> {
     try {
       const response = await this.questionService
         .getQuestionsByJobId(jobId)
         .toPromise();
-      if (Array.isArray(response)) {
-        this.questionData = response;
 
-        // Chama createForm somente depois de garantir que questionData está preenchido
-        return response.filter(
+      if (Array.isArray(response) && response.length > 0) {
+        this.questionData = response.filter(
           (question): question is IQuestion => question !== undefined
         );
+      } else {
+        console.warn("Nenhuma pergunta encontrada para a vaga.");
+        this.questionData = []; // Inicialize como array vazio
       }
-      return undefined;
     } catch (error) {
-      console.error(`Erro ao buscar perguntas da vaga: ${error}`);
-      return undefined;
+      this.questionData = []; // Inicialize como array vazio em caso de erro
     }
   }
+
+
 
   async getApplications(jobId: string): Promise<IApplication[] | undefined> {
     try {

@@ -53,7 +53,7 @@ export const routes: Routes = [
   {
     path: 'criar-curriculo/etapa2',
     component: CurriculumStep2Component,
-    canActivate: [AuthGuard, UserGuard],
+    canActivate: [ UserGuard],
   },
   {
     path: 'criar-curriculo/etapa3',
